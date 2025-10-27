@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 
