@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import VistaProductos from './pages/Vista-Productos/VistaProductos';
-import VistaCarrito from './pages/Vista-Carrito/VistaCarrito';
+import React from 'react';
+import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
+import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 
 function App() {
   return (
