@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes, Switch } from 'wouter';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
-import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 
 function App() {
   return (
