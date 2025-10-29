@@ -22,6 +22,9 @@ function VistaProductos() {
           />
         ))}
         </div> 
+        <Link href="/carrito">
+          <button className="btn-carrito">Mi Carrito</button>
+        </Link>
     </div>
     );
 }
