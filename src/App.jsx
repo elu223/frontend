@@ -1,17 +1,14 @@
-import React, {useState} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
-import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
+import VistaProductos from './pages/Vista-Productos/VistaProductos';
+import VistaCarrito from './pages/Vista-Carrito/VistaCarrito';
 
 function App() {
   return (
-    <Router>
+    
       <Routes>
         <Route path="/" element={<VistaProductos />} />
         <Route path="/carrito" element={<VistaCarrito />} />
       </Routes>
-    </Router>
-  );
+  )
 }
-
 export default App;
