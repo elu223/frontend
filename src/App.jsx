@@ -1,15 +1,21 @@
 import React from 'react';
-import { Route, Routes, Switch } from 'wouter';
+import { Route, Router, Routes, Switch } from 'wouter';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
+import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 
 function App() {
   return (
+    <Router>
       <Switch>
-        <Routes>
-         <Route path="/" element={<VistaProductos />} />
-         <Route path="/carrito" element={<VistaCarrito />} />
-        </Routes>
+        <div>
+          <Routes>
+            <Route path="/" element={<VistaProductos />} />
+            <Route path="/carrito" element={<VistaCarrito />} />
+          </Routes>
+        </div>
       </Switch>
+    </Router>
   )
+
 }
 export default App;

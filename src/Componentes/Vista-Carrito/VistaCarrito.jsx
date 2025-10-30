@@ -1,5 +1,5 @@
 import React, {useState}  from 'react';
-import './VistaCarrito.css'
+import './VistaCarrito.css';
 
 function VistaCarrito() {
     const [items, setItems] = useState([
