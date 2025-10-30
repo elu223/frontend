@@ -4,7 +4,7 @@ function ProductCard({ nombre, precio, imagen }) {
         <div className="tarjeta-producto">
             <img src={imagen} alt={nombre} className="imagen-producto" />
             <h2 className="nombre-producto">{nombre}</h2>
-            <p className="precio-producto">${precio.toFixed(2)}</p>
+            <p className="precio-producto">${precio.toFixed}</p>
         </div>
     );
 }

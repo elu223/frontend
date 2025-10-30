@@ -4,11 +4,12 @@ import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 
 function App() {
   return (
-    
-      <Routes>
-        <Route path="/" element={<VistaProductos />} />
-        <Route path="/carrito" element={<VistaCarrito />} />
-      </Routes>
+      <Switch>
+        <Routes>
+         <Route path="/" element={<VistaProductos />} />
+         <Route path="/carrito" element={<VistaCarrito />} />
+        </Routes>
+      </Switch>
   )
 }
 export default App;
