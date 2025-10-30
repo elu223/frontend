@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import './VistaProductos.css';
-function ProductCard({ nombre, precio, imagen }) {
-    return (
-        <div className="tarjeta-producto">
-            <img src={imagen} alt={nombre} className="imagen-producto" />
-            <h2 className="nombre-producto">{nombre}</h2>
-            <p className="precio-producto">${precio.toFixed}</p>
-        </div>
-    );
-=======
 import { useState } from 'react';
 import './TarjetaProductos.css';
 
@@ -27,7 +16,6 @@ function TarjetaProducto({ id, nombre, precio, imagen, descripcion }) {
       </div>
     </div>
   );
->>>>>>> origin/develop_orosco
 }
 
 export default TarjetaProducto;
