@@ -2,20 +2,21 @@ import React from 'react';
 import { Route, Router, Routes, Switch } from 'wouter';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
+import './App.css';
 
 function App() {
   return (
     <Router>
-      <Switch>
-        <div>
-          <Routes>
-            <Route path="/" element={<VistaProductos />} />
-            <Route path="/carrito" element={<VistaCarrito />} />
-          </Routes>
-        </div>
-      </Switch>
+      <div className="App">
+        <Switch>
+          <Route path="/" component={VistaProductos} />
+          <Route path="/carrito" component={VistaCarrito} />
+          {/* Agregar más rutas */}
+          <Route>404 - Página no encontrada</Route>
+        </Switch>
+      </div>
     </Router>
-  )
-
+    );
 }
+
 export default App;
