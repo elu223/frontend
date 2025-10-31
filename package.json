@@ -12,10 +12,7 @@
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-<<<<<<< HEAD
-=======
     "react-router-dom": "^7.9.4",
->>>>>>> origin/develop_orosco
     "wouter": "^3.7.1"
   },
   "devDependencies": {
