@@ -1,10 +1,13 @@
 import React, {useState}  from 'react';
+import logo from'../../img/1000075668.png';
 import './VistaCarrito.css';
 
 function VistaCarrito() {
     const [items, setItems] = useState([
         { id: 1, nombre: 'Producto 1', precio: 10.0, cantidad: 2 },
         { id: 2, nombre: 'Producto 2', precio: 15.0, cantidad: 1 },
+        { id: 3, nombre: 'Producto 3', precio: 15.0, cantidad: 1 },
+        { id: 4, nombre: 'Producto 4', precio: 15.0, cantidad: 1 },
     ]);
 
     const eliminarItem = (id) => {
@@ -19,20 +22,31 @@ function VistaCarrito() {
 
     return (
         <div className='Carrito-container'>
-            <h2 className='tituloCarrito'>Carrito de compra</h2>
+            <h2 className='tituloCarrito'>
+                {/* https://cdn-icons-png.flaticon.com/512/263/263142.png  imagen de carrito logo*/}
+                <img src="./" alt="" />
+                Carrito de compra</h2>
 
             <div className='itemsLista'>
                 {items.map(item => (
                     <div key={item.id} className='Carrito-item'>
                         <h3>{item.nombre}</h3>
+                        <div className='Precio-producto'>
+                            <p>Precio</p>
                         <h3>${item.precio}</h3>
-                        <input 
+                        </div>
+                        <div className='Cantidad-producto'>
+                            <p>Cantidad</p>
+                            <button className='Aumentar-cantidad'>+</button>
+                         <input className='cantidad-input'
                             type="number"   
                             value={item.cantidad}
                             min="1"
                             onChange={(e) => actualizarCantidad(item.id, parseInt(e.target.value))}
-                        />
-                        <button className='Boton-Eliminar' onClick={() => eliminarItem(item.id)}>Eliminar</button>
+                         />
+                            <button className='Disminuir-cantidad'>-</button>
+                        </div>
+                        <button className='Boton-Eliminar' onClick={() => eliminarItem(item.id)}>Quitar</button>
                     </div>
                 ))}
             </div>
