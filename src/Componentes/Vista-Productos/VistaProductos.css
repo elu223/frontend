@@ -176,9 +176,15 @@
   min-width: 0; /* Permite que se ajusten */
 }
 
+/* Agregar esto en VistaProductos.css */
+.lista-productos-horizontal a {
+    text-decoration: none;  /* Esto quitará la línea */
+    color: inherit;         /* Mantiene el color original del texto */
+}
+
 /* Footer */
 .footer {
-  background: #2c3e50;
+  background: #d20081;
   color: white;
   text-align: center;
   padding: 2rem 0;
