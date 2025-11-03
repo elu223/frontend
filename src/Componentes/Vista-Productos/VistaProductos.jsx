@@ -8,35 +8,35 @@ function VistaProductos() {
   
   const productos = [
     { 
-      id: 1, 
+      id: '1',  // Cambié a string para que coincida con la ruta
       nombre: 'Smartphone Samsung', 
       precio: 30000, 
       imagen: 'https://via.placeholder.com/300x300/007bff/ffffff?text=Samsung',
       descripcion: 'Smartphone de última generación'
     },
     { 
-      id: 2, 
+      id: '2',  // Cambié a string
       nombre: 'Laptop HP', 
       precio: 100000, 
       imagen: 'https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop+HP',
       descripcion: 'Laptop ideal para trabajo y estudio'
     },
     { 
-      id: 3, 
+      id: '3',  // Cambié a string
       nombre: 'Audífonos Sony', 
       precio: 30000, 
       imagen: 'https://via.placeholder.com/300x300/dc3545/ffffff?text=Audífonos',
       descripcion: 'Audífonos con cancelación de ruido'
     },
     { 
-      id: 4, 
+      id: '4',  // Cambié a string
       nombre: 'Tablet iPad', 
       precio: 30000, 
       imagen: 'https://via.placeholder.com/300x300/6f42c1/ffffff?text=iPad',
       descripcion: 'Tablet perfecta para creativos'
     },
     { 
-      id: 5, 
+      id: '5',  // Cambié a string
       nombre: 'Smart Watch', 
       precio: 500000, 
       imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
@@ -82,6 +82,7 @@ function VistaProductos() {
           */}
         </div>
       </header>
+
       {/* Productos */}
       <main className="main-content">
         <div className="container">
@@ -101,14 +102,16 @@ function VistaProductos() {
             {/* DIV con 5 productos en FILA HORIZONTAL */}
             <div className="lista-productos-horizontal"> 
               {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
-                <TarjetaProducto  
-                  key={producto.id}
-                  id={producto.id}
-                  nombre={producto.nombre}
-                  precio={producto.precio}
-                  imagen={producto.imagen}
-                  descripcion={producto.descripcion}
-                />
+                // ENVOLVER CADA TarjetaProducto CON LINK - ESTO ES LO QUE FALTABA
+                <Link key={producto.id} href={`/producto/${producto.id}`}>
+                  <TarjetaProducto  
+                    id={producto.id}
+                    nombre={producto.nombre}
+                    precio={producto.precio}
+                    imagen={producto.imagen}
+                    descripcion={producto.descripcion}
+                  />
+                </Link>
               ))}
             </div>
           </div>
