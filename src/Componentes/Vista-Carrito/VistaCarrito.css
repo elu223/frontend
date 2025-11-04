@@ -1,6 +1,6 @@
 .Carrito-container {
   width: 100vw;
-  height: 100vh;
+  height: auto;
   background-color: #FCEFB0;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .itemsLista {
-  margin-left: 496px;
+  margin-left: 489px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -23,9 +23,22 @@ h2{
   font-size: 34px;
   padding: 15px;
 }
+:hover.Carrito-item {
+  box-shadow: 0px 1px 4px 1px #9a1368;
+  position: relative;
+  width: 740px;
+  margin-top: 12px;
+  background-color: #ffffff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .Carrito-item {
-  width: 80vh;
+  box-shadow: 0px 1px 4px 1px #520837;
+  position: relative;
+  width: 740px;
   margin-top: 12px;
   background-color: #ffffff;
   padding: 15px;
@@ -35,26 +48,34 @@ h2{
 }
 
 .Boton-Eliminar {
-  background-color: #AB0C70;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+    top: 40px;
+    position: relative;
+    background-color: #AB0C70;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 23px;
+    cursor: pointer;
 }
 
 .Carrito-total {
-  margin-top: 20px;
-  text-align: right;
+    top: -8px;
+    left: 525px;
+    position: relative;
+    border-radius: 16px;
+    background: white;
+    width: 52%;
+    text-align: center;
 }
 
 .Boton-Comprar {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    height: 26px;
+    width: -webkit-fill-available;
+    background-color: #dce4dd;
+    color: #AB0C70;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .cantidad-input {

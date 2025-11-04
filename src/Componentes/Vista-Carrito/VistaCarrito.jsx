@@ -1,5 +1,5 @@
 import React, {useState}  from 'react';
-import logo from'../../img/1000075668.png';
+
 import './VistaCarrito.css';
 
 function VistaCarrito() {
@@ -8,6 +8,7 @@ function VistaCarrito() {
         { id: 2, nombre: 'Producto 2', precio: 15.0, cantidad: 1 },
         { id: 3, nombre: 'Producto 3', precio: 15.0, cantidad: 1 },
         { id: 4, nombre: 'Producto 4', precio: 15.0, cantidad: 1 },
+    
     ]);
 
     const eliminarItem = (id) => {
@@ -46,7 +47,7 @@ function VistaCarrito() {
                          />
                             <button className='Disminuir-cantidad'>-</button>
                         </div>
-                        <button className='Boton-Eliminar' onClick={() => eliminarItem(item.id)}>Quitar</button>
+                        <button className='Boton-Eliminar Quitar' onClick={() => eliminarItem(item.id)}>Quitar</button>
                     </div>
                 ))}
             </div>
