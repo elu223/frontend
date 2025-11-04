@@ -8,35 +8,35 @@ function VistaProductos() {
   
   const productos = [
     { 
-      id: '1',  // Cambié a string para que coincida con la ruta
+      id: '1',  
       nombre: 'Smartphone Samsung', 
       precio: 30000, 
       imagen: 'https://via.placeholder.com/300x300/007bff/ffffff?text=Samsung',
       descripcion: 'Smartphone de última generación'
     },
     { 
-      id: '2',  // Cambié a string
+      id: '2', 
       nombre: 'Laptop HP', 
       precio: 100000, 
       imagen: 'https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop+HP',
       descripcion: 'Laptop ideal para trabajo y estudio'
     },
     { 
-      id: '3',  // Cambié a string
+      id: '3',  
       nombre: 'Audífonos Sony', 
       precio: 30000, 
       imagen: 'https://via.placeholder.com/300x300/dc3545/ffffff?text=Audífonos',
       descripcion: 'Audífonos con cancelación de ruido'
     },
     { 
-      id: '4',  // Cambié a string
+      id: '4',  
       nombre: 'Tablet iPad', 
       precio: 30000, 
       imagen: 'https://via.placeholder.com/300x300/6f42c1/ffffff?text=iPad',
       descripcion: 'Tablet perfecta para creativos'
     },
     { 
-      id: '5',  // Cambié a string
+      id: '5', 
       nombre: 'Smart Watch', 
       precio: 500000, 
       imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
@@ -61,7 +61,7 @@ function VistaProductos() {
             </Link>
           </div>
           
-          {/* Buscador - EN LA IZQUIERDA */}
+          {/* Buscador */}
           <div className="buscador-container">
             <input
               type="text"
@@ -97,12 +97,10 @@ function VistaProductos() {
             </div>
           )}
 
-          {/* CONTENEDOR QUE ENVUELVE LOS 5 PRODUCTOS */}
+          {/* contenedor con los productos */}
           <div className="contenedor-productos">
-            {/* DIV con 5 productos en FILA HORIZONTAL */}
             <div className="lista-productos-horizontal"> 
               {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
-                // ENVOLVER CADA TarjetaProducto CON LINK - ESTO ES LO QUE FALTABA
                 <Link key={producto.id} href={`/producto/${producto.id}`}>
                   <TarjetaProducto  
                     id={producto.id}
