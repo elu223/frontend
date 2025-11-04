@@ -1,10 +1,15 @@
-import { useState } from 'react';
+
 import './TarjetaProductos.css';
 
+
 function TarjetaProducto({ id, nombre, precio, imagen, descripcion }) {
+  // const [cantidad, setCantidad] = useState(1);
+  // const [nombre, setNombre] = useState('');
+  // const [precio, setPrecio] = useState(0);
+
 
   return (
-    <div className="tarjeta-producto">
+    <div className="tarjeta-producto" key ={id}>
       <div className="imagen-producto">
         <img src={imagen} alt={nombre} />
       </div>
