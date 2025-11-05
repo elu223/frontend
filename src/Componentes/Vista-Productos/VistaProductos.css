@@ -131,12 +131,12 @@
 }
 
 .container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
 .titulo-productos {
+  font-family: "Inter", sans-serif;
   text-align: center;
   font-size: 2.5rem;
   color: #2c3e50;
@@ -163,17 +163,15 @@
 }
 
 .lista-productos-horizontal {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 1.5rem;
-  width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    flex-direction: row;
 }
 
-.lista-productos-horizontal .tarjeta-producto {
-  flex: 1;
-  min-width: 0; 
-}
+
 
 .lista-productos-horizontal a {
     text-decoration: none;  
@@ -206,115 +204,6 @@
   word-wrap: break-word;
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-  .lista-productos-horizontal {
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  .contenedor-productos {
-    padding: 1.5rem;
-  }
-  
-  .lista-productos-horizontal {
-    gap: 1rem;
-  }
-  
-  .buscador-container {
-    max-width: 500px; 
-    min-width: 400px;
-  }
-}
-
-@media (max-width: 768px) {
-  .header-ecommerce .container {
-    flex-direction: column;
-    height: auto;
-    gap: 1rem;
-    padding: 1rem 20px;
-  }
-  
-  .logo-container {
-    margin-right: 0;
-    margin-left: 0;
-    justify-content: center;
-  }
-  
-  .buscador-container {
-    max-width: 100%; 
-    min-width: auto;
-    margin-left: 0;
-    margin-right: 0;
-    order: 2;
-  }
-  
-  .contenedor-productos {
-    padding: 1rem;
-    margin: 0 -10px 2rem -10px;
-    border-radius: 10px;
-  }
-  
-  .lista-productos-horizontal {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 1rem;
-    gap: 1rem;
-  }
-  
-  .lista-productos-horizontal .tarjeta-producto {
-    flex: 0 0 auto;
-    min-width: 250px;
-    max-width: 250px;
-  }
-  
-  .titulo-productos {
-    font-size: 2rem;
-  }
-}
-
-
-@media (max-width: 480px) {
-  .logo-container {
-    gap: 0.5rem;
-  }
-  
-  .logo-imagen {
-    width: 60px;
-    height: 70px;
-  }
-  
-  .logo-texto {
-    font-size: 1.8rem;
-  }
-  
-  .buscador-input {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.8rem;
-  }
-  
-  .buscador-btn {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
-  }
-  
-  .contenedor-productos {
-    padding: 0.8rem;
-    margin: 0 -5px 2rem -5px;
-  }
-  
-  .lista-productos-horizontal .tarjeta-producto {
-    min-width: 220px;
-    max-width: 220px;
-  }
-  
-  .titulo-productos {
-    font-size: 1.8rem;
-  }
-}
 .navegacion-con-menu{
   order: 2;
 }
