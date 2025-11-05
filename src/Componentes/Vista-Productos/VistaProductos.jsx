@@ -1,46 +1,52 @@
-import React from 'react';
-import ProductCard from './TarjetaProductos.jsx';
+import { Link } from 'wouter';
+import { useState } from 'react';
+import TarjetaProducto from './TarjetaProductos';
 import './VistaProductos.css';
 
 function VistaProductos() {
+  const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const productos = [
-    { 
-      id: '1',  
-      nombre: 'Smartphone Samsung', 
-      precio: 30000, 
+    {
+      id: '1',
+      nombre: 'Smartphone Samsung',
+      precio: 30000,
       imagen: 'https://via.placeholder.com/300x300/007bff/ffffff?text=Samsung',
       descripcion: 'Smartphone de última generación'
     },
-    { 
-      id: '2', 
-      nombre: 'Laptop HP', 
-      precio: 100000, 
+    {
+      id: '2',
+      nombre: 'Laptop HP',
+      precio: 100000,
       imagen: 'https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop+HP',
       descripcion: 'Laptop ideal para trabajo y estudio'
     },
-    { 
-      id: '3',  
-      nombre: 'Audífonos Sony', 
-      precio: 30000, 
+    {
+      id: '3',
+      nombre: 'Audífonos Sony',
+      precio: 30000,
       imagen: 'https://via.placeholder.com/300x300/dc3545/ffffff?text=Audífonos',
       descripcion: 'Audífonos con cancelación de ruido'
     },
-    { 
-      id: '4',  
-      nombre: 'Tablet iPad', 
-      precio: 30000, 
+    {
+      id: '4',
+      nombre: 'Tablet iPad',
+      precio: 30000,
       imagen: 'https://via.placeholder.com/300x300/6f42c1/ffffff?text=iPad',
       descripcion: 'Tablet perfecta para creativos'
     },
-    { 
-      id: '5', 
-      nombre: 'Smart Watch', 
-      precio: 500000, 
+    {
+      id: '5',
+      nombre: 'Smart Watch',
+      precio: 500000,
       imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
       descripcion: 'Reloj inteligente con monitor de salud'
     }
-  ];    
-    return (
+  ];
+  const productosFiltrados = productos.filter(producto =>
+    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) || producto.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase())
+  );
+
+  return (
     <div className="vista-productos">
       {/* Header */}
       <header className="header-ecommerce">
@@ -51,7 +57,7 @@ function VistaProductos() {
               <h1 className="logo-texto">TejidosMiki</h1>
             </Link>
           </div>
-          
+
           {/* Buscador */}
           <div className="buscador-container">
             <input
@@ -80,7 +86,7 @@ function VistaProductos() {
           {terminoBusqueda && (
             <div className="resultados-busqueda">
               <p>
-                {productosFiltrados.length > 0 
+                {productosFiltrados.length > 0
                   ? `Se encontraron ${productosFiltrados.length} productos para "${terminoBusqueda}"`
                   : `No se encontraron productos para "${terminoBusqueda}"`
                 }
@@ -90,10 +96,10 @@ function VistaProductos() {
 
           {/* contenedor con los productos */}
           <div className="contenedor-productos">
-            <div className="lista-productos-horizontal"> 
+            <div className="lista-productos-horizontal">
               {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
                 <Link key={producto.id} href={`/producto/${producto.id}`}>
-                  <TarjetaProducto  
+                  <TarjetaProducto
                     id={producto.id}
                     nombre={producto.nombre}
                     precio={producto.precio}
@@ -114,7 +120,7 @@ function VistaProductos() {
         </div>
       </footer>
     </div>
-    );
+  );
 }
 
 export default VistaProductos;

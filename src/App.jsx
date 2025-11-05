@@ -12,6 +12,7 @@ function App() {
         <Switch>
           <Route path="/" component={VistaProductos} />
           <Route path="/carrito" component={VistaCarrito} />
+          <Route path="/producto/:id" component={VistaProductoDetalle} />
           <Route>404 - Página no encontrada</Route>
         </Switch>
       </div>
