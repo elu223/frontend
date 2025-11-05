@@ -19,6 +19,22 @@ function VistaCarrito() {
         setItems(items.map(item => item.id === id ? { ...item, cantidad } : item));
     }
 
+    const incrementarCantidad = (id) => {
+        setItems(items.map(item => 
+            item.id === id 
+            ? { ...item, cantidad: item.cantidad + 1 } 
+            : item
+        ));
+    };
+
+    const disminuirCantidad = (id) => {
+        setItems(items.map(item => 
+            item.id === id 
+            ? { ...item, cantidad: Math.max(1, item.cantidad - 1) } 
+            : item
+        ));
+    };
+
     const total = items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
     return (
@@ -38,14 +54,17 @@ function VistaCarrito() {
                         </div>
                         <div className='Cantidad-producto'>
                             <p>Cantidad</p>
-                            <button className='Aumentar-cantidad'>+</button>
+                            <button className='Aumentar-cantidad' onClick={() => incrementarCantidad(item.id)}>+</button>
                          <input className='cantidad-input'
                             type="number"   
                             value={item.cantidad}
                             min="1"
-                            onChange={(e) => actualizarCantidad(item.id, parseInt(e.target.value))}
+                            onChange={(e) => {
+                                const value = parseInt(e.target.value) || 1;
+                                actualizarCantidad(item.id, Math.max(1, value));
+                            }}
                          />
-                            <button className='Disminuir-cantidad'>-</button>
+                            <button className='Disminuir-cantidad' onClick={() => disminuirCantidad(item.id)}>-</button>
                         </div>
                         <button className='Boton-Eliminar Quitar' onClick={() => eliminarItem(item.id)}>Quitar</button>
                     </div>

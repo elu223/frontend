@@ -275,6 +275,7 @@
   }
 }
 
+
 @media (max-width: 480px) {
   .logo-container {
     gap: 0.5rem;
@@ -313,4 +314,7 @@
   .titulo-productos {
     font-size: 1.8rem;
   }
+}
+.navegacion-con-menu{
+  order: 2;
 }

@@ -9,7 +9,17 @@
   background-color: #AB0C70;
   text-align: center;
   margin: 0;
+  
 }
+
+h2.tituloCarrito {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+}
+
+
 
 .itemsLista {
   margin-left: 489px;
@@ -47,6 +57,12 @@ h2{
   align-items: center;
 }
 
+.Cantidad-producto{
+  display: flex;
+  flex-direction: column;
+
+}
+
 .Boton-Eliminar {
     top: 40px;
     position: relative;
@@ -59,6 +75,7 @@ h2{
 }
 
 .Carrito-total {
+  box-shadow: 0px 1px 4px 1px #9a1368;
     top: -8px;
     left: 525px;
     position: relative;
@@ -77,7 +94,14 @@ h2{
     border-radius: 5px;
     cursor: pointer;
 }
-
+.Aumentar-cantidad,
+.Disminuir-cantidad {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px 10px;
+}
 .cantidad-input {
   -webkit-appearance: none;
   -moz-appearance: textfield;
