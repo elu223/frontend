@@ -1,8 +1,8 @@
 import { Link } from "wouter";
 import { useState } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
+import MenuDesplegable from "../Menu/MenuDesplegable.jsx";
 import './VistaProductos.css';
-
 function VistaProductos() {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   
@@ -97,25 +97,27 @@ function VistaProductos() {
             </div>
           )}
 
-          {/* contenedor con los productos */}
-          <div className="contenedor-productos">
-            <div className="lista-productos-horizontal"> 
-              {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
-                <Link key={producto.id} href={`/producto/${producto.id}`}>
-                  <TarjetaProducto  
-                    id={producto.id}
-                    nombre={producto.nombre}
-                    precio={producto.precio}
-                    imagen={producto.imagen}
-                    descripcion={producto.descripcion}
-                  />
-                </Link>
-              ))}
+          {/* Aquí va la estructura del menú y productos */}
+          <div className="layout-contenido">
+            <MenuDesplegable />
+            <div className="contenedor-productos">
+              <div className="lista-productos-horizontal"> 
+                {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
+                  <Link key={producto.id} href={`/producto/${producto.id}`}>
+                    <TarjetaProducto  
+                      id={producto.id}
+                      nombre={producto.nombre}
+                      precio={producto.precio}
+                      imagen={producto.imagen}
+                      descripcion={producto.descripcion}
+                    />
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </main>
-
       {/* Footer */}
       <footer className="footer">
         <div className="container">
@@ -125,5 +127,4 @@ function VistaProductos() {
     </div>
   );
 }
-
 export default VistaProductos;
