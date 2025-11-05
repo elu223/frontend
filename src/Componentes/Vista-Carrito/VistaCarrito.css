@@ -1,7 +1,8 @@
 .Carrito-container {
+  font-size: 20px;
   width: 100vw;
   height: auto;
-  background-color: #FCEFB0;
+  background-color: #ffffff;
 }
 
 .tituloCarrito {
@@ -16,10 +17,9 @@ h2.tituloCarrito {
   font-family: "Playfair Display", serif;
   font-optical-sizing: auto;
   font-weight: weight;
+  font-weight: bold;
   font-style: normal;
 }
-
-
 
 .itemsLista {
   margin-left: 489px;
@@ -33,12 +33,14 @@ h2{
   font-size: 34px;
   padding: 15px;
 }
+
 :hover.Carrito-item {
-  box-shadow: 0px 1px 4px 1px #9a1368;
+  padding: 0 20px 2rem;
+  box-shadow: 0px 1px 4px 1px #bb4b92;
   position: relative;
   width: 740px;
   margin-top: 12px;
-  background-color: #ffffff;
+  background-color: #fcefb0;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -46,11 +48,12 @@ h2{
 }
 
 .Carrito-item {
+  
   box-shadow: 0px 1px 4px 1px #520837;
   position: relative;
   width: 740px;
   margin-top: 12px;
-  background-color: #ffffff;
+  background-color: #fcefb0;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -62,9 +65,21 @@ h2{
   flex-direction: column;
 
 }
+:hover.Boton-Eliminar {
+  
+    top: 60px;
+    position: relative;
+    background-color: white;
+    color:  #AB0C70;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 23px;
+    cursor: pointer;
+}
 
 .Boton-Eliminar {
-    top: 40px;
+  
+    top: 60px;
     position: relative;
     background-color: #AB0C70;
     color: white;
@@ -75,16 +90,26 @@ h2{
 }
 
 .Carrito-total {
-  box-shadow: 0px 1px 4px 1px #9a1368;
+  box-shadow: 0px 1px 4px 1px #7a7a7a;
     top: -8px;
-    left: 525px;
+    left: 490px;
     position: relative;
     border-radius: 16px;
     background: white;
-    width: 52%;
+    width: 58%;
     text-align: center;
 }
 
+:hover.Boton-Comprar {
+    height: 26px;
+    width: -webkit-fill-available;
+    background-color: #AB0C70;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 0px 1px 1px #7a7a7a;
+    cursor: pointer;
+}
 .Boton-Comprar {
     height: 26px;
     width: -webkit-fill-available;
@@ -92,14 +117,16 @@ h2{
     color: #AB0C70;
     border: none;
     border-radius: 5px;
+    box-shadow: 1px 0px 1px 1px #7a7a7a;
     cursor: pointer;
 }
+
 .Aumentar-cantidad,
 .Disminuir-cantidad {
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 2px;
   padding: 5px 10px;
 }
 .cantidad-input {
@@ -121,4 +148,133 @@ h2{
 .cantidad-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.formulario-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 16px;
+  z-index: 2000;
+}
+
+.formulario-container.pago-form {
+  background: #fff8dc; /* color claro como en la imagen */
+  padding: 18px;
+  border-radius: 6px;
+  width: 420px;
+  max-width: 95%;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  font-size: 14px;
+}
+
+.fila-voucher {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.fila-voucher input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn-aplicar {
+  background: #6f1b4b;
+  color: #fff;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.campo-envio input {
+  width: 100%;
+  padding: 10px;
+  margin: 12px 0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.medios-pago {
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.pago-icon {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.label {
+  display:block;
+  margin-top:10px;
+  margin-bottom:6px;
+  font-weight:600;
+}
+
+input[type="text"], input[type="tel"], input[type="email"] {
+  width: 100%;
+  padding:10px;
+  border-radius:4px;
+  border:1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.fila-pequena {
+  display:flex;
+  gap:10px;
+  margin-top:8px;
+}
+
+.col-pequena { flex:1; }
+
+.resumen-pago {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:16px;
+  gap:12px;
+}
+
+.total-text {
+  background:#6f1b4b;
+  color:#fff;
+  padding:10px 12px;
+  border-radius:6px;
+  font-weight:700;
+}
+
+.btn-pagar {
+  background:#6f1b4b;
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.btn-cancel {
+  margin-top:10px;
+  background:transparent;
+  border:none;
+  color:#333;
+  cursor:pointer;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 480px) {
+  .formulario-container.pago-form { width: 100%; padding:14px; }
+  .fila-voucher { flex-direction: column; }
+  .resumen-pago { flex-direction: column; align-items:stretch; gap:8px; }
 }
