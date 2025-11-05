@@ -83,7 +83,7 @@ function VistaProductos() {
         </div>
       </header>
 
-      {/* Productos kS*/}
+      {/* Productos */}
       <main className="main-content">
         <div className="container">
           {terminoBusqueda && (

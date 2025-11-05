@@ -1,48 +1,100 @@
 .Carrito-container {
-  background-color: black;
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100vw;
+  height: auto;
+  background-color: #FCEFB0;
 }
 
 .tituloCarrito {
+  color:#ffffff;
+  background-color: #AB0C70;
   text-align: center;
+  margin: 0;
 }
 
 .itemsLista {
+  margin-left: 489px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  flex-wrap: nowrap;
+}
+
+h2{
+  
+  font-size: 34px;
+  padding: 15px;
+}
+:hover.Carrito-item {
+  box-shadow: 0px 1px 4px 1px #9a1368;
+  position: relative;
+  width: 740px;
+  margin-top: 12px;
+  background-color: #ffffff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .Carrito-item {
-  border: 1px solid #ddd;
+  box-shadow: 0px 1px 4px 1px #520837;
+  position: relative;
+  width: 740px;
+  margin-top: 12px;
+  background-color: #ffffff;
   padding: 15px;
-  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .Boton-Eliminar {
-  background-color: #ff4444;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+    top: 40px;
+    position: relative;
+    background-color: #AB0C70;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 23px;
+    cursor: pointer;
 }
 
 .Carrito-total {
-  margin-top: 20px;
-  text-align: right;
+    top: -8px;
+    left: 525px;
+    position: relative;
+    border-radius: 16px;
+    background: white;
+    width: 52%;
+    text-align: center;
 }
 
 .Boton-Comprar {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    height: 26px;
+    width: -webkit-fill-available;
+    background-color: #dce4dd;
+    color: #AB0C70;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cantidad-input {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #6A1452;
+  width: 56px;
+  padding: 6px;
+  border-radius: 22px;
+  text-align: center;
+  font: inherit;
+  box-sizing: border-box;
+  color:white;
+}
+
+.cantidad-input::-webkit-outer-spin-button,
+.cantidad-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

@@ -7,7 +7,7 @@ function VistaProductoDetalle() {
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
-
+  const [comentariosLocales, setComentariosLocales] = useState([]);
   // Datos del producto principal
   const producto = {
     nombre: "Mini Crochet Banana",
@@ -80,6 +80,37 @@ function VistaProductoDetalle() {
     }
   ];
 
+  // Para el rating de productos
+  const renderStars = (rating) => {
+    return [...Array(5)].map((_, index) => (
+      <FaStar
+        key={index}
+        className={index < rating ? "star filled" : "star"}
+        color={index < rating ? "#ffc107" : "#e4e5e9"}
+        size={20}
+      />
+    ));
+  };
+
+  // Para la selección de rating en comentarios
+  const handleRatingClick = (value) => {
+    setRating(value);
+  };
+
+  const renderSelectableStars = () => {
+    return [...Array(5)].map((_, index) => (
+      <FaStar
+        key={index}
+        className="star selectable"
+        color={index < rating ? "#ffc107" : "#e4e5e9"}
+        size={24}
+        style={{ cursor: 'pointer' }}
+        onClick={() => handleRatingClick(index + 1)}
+        onMouseEnter={() => setRating(index + 1)}
+      />
+    ));
+  };
+
   return (
     <div className="vista-producto-detalle">
       {/* HEADER CON BUSCADOR A LA DERECHA */}
@@ -130,7 +161,7 @@ function VistaProductoDetalle() {
                 <h1 className="titulo-producto">{producto.nombre}</h1>
                 
                 <div className="rating-producto">
-                  <span className="estrellas">★★★★★</span>
+                  <span className="estrellas">{renderStars(producto.puntuacion)}</span>
                 </div>
                 
                 <div className="precio-producto">${producto.precio.toLocaleString()}</div>
@@ -174,7 +205,7 @@ function VistaProductoDetalle() {
             
             <div className="formulario-comentario">
               <div className="rating-comentario">
-                <span>★★★★★</span>
+                {renderSelectableStars()}
               </div>
               <textarea 
                 className="textarea-comentario"
@@ -187,7 +218,7 @@ function VistaProductoDetalle() {
             </div>
 
             <div className="lista-comentarios">
-              {comentarios.map((com, index) => (
+              {[...comentariosLocales, ...comentarios].map((com, index) => (
                 <div key={index} className="comentario-item">
                   <div className="usuario-comentario">{com.usuario}</div>
                   <div className="texto-comentario">{com.texto}</div>
