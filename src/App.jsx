@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Router, Switch } from 'wouter';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
+import VistaProductoDetalle from './Componentes/Vista-Producto-Detalle/VistaProductoDetalle'
 import './App.css';
 
 function App() {

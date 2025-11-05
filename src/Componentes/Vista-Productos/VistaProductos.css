@@ -80,7 +80,7 @@
   font-size: 1rem;
   border-radius: 25px;
   background: transparent;
-  width: 100%; /* Asegura que ocupe todo el espacio */
+  width: 100%;
 }
 
 .buscador-btn {
@@ -96,14 +96,14 @@
   color: white;
   font-size: 1.2rem;
   transition: background 0.3s ease;
-  flex-shrink: 0; /* Evita que se encoja */
+  flex-shrink: 0;
 }
 
 .buscador-btn:hover {
   background: #b3157a;
 }
 
-/* Navegación COMENTADA - Puedes eliminar estos estilos si quieres */
+/* Navegación COMENTADA  */
 /*
 .navegacion {                       
   display: flex;
@@ -122,6 +122,7 @@
   white-space: nowrap;
   font-family: system-ui;
 }
+  hola
 */
 
 /* Main Content */
@@ -161,7 +162,6 @@
   border: 1px solid #e9ecef;
 }
 
-/* LISTA HORIZONTAL - 5 productos en una sola fila */
 .lista-productos-horizontal {
   display: flex;
   justify-content: space-between;
@@ -170,15 +170,19 @@
   width: 100%;
 }
 
-/* Asegurar que cada producto ocupe el mismo espacio */
 .lista-productos-horizontal .tarjeta-producto {
   flex: 1;
-  min-width: 0; /* Permite que se ajusten */
+  min-width: 0; 
+}
+
+.lista-productos-horizontal a {
+    text-decoration: none;  
+    color: inherit;
 }
 
 /* Footer */
 .footer {
-  background: #2c3e50;
+  background: #d20081;
   color: white;
   text-align: center;
   padding: 2rem 0;
@@ -219,7 +223,7 @@
   }
   
   .buscador-container {
-    max-width: 500px; /* Un poco menos ancho en tablets */
+    max-width: 500px; 
     min-width: 400px;
   }
 }
@@ -239,7 +243,7 @@
   }
   
   .buscador-container {
-    max-width: 100%; /* Ocupa todo el ancho en móvil */
+    max-width: 100%; 
     min-width: auto;
     margin-left: 0;
     margin-right: 0;
@@ -252,7 +256,6 @@
     border-radius: 10px;
   }
   
-  /* En móvil, cambiar a scroll horizontal */
   .lista-productos-horizontal {
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -271,6 +274,7 @@
     font-size: 2rem;
   }
 }
+
 
 @media (max-width: 480px) {
   .logo-container {
@@ -310,4 +314,7 @@
   .titulo-productos {
     font-size: 1.8rem;
   }
+}
+.navegacion-con-menu{
+  order: 2;
 }
