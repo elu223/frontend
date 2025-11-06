@@ -57,12 +57,7 @@ function VistaProductos() {
               <h1 className="logo-texto">TejidosMiki</h1>
             </Link>
           </div>
-<<<<<<< HEAD
-
-          {/* Buscador */}
-=======
           
->>>>>>> origin/develop_orosco
           <div className="buscador-container">
             <input
               type="text"

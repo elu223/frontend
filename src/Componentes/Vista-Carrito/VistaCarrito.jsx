@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import HeaderMenu from "../Menu/Header-Menu.jsx";
+import { Link } from 'wouter';
 import './VistaCarrito.css';
 
 function VistaCarrito() {
@@ -87,6 +88,18 @@ function VistaCarrito() {
 
     return (
         <div className='Carrito-container'>
+            <header className="header-ecommerce">
+                <div className="container">
+                    <div className="logo-container">
+                        <Link href="/" className="logo-link">
+                        <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
+                        <h1 className="logo-texto">TejidosMiki</h1>
+                        </Link>
+                    </div>
+
+                    <HeaderMenu />
+                </div>
+            </header>
             <h2 className='tituloCarrito'>
                 {/* https://cdn-icons-png.flaticon.com/512/263/263142.png  imagen de carrito logo*/}
                 <img src="./" alt="" />
