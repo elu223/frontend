@@ -207,8 +207,8 @@ function VistaCarrito() {
                             </div>
 
                             <div className='resumen-pago'>
-                                <h3>Resumen del pago: ${total}</h3>
-                                <button type="submit" className='btn-confirmar-pago'>Confirmar Pago</button>
+                                <h3>${total}</h3>
+                                <button type="submit" className='btn-confirmar-pago'>Pagar</button>
                             </div>
 
                             

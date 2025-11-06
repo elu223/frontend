@@ -2,7 +2,7 @@
   font-size: 20px;
   width: 100vw;
   height: auto;
-  background-color: #fff8dc;
+  background-color: #ffffff;
 }
 
 .tituloCarrito {
@@ -40,7 +40,7 @@ h2{
   position: relative;
   width: 740px;
   margin-top: 12px;
-  background-color: #fff8dc;
+  background-color: #fcd4f2;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -65,11 +65,12 @@ h2{
 
 }
 :hover.Boton-Eliminar {
-    top: 60px;
+   top: 39px;
+    left: -23px;
     position: relative;
     background-color: white;
     color:  #AB0C70;
-    padding: 8px 16px;
+    padding: 8px;
     border: none;
     border-radius: 23px;
     cursor: pointer;
@@ -77,10 +78,11 @@ h2{
 
 .Boton-Eliminar {
     top: 39px;
+    left: -23px;
     position: relative;
     background-color: #AB0C70;
     color: white;
-    padding: 8px 16px;
+    padding: 8px;
     border: none;
     border-radius: 23px;
     cursor: pointer;
@@ -98,6 +100,7 @@ h2{
 }
 
 :hover.Boton-Comprar {
+    box-shadow: 0px 1px 8px 1px #7a7a7a;
     height: 26px;
     width: -webkit-fill-available;
     background-color: #AB0C70;
@@ -211,10 +214,11 @@ h2{
 }
 
 .btn-aplicar {
+    height: 31px;
     background: #6f1b4b;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 9px 11px;
     border-radius: 6px;
     cursor: pointer;
 }
@@ -240,14 +244,14 @@ h2{
 }
 
 .pago-icon {
-    width: 100%;
+    width: 76%;
     padding: 12px 8px;
     background: white;
     border: 2px solid transparent;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0px 2px 0px currentColor;
 }
 
 .pago-option input[type="radio"]:checked + .pago-icon {
@@ -263,17 +267,17 @@ h2{
 }
 
 input[type="text"] {
-    width: 100%;
-    padding: 12px;
+    width: 93%;
+    padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 6px;
-    margin-bottom: 16px;
+    border-radius: 7px;
+    margin-bottom: 6px;
     font-size: 14px;
 }
 
 .fila-pequena {
     display: flex;
-    gap: 16px;
+    
     margin-bottom: 24px;
 }
 
@@ -282,6 +286,11 @@ input[type="text"] {
 }
 
 .resumen-pago {
+    height: 40px;
+    border-radius: 15px;
+    padding: 6px;
+    background-color: #520837;
+    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -308,10 +317,11 @@ input[type="text"] {
 .btn-cancel {
     background: none;
     border: none;
-    color: #666;
+    color: #ff0000;
     width: 100%;
     padding: 8px;
     margin-top: 12px;
-    cursor: pointer;
     font-size: 14px;
 }
+
+
