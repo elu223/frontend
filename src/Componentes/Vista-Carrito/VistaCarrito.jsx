@@ -1,4 +1,4 @@
-import React, {useState}  from 'react';
+import React, { useState } from 'react';
 
 import './VistaCarrito.css';
 
@@ -44,6 +44,14 @@ function VistaCarrito() {
     const [cardNumero, setCardNumero] = useState('');
     const [cardFecha, setCardFecha] = useState('');
     const [cardCVV, setCardCVV] = useState('');
+    const [metodoPago, setMetodoPago] = useState('');
+
+    const mediosPago = [
+        { id: 'VISA', nombre: 'VISA' },
+        { id: 'MCD', nombre: 'MasterCard' },
+        { id: 'BBVA', nombre: 'BBVA' },
+        { id: 'NX', nombre: 'NX' }
+    ];
 
     const aplicarVoucher = () => {
         console.log('Voucher aplicado:', voucher);
@@ -52,12 +60,17 @@ function VistaCarrito() {
 
     const manejarPago = (e) => {
         e.preventDefault();
+        if (!metodoPago) {
+            alert('Por favor seleccione un método de pago');
+            return;
+        }
         const pago = {
             items,
             total,
             voucher,
             lugarEnvio,
-            tarjeta: { cardNombre, cardNumero, cardFecha, cardCVV }
+            tarjeta: { cardNombre, cardNumero, cardFecha, cardCVV },
+            metodoPago
         };
         console.log('Procesar pago:', pago);
         // aquí enviar a backend o limpiar carrito
@@ -138,10 +151,18 @@ function VistaCarrito() {
                             </div>
 
                             <div className='medios-pago'>
-                                <div className='pago-icon'>VISA</div>
-                                <div className='pago-icon'>MCD</div>
-                                <div className='pago-icon'>BBVA</div>
-                                <div className='pago-icon'>NX</div>
+                                {mediosPago.map(medio => (
+                                    <label key={medio.id} className='pago-option'>
+                                        <input
+                                            type="radio"
+                                            name="metodoPago"
+                                            value={medio.id}
+                                            checked={metodoPago === medio.id}
+                                            onChange={(e) => setMetodoPago(e.target.value)}
+                                        />
+                                        <span className='pago-icon'>{medio.nombre}</span>
+                                    </label>
+                                ))}
                             </div>
 
                             <label className='label'>Nombre de la tarjeta</label>
@@ -186,18 +207,20 @@ function VistaCarrito() {
                             </div>
 
                             <div className='resumen-pago'>
-                                <div className='total-text'>${total.toLocaleString()}</div>
-                                <button type="submit" className='btn-pagar'>Pagar</button>
+                                <h3>Resumen del pago: ${total}</h3>
+                                <button type="submit" className='btn-confirmar-pago'>Confirmar Pago</button>
                             </div>
 
-                            <button type="button" className='btn-cancel' onClick={() => setMostrarFormulario(false)}>Cancelar</button>
+                            
+                            <button type="button" className='btn-cancelar' onClick={() => setMostrarFormulario(false)}>Cancelar</button>
                         </form>
                     </div>
+                    
                 </div>
             )}
-        </div>
             </div>
-            
+        </div>
     );
 }
+
 export default VistaCarrito;
