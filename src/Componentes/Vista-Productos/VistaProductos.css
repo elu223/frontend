@@ -6,6 +6,8 @@
 .vista-productos {
   min-height: 100vh;
   background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header */
@@ -20,13 +22,13 @@
 
 .header-ecommerce .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: column;
   align-items: center;
   height: 95px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .logo-container {
@@ -103,27 +105,6 @@
   background: #b3157a;
 }
 
-/* Navegación COMENTADA  */
-/*
-.navegacion {                       
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-top: 45px;
-  margin-left: auto;
-}
-
-.nav-link {
-  color: #410330;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  white-space: nowrap;
-  font-family: system-ui;
-}
-  hola
-*/
 
 /* Main Content */
 .main-content {
@@ -187,6 +168,7 @@
   margin-top: 4rem;
   width: 100%;
   box-sizing: border-box;
+  margin-top: auto;
 }
 
 .footer .container {
