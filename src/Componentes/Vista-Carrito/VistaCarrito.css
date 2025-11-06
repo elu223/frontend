@@ -111,8 +111,9 @@ h2{
     cursor: pointer;
 }
 .Boton-Comprar {
-    height: 26px;
+    font-size: 20px;
     width: -webkit-fill-available;
+    height: 26px;
     background-color: #dce4dd;
     color: #AB0C70;
     border: none;
@@ -304,24 +305,28 @@ input[type="text"] {
 }
 
 .btn-pagar {
-    background: #6f1b4b;
-    color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
+  background: none;
+  cursor: pointer;
+  font-size: 2px;
+  padding: 5px 10px;
 }
 
 .btn-cancel {
     background: none;
     border: none;
-    color: #ff0000;
+    color: #ffffff;
     width: 100%;
     padding: 8px;
     margin-top: 12px;
     font-size: 14px;
 }
 
-
+.btn-confirmar-pago {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+}
