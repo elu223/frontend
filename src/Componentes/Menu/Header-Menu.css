@@ -1,0 +1,70 @@
+.header-menu-ml {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.menu-opciones {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.menu-opcion {
+  position: relative;
+  display: flex;
+  height: auto;
+  color: rgba(0, 0, 0, 0.9);
+  text-decoration: none;
+  padding: 0;
+  line-height: 18px;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Inter", sans-serif;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.menu-opcion:hover {
+  color: rgba(0, 0, 0, 0.7); /* Cambiado de azul a gris oscuro */
+}
+
+.carrito-opcion {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.carrito-icono {
+  font-size: 1.3rem;
+}
+
+.carrito-contador {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #D51890;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .menu-opciones {
+    gap: 1rem;
+  }
+  
+  .menu-opcion {
+    font-size: 0.8rem;
+  }
+}

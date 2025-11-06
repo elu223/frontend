@@ -4,6 +4,8 @@
   font-family: Arial, sans-serif;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* HEADER CON BUSCADOR A LA DERECHA */

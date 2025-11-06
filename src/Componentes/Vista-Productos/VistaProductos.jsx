@@ -1,8 +1,9 @@
 import { Link } from "wouter";
 import { useState } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
-import MenuDesplegable from "../Menu/MenuDesplegable.jsx";
+import HeaderMenu from "../Menu/Header-Menu.jsx";
 import './VistaProductos.css';
+
 function VistaProductos() {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   
@@ -51,7 +52,6 @@ function VistaProductos() {
 
   return (
     <div className="vista-productos">
-      {/* Header */}
       <header className="header-ecommerce">
         <div className="container">
           <div className="logo-container">
@@ -61,7 +61,6 @@ function VistaProductos() {
             </Link>
           </div>
           
-          {/* Buscador */}
           <div className="buscador-container">
             <input
               type="text"
@@ -73,17 +72,10 @@ function VistaProductos() {
             <button className="buscador-btn">🔍</button>
           </div>
 
-          {/*
-          <nav className="navegacion">
-            <Link href="/registrarse" className="nav-link">Registrarse</Link>
-            <Link href="/iniciar-sesion" className="nav-link">Iniciar sesión</Link>
-            <Link href="/ver-compras" className="nav-link">Ver compras</Link>
-          </nav>
-          */}
+          <HeaderMenu />
         </div>
       </header>
 
-      {/* Productos */}
       <main className="main-content">
         <div className="container">
           {terminoBusqueda && (
@@ -97,34 +89,31 @@ function VistaProductos() {
             </div>
           )}
 
-          {/* Aquí va la estructura del menú y productos */}
-          <div className="layout-contenido">
-            <MenuDesplegable />
-            <div className="contenedor-productos">
-              <div className="lista-productos-horizontal"> 
-                {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
-                  <Link key={producto.id} href={`/producto/${producto.id}`}>
-                    <TarjetaProducto  
-                      id={producto.id}
-                      nombre={producto.nombre}
-                      precio={producto.precio}
-                      imagen={producto.imagen}
-                      descripcion={producto.descripcion}
-                    />
-                  </Link>
-                ))}
-              </div>
+          <div className="contenedor-productos">
+            <div className="lista-productos-horizontal"> 
+              {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
+                <Link key={producto.id} href={`/producto/${producto.id}`}>
+                  <TarjetaProducto  
+                    id={producto.id}
+                    nombre={producto.nombre}
+                    precio={producto.precio}
+                    imagen={producto.imagen}
+                    descripcion={producto.descripcion}
+                  />
+                </Link>
+              ))}
             </div>
           </div>
         </div>
       </main>
-      {/* Footer */}
+      
       <footer className="footer">
         <div className="container">
-          <p>&copy; 2024 TejidosMiki. Todos los derechos reservados.</p>
+          <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
         </div>
       </footer>
     </div>
   );
 }
+
 export default VistaProductos;
