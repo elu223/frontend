@@ -1,11 +1,13 @@
 .Carrito-container {
   font-size: 20px;
-  width: 100vw;
+  width: 100%;
   height: auto;
   background-color: #ffffff;
 }
 
 .tituloCarrito {
+    height: 20px;
+    text-align:start;
   color:#ffffff;
   background-color: #AB0C70;
   text-align: center;
@@ -14,15 +16,18 @@
 }
 
 h2.tituloCarrito {
-  font-family: "Playfair Display", serif;
-  font-optical-sizing: auto;
-  font-weight: weight;
-  font-weight: bold;
-  font-style: normal;
+    display: flex;
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    align-items: center;
+    justify-content: center;
 }
 
 .itemsLista {
-  margin-left: 489px;
+  margin-left: 450px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -35,23 +40,20 @@ h2{
 }
 
 :hover.Carrito-item {
-  padding: 0 20px 2rem;
   box-shadow: 0px 1px 4px 1px #bb4b92;
   position: relative;
-  width: 740px;
+  width: 770px;
   margin-top: 12px;
   background-color: #fcd4f2;
-  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .Carrito-item {
-  
   box-shadow: 0px 1px 4px 1px #520837;
   position: relative;
-  width: 740px;
+  width: 770px;
   margin-top: 12px;
   background-color: #fff8dc;
   display: flex;
@@ -59,11 +61,13 @@ h2{
   align-items: center;
 }
 
-.Cantidad-producto{
-  display: flex;
-  flex-direction: column;
-
+.Cantidad-producto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 14px;
 }
+
 :hover.Boton-Eliminar {
    top: 39px;
     left: -23px;
@@ -91,7 +95,7 @@ h2{
 .Carrito-total {
   box-shadow: 0px 1px 4px 1px #7a7a7a;
     top: -8px;
-    left: 490px;
+    left: 460px;
     position: relative;
     border-radius: 16px;
     background: white;
@@ -127,18 +131,16 @@ h2{
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 2px;
-  padding: 5px 10px;
+  font-size: 20px;
 }
 .cantidad-input {
   -webkit-appearance: none;
   -moz-appearance: textfield;
   appearance: none;
-  border: 1px solid rgba(0,0,0,0.12);
   background: #6A1452;
-  width: 56px;
-  padding: 6px;
-  border-radius: 22px;
+  width: 50px;
+    height: 30px;
+  border-radius: 30px;
   text-align: center;
   font: inherit;
   box-sizing: border-box;
@@ -209,7 +211,7 @@ h2{
 .fila-voucher input {
     flex: 1;
     padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #ffffff;
     border-radius: 6px;
     font-size: 14px;
 }
@@ -225,9 +227,9 @@ h2{
 }
 
 .campo-envio input {
-    width: 100%;
+    width: 93%;
     padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #ffffff;
     border-radius: 6px;
     font-size: 14px;
 }
@@ -266,11 +268,16 @@ h2{
     font-weight: 500;
     font-size: 14px;
 }
+input .datos-tarjeta{
+    width: 75%;
+    padding: 12px;
+}
 
-input[type="text"] {
-    width: 93%;
+input{
+    box-shadow: 0px 2px 0px currentColor;
+    width: 90%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #ffffff;
     border-radius: 7px;
     margin-bottom: 6px;
     font-size: 14px;
@@ -287,6 +294,7 @@ input[type="text"] {
 }
 
 .resumen-pago {
+    box-shadow: 2px 2px 2px #2a2a2a;
     height: 40px;
     border-radius: 15px;
     padding: 6px;
@@ -311,17 +319,6 @@ input[type="text"] {
   font-size: 2px;
   padding: 5px 10px;
 }
-
-.btn-cancel {
-    background: none;
-    border: none;
-    color: #ffffff;
-    width: 100%;
-    padding: 8px;
-    margin-top: 12px;
-    font-size: 14px;
-}
-
 .btn-confirmar-pago {
     border: none;
     background: none;
@@ -329,4 +326,33 @@ input[type="text"] {
     color: white;
     font-size: 21px;
     font-weight: bold;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+:hover.btn-cancelar{
+    box-shadow: 2px 4px 4px 1px #7a7a7a;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #a10000;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 16px;
+    height: 26px;
+    background-color: #ffffff;
+}
+
+.btn-cancelar{
+    box-shadow: 2px 2px 2px #7a7a7a;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 16px;
+    height: 26px;
+    background-color: #a10000;
 }

@@ -178,8 +178,9 @@ function VistaCarrito() {
                                 ))}
                             </div>
 
-                            <label className='label'>Nombre de la tarjeta</label>
+                            <label htmlFor="cardNombreInput" className='label'>Nombre de la tarjeta</label>
                             <input
+                                id="cardNombreInput"
                                 type="text"
                                 placeholder="Titular de la tarjeta"
                                 value={cardNombre}
@@ -198,8 +199,9 @@ function VistaCarrito() {
 
                             <div className='fila-pequena'>
                                 <div className='col-pequena'>
-                                    <label className='label'>Fecha</label>
+                                    <label >Fecha</label>
                                     <input
+                                     className='datos-tarjeta'
                                         type="text"
                                         placeholder="MM/AA"
                                         value={cardFecha}
@@ -209,7 +211,7 @@ function VistaCarrito() {
                                 </div>
                                 <div className='col-pequena'>
                                     <label className='label'>CVV</label>
-                                    <input
+                                    <input className='datos-tarjeta'
                                         type="text"
                                         placeholder="CVV"
                                         value={cardCVV}
@@ -220,8 +222,11 @@ function VistaCarrito() {
                             </div>
 
                             <div className='resumen-pago'>
-                                <h3>${total}</h3>
-                                <button type="submit" className='btn-confirmar-pago'>Pagar</button>
+                                
+                                <button type="submit" className='btn-confirmar-pago'>
+                                    <span>${total}</span>
+                                    <span>Pagar</span>
+                                </button>
                             </div>
 
                             
