@@ -116,15 +116,6 @@
   padding: 0 20px;
 }
 
-.titulo-productos {
-  font-family: "Inter", sans-serif;
-  text-align: center;
-  font-size: 2.5rem;
-  color: #2c3e50;
-  margin-bottom: 3rem;
-  font-weight: bold;
-}
-
 /* Resultados de búsqueda */
 .resultados-busqueda {
   text-align: center;
@@ -144,12 +135,11 @@
 }
 
 .lista-productos-horizontal {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     justify-content: space-between;
-    align-items: center;
     gap: 1.5rem;
     width: 100%;
-    flex-direction: row;
 }
 
 
