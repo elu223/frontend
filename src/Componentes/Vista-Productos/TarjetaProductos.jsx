@@ -11,10 +11,9 @@ function TarjetaProducto({ id, nombre, precio, imagen, descripcion }) {
       
       <div className="info-producto">
         <h3 className="nombre-producto">{nombre}</h3>
-        <p className="descripcion-producto">{descripcion}</p>
         <div className="precio-producto">${precio}</div>
         <div className="acciones-producto">
-          <button className="btn-agregar-carrito">Agregar al carrito</button>
+        <button className="btn-agregar-carrito">Agregar al carrito</button>
         </div>
       </div>
     </div>

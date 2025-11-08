@@ -259,7 +259,7 @@ function VistaProductoDetalle() {
       {/* Footer */}
       <footer className="footer">
         <div className="container">
-          <p>&copy; 2024 TejidosMiki. Todos los derechos reservados.</p>
+          <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
         </div>
       </footer>
     </div>

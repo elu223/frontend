@@ -10,39 +10,64 @@ function VistaProductos() {
   const productos = [
     { 
       id: '1',  
-      nombre: 'Smartphone Samsung', 
-      precio: 30000, 
-      imagen: 'https://via.placeholder.com/300x300/007bff/ffffff?text=Samsung',
-      descripcion: 'Smartphone de última generación'
+      nombre: 'Ajolote Amigurumi Amarillo', 
+      precio: 6500, 
+      imagen: '/img/ajolote amarillo.jpeg',
     },
     { 
       id: '2', 
-      nombre: 'Laptop HP', 
-      precio: 100000, 
-      imagen: 'https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop+HP',
-      descripcion: 'Laptop ideal para trabajo y estudio'
+      nombre: 'Tulipan Rojo Tejido', 
+      precio: 7500, 
+      imagen: 'img/tulipan rojo.jpeg',
     },
     { 
       id: '3',  
-      nombre: 'Audífonos Sony', 
-      precio: 30000, 
-      imagen: 'https://via.placeholder.com/300x300/dc3545/ffffff?text=Audífonos',
-      descripcion: 'Audífonos con cancelación de ruido'
+      nombre: 'Llavero Corazón', 
+      precio: 7800, 
+      imagen: 'img/llaveros en forma de corazon.jpeg',
     },
     { 
       id: '4',  
-      nombre: 'Tablet iPad', 
-      precio: 30000, 
-      imagen: 'https://via.placeholder.com/300x300/6f42c1/ffffff?text=iPad',
-      descripcion: 'Tablet perfecta para creativos'
+      nombre: 'Pelota Tejida', 
+      precio: 6500, 
+      imagen: '/img/pelota.jpeg',
     },
     { 
       id: '5', 
+      nombre: 'Rosa Blanca Tejida', 
+      precio: 7500, 
+      imagen: 'img/rosa blanca.jpeg',
+    },
+        { 
+      id: '6', 
+      nombre: 'Rosa Roja Tejida', 
+      precio: 7500, 
+      imagen: 'img/rosa.png',
+    },
+        { 
+      id: '7', 
+      nombre: 'Crochet Domo Hat', 
+      precio: 10000, 
+      imagen: 'img/gorro domo.png',
+    },
+        { 
+      id: '8', 
       nombre: 'Smart Watch', 
       precio: 500000, 
       imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
-      descripcion: 'Reloj inteligente con monitor de salud'
-    }
+    },
+        { 
+      id: '9', 
+      nombre: 'Smart Watch', 
+      precio: 500000, 
+      imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
+    },
+        { 
+      id: '10', 
+      nombre: 'Smart Watch', 
+      precio: 500000, 
+      imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
+    },
   ];    
 
   const productosFiltrados = productos.filter(producto =>
