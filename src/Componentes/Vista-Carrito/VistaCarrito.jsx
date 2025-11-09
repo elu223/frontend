@@ -146,6 +146,7 @@ function VistaCarrito() {
                         <form onSubmit={manejarPago}>
                             <div className='fila-voucher'>
                                 <input
+                                    className='input'
                                     type="text"
                                     placeholder="Código del vale"
                                     value={voucher}
@@ -156,6 +157,7 @@ function VistaCarrito() {
 
                             <div className='campo-envio'>
                                 <input
+                                    className='input'
                                     type="text"
                                     placeholder="Lugar del envio"
                                     value={lugarEnvio}
@@ -167,6 +169,7 @@ function VistaCarrito() {
                                 {mediosPago.map(medio => (
                                     <label key={medio.id} className='pago-option'>
                                         <input
+                                            className='input'
                                             type="radio"
                                             name="metodoPago"
                                             value={medio.id}
@@ -180,6 +183,7 @@ function VistaCarrito() {
 
                             <label htmlFor="cardNombreInput" className='label'>Nombre de la tarjeta</label>
                             <input
+                                className='input'
                                 id="cardNombreInput"
                                 type="text"
                                 placeholder="Titular de la tarjeta"
@@ -190,6 +194,7 @@ function VistaCarrito() {
 
                             <label className='label'>Numero de tarjeta</label>
                             <input
+                                className='input'
                                 type="text"
                                 placeholder="0000 0000 0000 0000"
                                 value={cardNumero}
@@ -201,7 +206,7 @@ function VistaCarrito() {
                                 <div className='col-pequena'>
                                     <label >Fecha</label>
                                     <input
-                                     className='datos-tarjeta'
+                                     className='datos-tarjeta input'
                                         type="text"
                                         placeholder="MM/AA"
                                         value={cardFecha}
@@ -211,7 +216,7 @@ function VistaCarrito() {
                                 </div>
                                 <div className='col-pequena'>
                                     <label className='label'>CVV</label>
-                                    <input className='datos-tarjeta'
+                                    <input className='datos-tarjeta input'
                                         type="text"
                                         placeholder="CVV"
                                         value={cardCVV}

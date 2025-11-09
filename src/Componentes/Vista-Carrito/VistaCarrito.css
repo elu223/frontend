@@ -273,7 +273,7 @@ input .datos-tarjeta{
     padding: 12px;
 }
 
-input{
+.input{
     box-shadow: 0px 2px 0px currentColor;
     width: 90%;
     padding: 10px;
