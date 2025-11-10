@@ -1,49 +1,24 @@
-// VistaProductoDetalle.jsx - COMPONENTE DINÁMICO
 import { useState } from "react";
 import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
-import HeaderMenu from "../Menu/Header-Menu.jsx";
-import { productos } from '../../data/productos'; // 
+import HeaderMenu from "../Header/Header-Menu.jsx";
+import { productos } from '../../data/productos';
 import './VistaProductoDetalle.css';
 
 function VistaProductoDetalle({ agregarAlCarrito }) {
+  const [match, params] = useRoute("/producto/:id");
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
-  const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [comentariosLocales, setComentariosLocales] = useState([]);
 
-  //BUSCAR PRODUCTO POR ID - 
   const producto = productos.find(p => p.id === params?.id);
 
-  // Si no se encuentra el producto
+  // Si no se encuentra el producto, mostrar mensaje de error
   if (!producto) {
     return (
       <div className="vista-producto-detalle">
-        <header className="header-ecommerce">
-          <div className="container">
-            <div className="logo-container">
-              <Link href="/" className="logo-link">
-                <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-                <h1 className="logo-texto">TejidosMiki</h1>
-              </Link>
-            </div>
-            
-            <div className="buscador-container">
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                value={terminoBusqueda}
-                onChange={(e) => setTerminoBusqueda(e.target.value)}
-                className="buscador-input"
-              />
-              <button className="buscador-btn">🔍</button>
-            </div>
-
-            <HeaderMenu />
-          </div>
-        </header>
-
+        <HeaderMenu />
         <main className="main-content">
           <div className="container">
             <div style={{ textAlign: 'center', padding: '4rem' }}>
@@ -59,12 +34,11 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
     );
   }
 
-  // Productos relacionados (excluyendo el actual)
+  // Productos relacionados (excluyendo el actual) - SOLO si producto existe
   const productosRelacionados = productos
     .filter(p => p.id !== producto.id)
     .slice(0, 6);
 
-  // Para el rating de productos
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
       <FaStar
@@ -76,7 +50,6 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
     ));
   };
 
-  // Para la selección de rating en comentarios
   const handleRatingClick = (value) => {
     setRating(value);
   };
@@ -94,7 +67,6 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
     ));
   };
 
-  // Comentarios de ejemplo (puedes mover esto a los datos del producto)
   const comentarios = [
     { 
       usuario: "TuchakalitalwU", 
@@ -115,35 +87,10 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
 
   return (
     <div className="vista-producto-detalle">
-      {/* Header idéntico al de VistaProductos */}
-      <header className="header-ecommerce">
-        <div className="container">
-          <div className="logo-container">
-            <Link href="/" className="logo-link">
-              <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-              <h1 className="logo-texto">TejidosMiki</h1>
-            </Link>
-          </div>
-          
-          <div className="buscador-container">
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={terminoBusqueda}
-              onChange={(e) => setTerminoBusqueda(e.target.value)}
-              className="buscador-input"
-            />
-            <button className="buscador-btn">🔍</button>
-          </div>
+      <HeaderMenu />
 
-          <HeaderMenu />
-        </div>
-      </header>
-
-      {/* Main content */}
       <main className="main-content">
         <div className="container">
-          {/* Contenido principal */}
           <div className="contenedor-principal">
             
             {/* COLUMNA IZQUIERDA - PRODUCTOS RELACIONADOS */}
@@ -181,20 +128,22 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                     <h1 className="titulo-producto">{producto.nombre}</h1>
                     
                     <div className="rating-producto">
-                      <span className="estrellas">{renderStars(producto.rating)}</span>
-                      <span>({producto.reviews} reseñas)</span>
+                      <span className="estrellas">{renderStars(producto.rating || 0)}</span>
+                      <span>({producto.reviews || 0} reseñas)</span>
                     </div>
                     
                     <div className="precio-producto">${producto.precio.toLocaleString()}</div>
 
                     <div className="botones-producto">
-                      <button className="btn-anadir-carrito" onClick={() => agregarAlCarrito(producto)}>Añadir al carrito</button>
+                      <button className="btn-anadir-carrito" onClick={() => agregarAlCarrito({...producto, cantidad})}>
+                        Añadir al carrito
+                      </button>
                       <button className="btn-comprar-ahora">Comprar ahora</button>
                     </div>
 
                     <div className="stock-cantidad-detalle">
                       <div className="stock-disponible">
-                        <strong>Stock disponible:</strong> {producto.stock}
+                        <strong>Stock disponible:</strong> {producto.stock || 0}
                       </div>
                       <div className="selector-cantidad-detalle">
                         <strong>Cantidad:</strong>
@@ -203,7 +152,7 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                           onChange={(e) => setCantidad(parseInt(e.target.value))}
                           className="select-cantidad"
                         >
-                          {[...Array(Math.min(producto.stock, 10))].map((_, i) => (
+                          {[...Array(Math.min(producto.stock || 1, 10))].map((_, i) => (
                             <option key={i + 1} value={i + 1}>
                               {i + 1} unidad{i + 1 > 1 ? 'es' : ''}
                             </option>
@@ -216,7 +165,7 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                   <div className="info-producto-detalle">
                     <h3>Características del Producto</h3>
                     <ul>
-                      {producto.caracteristicas.map((caracteristica, index) => (
+                      {(producto.caracteristicas || []).map((caracteristica, index) => (
                         <li key={index}>{caracteristica}</li>
                       ))}
                     </ul>
@@ -241,11 +190,27 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                     value={comentario}
                     onChange={(e) => setComentario(e.target.value)}
                   />
-                  <button className="btn-enviar-comentario">Enviar Comentario</button>
+                  <button 
+                    className="btn-enviar-comentario"
+                    onClick={() => {
+                      if (comentario.trim() && rating > 0) {
+                        const nuevoComentario = {
+                          usuario: "Usuario Actual",
+                          texto: comentario,
+                          puntuacion: rating
+                        };
+                        setComentariosLocales([...comentariosLocales, nuevoComentario]);
+                        setComentario('');
+                        setRating(0);
+                      }
+                    }}
+                  >
+                    Enviar Comentario
+                  </button>
                 </div>
 
                 <div className="lista-comentarios">
-                  {comentarios.map((com, index) => (
+                  {[...comentarios, ...comentariosLocales].map((com, index) => (
                     <div key={index} className="comentario-item">
                       <div className="usuario-comentario">{com.usuario}</div>
                       <div className="texto-comentario">{com.texto}</div>
@@ -261,7 +226,6 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="footer">
         <div className="container">
           <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
