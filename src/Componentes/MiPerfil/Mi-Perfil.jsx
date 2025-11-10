@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState } from "react";
-import HeaderMenu from "../Menu/Header-Menu.jsx";
+import HeaderMenu from "../Header/Header-Menu.jsx";
 import './Mi-Perfil.css';
 
 function MiPerfil() {
