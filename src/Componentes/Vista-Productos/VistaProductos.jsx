@@ -1,75 +1,15 @@
+// VistaProductos.jsx
 import { Link } from "wouter";
 import { useState } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
 import HeaderMenu from "../Menu/Header-Menu.jsx";
+import { productos } from '../../data/productos'; 
 import './VistaProductos.css';
 
 function VistaProductos() {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   
-  const productos = [
-    { 
-      id: '1',  
-      nombre: 'Ajolote Amigurumi Amarillo', 
-      precio: 6500, 
-      imagen: '/img/ajolote amarillo.jpeg',
-    },
-    { 
-      id: '2', 
-      nombre: 'Tulipan Rojo Tejido', 
-      precio: 7500, 
-      imagen: 'img/tulipan rojo.jpeg',
-    },
-    { 
-      id: '3',  
-      nombre: 'Llavero Corazón', 
-      precio: 7800, 
-      imagen: 'img/llaveros en forma de corazon.jpeg',
-    },
-    { 
-      id: '4',  
-      nombre: 'Pelota Tejida', 
-      precio: 6500, 
-      imagen: '/img/pelota.jpeg',
-    },
-    { 
-      id: '5', 
-      nombre: 'Rosa Blanca Tejida', 
-      precio: 7500, 
-      imagen: 'img/rosa blanca.jpeg',
-    },
-        { 
-      id: '6', 
-      nombre: 'Rosa Roja Tejida', 
-      precio: 7500, 
-      imagen: 'img/rosa.png',
-    },
-        { 
-      id: '7', 
-      nombre: 'Crochet Domo Hat', 
-      precio: 10000, 
-      imagen: 'img/gorro domo.png',
-    },
-        { 
-      id: '8', 
-      nombre: 'Smart Watch', 
-      precio: 500000, 
-      imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
-    },
-        { 
-      id: '9', 
-      nombre: 'Smart Watch', 
-      precio: 500000, 
-      imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
-    },
-        { 
-      id: '10', 
-      nombre: 'Smart Watch', 
-      precio: 500000, 
-      imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
-    },
-  ];    
-
+  // ✅ Usar productos importados
   const productosFiltrados = productos.filter(producto =>
     producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
     producto.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase())

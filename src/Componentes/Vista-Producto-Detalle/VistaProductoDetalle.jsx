@@ -1,87 +1,69 @@
+// VistaProductoDetalle.jsx - COMPONENTE DINÁMICO
 import { useState } from "react";
-import { Link } from "wouter";
+import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Menu/Header-Menu.jsx";
+import { productos } from '../../data/productos'; // ✅ Importar productos
 import './VistaProductoDetalle.css';
 
 function VistaProductoDetalle() {
+  const [match, params] = useRoute("/producto/:id");
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [comentariosLocales, setComentariosLocales] = useState([]);
 
-  // Datos del producto principal
-  const producto = {
-    nombre: "Mini Crochet Banana",
-    precio: 5500,
-    puntuacion: 5,
-    imagen: "https://via.placeholder.com/400x400/6f42c1/ffffff?text=Mini+Banana",
-    stock: 1
-  };
+  //BUSCAR PRODUCTO POR ID - ESTO ES LA MAGIA
+  const producto = productos.find(p => p.id === params?.id);
 
-  // 6 productos relacionados 
-  const productosRelacionados = [
-    { 
-      id: 1, 
-      nombre: "Smartphone Samsung", 
-      precio: 8000, 
-      imagen: "https://via.placeholder.com/300x300/007bff/ffffff?text=Samsung" 
-    },
-    { 
-      id: 2, 
-      nombre: "Laptop HP", 
-      precio: 6500, 
-      imagen: "https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop+HP" 
-    },
-    { 
-      id: 3, 
-      nombre: "Smart Watch", 
-      precio: 8000, 
-      imagen: "https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch" 
-    },
-    { 
-      id: 4, 
-      nombre: "Tablet iPad", 
-      precio: 6500, 
-      imagen: "https://via.placeholder.com/300x300/6f42c1/ffffff?text=iPad" 
-    },
-    { 
-      id: 5, 
-      nombre: "Audífonos Sony", 
-      precio: 8000, 
-      imagen: "https://via.placeholder.com/300x300/dc3545/ffffff?text=Audífonos" 
-    },
-    { 
-      id: 6, 
-      nombre: "Cámara Canon", 
-      precio: 6500, 
-      imagen: "https://via.placeholder.com/300x300/20c997/ffffff?text=Cámara" 
-    }
-  ];
+  // Si no se encuentra el producto
+  if (!producto) {
+    return (
+      <div className="vista-producto-detalle">
+        <header className="header-ecommerce">
+          <div className="container">
+            <div className="logo-container">
+              <Link href="/" className="logo-link">
+                <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
+                <h1 className="logo-texto">TejidosMiki</h1>
+              </Link>
+            </div>
+            
+            <div className="buscador-container">
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                value={terminoBusqueda}
+                onChange={(e) => setTerminoBusqueda(e.target.value)}
+                className="buscador-input"
+              />
+              <button className="buscador-btn">🔍</button>
+            </div>
 
-  // Filtrar productos basado en la búsqueda
-  const productosFiltrados = productosRelacionados.filter(producto =>
-    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
-  );
+            <HeaderMenu />
+          </div>
+        </header>
 
-  const comentarios = [
-    { 
-      usuario: "TuchakalitalwU", 
-      texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "Juanito124_owo", 
-      texto: "No fue lo que esperaba. creí que era mas grande", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "User0001", 
-      texto: "Me en cantaron los colores :3", 
-      puntuacion: 5,
-    }
-  ];
+        <main className="main-content">
+          <div className="container">
+            <div style={{ textAlign: 'center', padding: '4rem' }}>
+              <h2>Producto no encontrado</h2>
+              <p>El producto que buscas no existe o ha sido removido.</p>
+              <Link href="/" className="btn-volver-tienda">
+                ← Volver a la tienda
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Productos relacionados (excluyendo el actual)
+  const productosRelacionados = productos
+    .filter(p => p.id !== producto.id)
+    .slice(0, 6);
 
   // Para el rating de productos
   const renderStars = (rating) => {
@@ -109,10 +91,28 @@ function VistaProductoDetalle() {
         size={24}
         style={{ cursor: 'pointer' }}
         onClick={() => handleRatingClick(index + 1)}
-        onMouseEnter={() => setRating(index + 1)}
       />
     ));
   };
+
+  // Comentarios de ejemplo (puedes mover esto a los datos del producto)
+  const comentarios = [
+    { 
+      usuario: "TuchakalitalwU", 
+      texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
+      puntuacion: 5,
+    },
+    { 
+      usuario: "Juanito124_owo", 
+      texto: "No fue lo que esperaba. creí que era mas grande", 
+      puntuacion: 5,
+    },
+    { 
+      usuario: "User0001", 
+      texto: "Me en cantaron los colores :3", 
+      puntuacion: 5,
+    }
+  ];
 
   return (
     <div className="vista-producto-detalle">
@@ -152,11 +152,13 @@ function VistaProductoDetalle() {
               <div className="productos-relacionados">
                 <h3>Productos Relacionados</h3>
                 <div className="grid-productos">
-                  {(terminoBusqueda ? productosFiltrados : productosRelacionados).map(prod => (
+                  {productosRelacionados.map(prod => (
                     <div key={prod.id} className="producto-miniatura">
-                      <img src={prod.imagen} alt={prod.nombre} className="imagen-miniatura" />
+                      <Link href={`/producto/${prod.id}`}>
+                        <img src={prod.imagen} alt={prod.nombre} className="imagen-miniatura" />
+                      </Link>
                       <div className="precio-miniatura">${prod.precio.toLocaleString()}</div>
-                      <button className="btn-miniatura">Agregar al carrito</button>
+                      <button className="btn-miniatura">Ver Detalles</button>
                     </div>
                   ))}
                 </div>
@@ -180,7 +182,8 @@ function VistaProductoDetalle() {
                     <h1 className="titulo-producto">{producto.nombre}</h1>
                     
                     <div className="rating-producto">
-                      <span className="estrellas">{renderStars(producto.puntuacion)}</span>
+                      <span className="estrellas">{renderStars(producto.rating)}</span>
+                      <span>({producto.reviews} reseñas)</span>
                     </div>
                     
                     <div className="precio-producto">${producto.precio.toLocaleString()}</div>
@@ -192,7 +195,7 @@ function VistaProductoDetalle() {
 
                     <div className="stock-cantidad-detalle">
                       <div className="stock-disponible">
-                        <strong>stock disponible:</strong> {producto.stock}
+                        <strong>Stock disponible:</strong> {producto.stock}
                       </div>
                       <div className="selector-cantidad-detalle">
                         <strong>Cantidad:</strong>
@@ -201,20 +204,22 @@ function VistaProductoDetalle() {
                           onChange={(e) => setCantidad(parseInt(e.target.value))}
                           className="select-cantidad"
                         >
-                          <option value="1">1 unidad</option>
-                          <option value="2">2 unidades</option>
-                          <option value="3">3 unidades</option>
+                          {[...Array(Math.min(producto.stock, 10))].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                              {i + 1} unidad{i + 1 > 1 ? 'es' : ''}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
                   </div>
                   
                   <div className="info-producto-detalle">
-                    <h3>Lo que tenés que saber de este producto</h3>
+                    <h3>Características del Producto</h3>
                     <ul>
-                      <li>Nombre del diseño: Mini banana</li>
-                      <li>Formato de venta: Individual.</li>
-                      <li>Dimensiones: 13cm de altura y 7cm de ancho.</li>
+                      {producto.caracteristicas.map((caracteristica, index) => (
+                        <li key={index}>{caracteristica}</li>
+                      ))}
                     </ul>
                   </div>
 
@@ -223,16 +228,17 @@ function VistaProductoDetalle() {
 
               {/* SECCIÓN DE COMENTARIOS */}
               <div className="seccion-comentarios-detalle">
-                <h3>Agregar comentario:</h3>
+                <h3>Comentarios y Reseñas</h3>
                 
                 <div className="formulario-comentario">
+                  <h4>Agregar comentario:</h4>
                   <div className="rating-comentario">
                     {renderSelectableStars()}
                   </div>
                   <textarea 
                     className="textarea-comentario"
-                    placeholder="..."
-                    rows="2"
+                    placeholder="Comparte tu experiencia con este producto..."
+                    rows="4"
                     value={comentario}
                     onChange={(e) => setComentario(e.target.value)}
                   />
@@ -240,13 +246,13 @@ function VistaProductoDetalle() {
                 </div>
 
                 <div className="lista-comentarios">
-                  {[...comentariosLocales, ...comentarios].map((com, index) => (
+                  {comentarios.map((com, index) => (
                     <div key={index} className="comentario-item">
                       <div className="usuario-comentario">{com.usuario}</div>
                       <div className="texto-comentario">{com.texto}</div>
-                      {com.puntuacion === 5 && (
-                        <div className="estrellas-comentario">★★★★★</div>
-                      )}
+                      <div className="estrellas-comentario">
+                        {"★".repeat(com.puntuacion)}{"☆".repeat(5 - com.puntuacion)}
+                      </div>
                     </div>
                   ))}
                 </div>

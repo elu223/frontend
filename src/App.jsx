@@ -12,7 +12,7 @@ function App() {
         <Switch>
           <Route path="/" component={VistaProductos} />
           <Route path="/carrito" component={VistaCarrito} />
-          <Route path="/producto/:id">{(params)=><VistaProductoDetalle id={params.id} />}</Route>
+          <Route path="/producto/:id" component={VistaProductoDetalle} />
           {/*más rutas */}
           <Route>404 - Página no encontrada</Route>
         </Switch>
