@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Menu/Header-Menu.jsx";
-import { productos } from '../../data/productos'; // ✅ Importar productos
+import { productos } from '../../data/productos'; 
 import './VistaProductoDetalle.css';
 
 function VistaProductoDetalle({ agregarAlCarrito }) {
