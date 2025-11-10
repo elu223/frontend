@@ -104,6 +104,7 @@ function VistaCarrito({ carrito, setCarrito }) {
           <FormularioCompra
             carrito={carrito}
             total={total}
+            onClose={() => setMostrarFormulario(false)}
           />
         )}
       </div>
