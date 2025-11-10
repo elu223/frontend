@@ -4,7 +4,7 @@ import { FaStar } from 'react-icons/fa';
 import HeaderMenu from "../Menu/Header-Menu.jsx";
 import './VistaProductoDetalle.css';
 
-function VistaProductoDetalle() {
+function VistaProductoDetalle({ agregarAlCarrito }) {
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
@@ -186,7 +186,7 @@ function VistaProductoDetalle() {
                     <div className="precio-producto">${producto.precio.toLocaleString()}</div>
 
                     <div className="botones-producto">
-                      <button className="btn-anadir-carrito">Añadir al carrito</button>
+                      <button className="btn-anadir-carrito" onClick={() => agregarAlCarrito(producto)}>Añadir al carrito</button>
                       <button className="btn-comprar-ahora">Comprar ahora</button>
                     </div>
 
