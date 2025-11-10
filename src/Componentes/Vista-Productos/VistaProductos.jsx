@@ -1,4 +1,3 @@
-// VistaProductos.jsx
 import { Link } from "wouter";
 import { useState } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
