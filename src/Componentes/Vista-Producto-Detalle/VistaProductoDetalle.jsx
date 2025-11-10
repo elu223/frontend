@@ -3,18 +3,17 @@ import { useState } from "react";
 import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Menu/Header-Menu.jsx";
-import { productos } from '../../data/productos'; // ✅ Importar productos
+import { productos } from '../../data/productos'; // 
 import './VistaProductoDetalle.css';
 
-function VistaProductoDetalle() {
-  const [match, params] = useRoute("/producto/:id");
+function VistaProductoDetalle({ agregarAlCarrito }) {
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [comentariosLocales, setComentariosLocales] = useState([]);
 
-  //BUSCAR PRODUCTO POR ID - ESTO ES LA MAGIA
+  //BUSCAR PRODUCTO POR ID - 
   const producto = productos.find(p => p.id === params?.id);
 
   // Si no se encuentra el producto
@@ -189,7 +188,7 @@ function VistaProductoDetalle() {
                     <div className="precio-producto">${producto.precio.toLocaleString()}</div>
 
                     <div className="botones-producto">
-                      <button className="btn-anadir-carrito">Añadir al carrito</button>
+                      <button className="btn-anadir-carrito" onClick={() => agregarAlCarrito(producto)}>Añadir al carrito</button>
                       <button className="btn-comprar-ahora">Comprar ahora</button>
                     </div>
 

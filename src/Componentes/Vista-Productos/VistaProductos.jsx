@@ -6,13 +6,12 @@ import HeaderMenu from "../Menu/Header-Menu.jsx";
 import { productos } from '../../data/productos'; 
 import './VistaProductos.css';
 
-function VistaProductos() {
+function VistaProductos({ agregarAlCarrito }) {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   
-  // ✅ Usar productos importados
+  //  Usar productos importados
   const productosFiltrados = productos.filter(producto =>
-    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-    producto.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase())
+    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
   );
 
   return (
@@ -25,7 +24,7 @@ function VistaProductos() {
               <h1 className="logo-texto">TejidosMiki</h1>
             </Link>
           </div>
-          
+
           <div className="buscador-container">
             <input
               type="text"
@@ -46,7 +45,7 @@ function VistaProductos() {
           {terminoBusqueda && (
             <div className="resultados-busqueda">
               <p>
-                {productosFiltrados.length > 0 
+                {productosFiltrados.length > 0
                   ? `Se encontraron ${productosFiltrados.length} productos para "${terminoBusqueda}"`
                   : `No se encontraron productos para "${terminoBusqueda}"`
                 }
@@ -55,23 +54,23 @@ function VistaProductos() {
           )}
 
           <div className="contenedor-productos">
-            <div className="lista-productos-horizontal"> 
+            <div className="lista-productos-horizontal">
               {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
-                <Link key={producto.id} href={`/producto/${producto.id}`}>
-                  <TarjetaProducto  
-                    id={producto.id}
-                    nombre={producto.nombre}
-                    precio={producto.precio}
-                    imagen={producto.imagen}
-                    descripcion={producto.descripcion}
-                  />
-                </Link>
+                <TarjetaProducto
+                  key={producto.id}
+                  id={producto.id}
+                  nombre={producto.nombre}
+                  precio={producto.precio}
+                  imagen={producto.imagen}
+                  descripcion={producto.descripcion}
+                  agregarAlCarrito={agregarAlCarrito}
+                />
               ))}
             </div>
           </div>
         </div>
       </main>
-      
+
       <footer className="footer">
         <div className="container">
           <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>

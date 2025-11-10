@@ -1,0 +1,23 @@
+.perfil-contenedor {
+    display: flex;
+    background-color: #6b0f47;
+    height: 90vh;
+    color: #ffffff;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+.main-content {
+    margin: 0;
+}   
+
+h2 {
+    color: black;
+    width: 99%;
+    text-align: center;
+    background-color: beige;
+    margin: 0;
+    font-size: 34px;
+}
