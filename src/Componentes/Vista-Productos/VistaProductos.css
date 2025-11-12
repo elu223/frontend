@@ -9,102 +9,6 @@
   flex-direction: column;
 }
 
-/* Header */
-.header-ecommerce {
-  background: linear-gradient(98deg, #FCEFB0 28%, #D51890 100%);
-  color: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.header-ecommerce .container {
-  display: flex;
-  justify-content: column;
-  align-items: center;
-  height: 95px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  gap: 1rem;
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-  margin-right: auto; /* Empuja el logo a la izquierda */
-}
-
-.logo-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  padding: 0.5rem 0;
-}
-
-.logo-imagen {
-  width: 76px;
-  height: 95px;
-  object-fit: contain;
-}
-
-.logo-texto {
-  font-size: 2.0rem;
-  color: black;
-  margin: 0;
-  font-family: "Questrial", sans-serif;
-  font-weight: 400;
-}
-
-/* Buscador - MÁS ALARGADO */
-.buscador-container {
-  display: flex;
-  align-items: center;
-  background: white;
-  border-radius: 25px;
-  padding: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  max-width: 700px; /* Más ancho */
-  margin-right: auto;
-  margin-left: 2rem;
-  flex: 1; /* Ocupa el espacio disponible */
-  min-width: 500px; /* Ancho mínimo */
-}
-
-.buscador-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: 25px;
-  background: transparent;
-  width: 100%;
-}
-
-.buscador-btn {
-  background: #D51890;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: white;
-  font-size: 1.2rem;
-  transition: background 0.3s ease;
-  flex-shrink: 0;
-}
-
-.buscador-btn:hover {
-  background: #b3157a;
-}
-
-
 /* Main Content */
 .main-content {
   padding: 2rem 0;
@@ -177,4 +81,19 @@
 
 .navegacion-con-menu{
   order: 2;
+}
+
+.btn-ver-todos {
+  background: #d20081;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-ver-todos:hover {
+  background: #a60066;
 }

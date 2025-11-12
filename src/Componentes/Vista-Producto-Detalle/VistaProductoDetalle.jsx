@@ -1,84 +1,44 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
-import HeaderMenu from "../Menu/Header-Menu.jsx";
-import { productos } from '../../data/productos'; // 
+import HeaderMenu from "../Header/Header-Menu.jsx";
+import { productos } from '../../data/productos';
 import './VistaProductoDetalle.css';
 
 function VistaProductoDetalle({ agregarAlCarrito }) {
+  const [match, params] = useRoute("/producto/:id");
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
-  const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [comentariosLocales, setComentariosLocales] = useState([]);
 
-  //BUSCAR PRODUCTO POR ID - 
   const producto = productos.find(p => p.id === params?.id);
 
-  // 6 productos relacionados 
-  const productosRelacionados = [
-    { 
-      id: 1, 
-      nombre: "Smartphone Samsung", 
-      precio: 8000, 
-      imagen: "https://via.placeholder.com/300x300/007bff/ffffff?text=Samsung" 
-    },
-    { 
-      id: 2, 
-      nombre: "Laptop HP", 
-      precio: 6500, 
-      imagen: "https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop+HP" 
-    },
-    { 
-      id: 3, 
-      nombre: "Smart Watch", 
-      precio: 8000, 
-      imagen: "https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch" 
-    },
-    { 
-      id: 4, 
-      nombre: "Tablet iPad", 
-      precio: 6500, 
-      imagen: "https://via.placeholder.com/300x300/6f42c1/ffffff?text=iPad" 
-    },
-    { 
-      id: 5, 
-      nombre: "Audífonos Sony", 
-      precio: 8000, 
-      imagen: "https://via.placeholder.com/300x300/dc3545/ffffff?text=Audífonos" 
-    },
-    { 
-      id: 6, 
-      nombre: "Cámara Canon", 
-      precio: 6500, 
-      imagen: "https://via.placeholder.com/300x300/20c997/ffffff?text=Cámara" 
-    }
-  ];
+  // Si no se encuentra el producto, mostrar mensaje de error
+  if (!producto) {
+    return (
+      <div className="vista-producto-detalle">
+        <HeaderMenu />
+        <main className="main-content">
+          <div className="container">
+            <div style={{ textAlign: 'center', padding: '4rem' }}>
+              <h2>Producto no encontrado</h2>
+              <p>El producto que buscas no existe o ha sido removido.</p>
+              <Link href="/" className="btn-volver-tienda">
+                ← Volver a la tienda
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
-  // Filtrar productos basado en la búsqueda
-  const productosFiltrados = productosRelacionados.filter(producto =>
-    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
-  );
+  // Productos relacionados (excluyendo el actual) - SOLO si producto existe
+  const productosRelacionados = productos
+    .filter(p => p.id !== producto.id)
+    .slice(0, 6);
 
-  const comentarios = [
-    { 
-      usuario: "TuchakalitalUwU", 
-      texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "Juanito124_owo", 
-      texto: "No fue lo que esperaba. creí que era mas grande", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "User0001", 
-      texto: "Me en cantaron los colores :3", 
-      puntuacion: 5,
-    }
-  ];
-
-  // Para el rating de productos
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
       <FaStar
@@ -90,7 +50,6 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
     ));
   };
 
-  // Para la selección de rating en comentarios
   const handleRatingClick = (value) => {
     setRating(value);
   };
@@ -109,37 +68,30 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
     ));
   };
 
+  const comentarios = [
+    { 
+      usuario: "TuchakalitalwU", 
+      texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
+      puntuacion: 5,
+    },
+    { 
+      usuario: "Juanito124_owo", 
+      texto: "No fue lo que esperaba. creí que era mas grande", 
+      puntuacion: 5,
+    },
+    { 
+      usuario: "User0001", 
+      texto: "Me en cantaron los colores :3", 
+      puntuacion: 5,
+    }
+  ];
+
   return (
     <div className="vista-producto-detalle">
-      {/* Header idéntico al de VistaProductos */}
-      <header className="header-ecommerce">
-        <div className="container">
-          <div className="logo-container">
-            <Link href="/" className="logo-link">
-              <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-              <h1 className="logo-texto">TejidosMiki</h1>
-            </Link>
-          </div>
-          
-          <div className="buscador-container">
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={terminoBusqueda}
-              onChange={(e) => setTerminoBusqueda(e.target.value)}
-              className="buscador-input"
-            />
-            <button className="buscador-btn">🔍</button>
-          </div>
+      <HeaderMenu />
 
-          <HeaderMenu />
-        </div>
-      </header>
-
-      {/* Main content */}
       <main className="main-content">
         <div className="container">
-          {/* Contenido principal */}
           <div className="contenedor-principal">
             
             {/* COLUMNA IZQUIERDA - PRODUCTOS RELACIONADOS */}
@@ -175,19 +127,22 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                     <h1 className="titulo-producto">{producto.nombre}</h1>
                     
                     <div className="rating-producto">
-                      <span className="estrellas">{renderStars(producto.puntuacion)}</span>
+                      <span className="estrellas">{renderStars(producto.rating || 0)}</span>
+                      <span>({producto.reviews || 0} reseñas)</span>
                     </div>
                     
                     <div className="precio-producto">${producto.precio.toLocaleString()}</div>
 
                     <div className="botones-producto">
-                      <button className="btn-anadir-carrito" onClick={() => agregarAlCarrito(producto)}>Añadir al carrito</button>
+                      <button className="btn-anadir-carrito" onClick={() => agregarAlCarrito({...producto, cantidad})}>
+                        Añadir al carrito
+                      </button>
                       <button className="btn-comprar-ahora">Comprar ahora</button>
                     </div>
 
                     <div className="stock-cantidad-detalle">
                       <div className="stock-disponible">
-                        <strong>stock disponible:</strong> {producto.stock}
+                        <strong>Stock disponible:</strong> {producto.stock || 0}
                       </div>
                       <div className="selector-cantidad-detalle">
                         <strong>Cantidad:</strong>
@@ -196,9 +151,11 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                           onChange={(e) => setCantidad(parseInt(e.target.value))}
                           className="select-cantidad"
                         >
-                          <option value="1">1 unidad</option>
-                          <option value="2">2 unidades</option>
-                          <option value="3">3 unidades</option>
+                          {[...Array(Math.min(producto.stock || 1, 10))].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                              {i + 1} unidad{i + 1 > 1 ? 'es' : ''}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -207,9 +164,9 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                   <div className="info-producto-detalle">
                     <h3>Lo que tenés que saber de este producto</h3>
                     <ul>
-                      <li>Nombre del diseño: Mini banana</li>
-                      <li>Formato de venta: Individual.</li>
-                      <li>Dimensiones: 13cm de altura y 7cm de ancho.</li>
+                      {(producto.caracteristicas || []).map((caracteristica, index) => (
+                        <li key={index}>{caracteristica}</li>
+                      ))}
                     </ul>
                   </div>
 
@@ -231,11 +188,27 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
                     value={comentario}
                     onChange={(e) => setComentario(e.target.value)}
                   />
-                  <button className="btn-enviar-comentario">Enviar Comentario</button>
+                  <button 
+                    className="btn-enviar-comentario"
+                    onClick={() => {
+                      if (comentario.trim() && rating > 0) {
+                        const nuevoComentario = {
+                          usuario: "Usuario Actual",
+                          texto: comentario,
+                          puntuacion: rating
+                        };
+                        setComentariosLocales([...comentariosLocales, nuevoComentario]);
+                        setComentario('');
+                        setRating(0);
+                      }
+                    }}
+                  >
+                    Enviar Comentario
+                  </button>
                 </div>
 
                 <div className="lista-comentarios">
-                  {[...comentariosLocales, ...comentarios].map((com, index) => (
+                  {[...comentarios, ...comentariosLocales].map((com, index) => (
                     <div key={index} className="comentario-item">
                       <div className="usuario-comentario">{com.usuario}</div>
                       <div className="texto-comentario">{com.texto}</div>
@@ -251,7 +224,6 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="footer">
         <div className="container">
           <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
