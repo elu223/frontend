@@ -7,13 +7,14 @@
 }
 
 .tituloCarrito {
-    height: 20px;
-    text-align:start;
+  height: 49px;
+  width: 100%;
+  text-align:start;
   color:#ffffff;
   background-color: #AB0C70;
   text-align: center;
   margin: 0;
-  
+  font-size: 34px;
 }
 
 h2.tituloCarrito {
@@ -25,8 +26,7 @@ h2.tituloCarrito {
     font-style: normal;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
-    padding: 15px;
+  
 }
 
 .itemsLista {
