@@ -29,11 +29,19 @@ h2.tituloCarrito {
   
 }
 
+
+
 .itemsLista {
   margin-left: 450px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+}
+
+h2{
+  
+  font-size: 34px;
+  padding: 15px;
 }
 
 :hover.Carrito-item {

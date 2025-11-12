@@ -3,47 +3,22 @@ import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import { productos } from '../../data/productos';
-import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import './VistaProductoDetalle.css';
-import { useCarrito } from "../CarritoContext/CarritoContext.jsx";
 
-function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar totalItems
+function VistaProductoDetalle({ agregarAlCarrito }) {
   const [match, params] = useRoute("/producto/:id");
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
   const [comentariosLocales, setComentariosLocales] = useState([]);
-  const [mostrarFormularioCompra, setMostrarFormularioCompra] = useState(false);
-  const [carritoCompraRapida, setCarritoCompraRapida] = useState([]);
 
   const producto = productos.find(p => p.id === params?.id);
-
-  // Función para manejar "Comprar ahora"
-  const handleComprarAhora = () => {
-    const productoConCantidad = {
-      ...producto,
-      cantidad: cantidad
-    };
-    setCarritoCompraRapida([productoConCantidad]);
-    setMostrarFormularioCompra(true);
-  };
-
-  // Función para calcular el total de compra rápida
-  const calcularTotalCompraRapida = () => {
-    return carritoCompraRapida.reduce((total, item) => total + (item.precio * item.cantidad), 0);
-  };
-
-  // Función para cerrar el formulario
-  const handleCerrarFormulario = () => {
-    setMostrarFormularioCompra(false);
-    setCarritoCompraRapida([]);
-  };
 
   // Si no se encuentra el producto, mostrar mensaje de error
   if (!producto) {
     return (
       <div className="vista-producto-detalle">
-        <HeaderMenu totalItems={totalItems} />
+        <HeaderMenu />
         <main className="main-content">
           <div className="container">
             <div style={{ textAlign: 'center', padding: '4rem' }}>
@@ -59,7 +34,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
     );
   }
 
-  // Productos relacionados (excluyendo el actual)
+  // Productos relacionados (excluyendo el actual) - SOLO si producto existe
   const productosRelacionados = productos
     .filter(p => p.id !== producto.id)
     .slice(0, 6);
@@ -112,7 +87,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
 
   return (
     <div className="vista-producto-detalle">
-      <HeaderMenu totalItems={totalItems} />
+      <HeaderMenu />
 
       <main className="main-content">
         <div className="container">
@@ -129,9 +104,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
                         <img src={prod.imagen} alt={prod.nombre} className="imagen-miniatura" />
                       </Link>
                       <div className="precio-miniatura">${prod.precio.toLocaleString()}</div>
-                      <Link href={`/producto/${prod.id}`}>
-                        <button className="btn-miniatura">Ver Detalles</button>
-                      </Link>
+                      <button className="btn-miniatura">Ver Detalles</button>
                     </div>
                   ))}
                 </div>
@@ -162,18 +135,10 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
                     <div className="precio-producto">${producto.precio.toLocaleString()}</div>
 
                     <div className="botones-producto">
-                      <button 
-                        className="btn-anadir-carrito" 
-                        onClick={() => agregarAlCarrito({...producto, cantidad})}
-                      >
+                      <button className="btn-anadir-carrito" onClick={() => agregarAlCarrito({...producto, cantidad})}>
                         Añadir al carrito
                       </button>
-                      <button 
-                        className="btn-comprar-ahora"
-                        onClick={handleComprarAhora}
-                      >
-                        Comprar ahora
-                      </button>
+                      <button className="btn-comprar-ahora">Comprar ahora</button>
                     </div>
 
                     <div className="stock-cantidad-detalle">
@@ -260,15 +225,6 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
           </div>
         </div>
       </main>
-
-      {/* Formulario de Compra Modal */}
-      {mostrarFormularioCompra && (
-        <FormularioCompra 
-          carrito={carritoCompraRapida}
-          total={calcularTotalCompraRapida()}
-          onClose={handleCerrarFormulario}
-        />
-      )}
 
       <footer className="footer">
         <div className="container">

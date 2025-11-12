@@ -1,10 +1,8 @@
 import { useLocation } from "wouter";
 import './TarjetaProductos.css';
-import { useCarrito } from "../CarritoContext/CarritoContext.jsx";
 
-function TarjetaProducto({ id, nombre, precio, imagen, descripcion }) {
+function TarjetaProducto({ id, nombre, precio, imagen, descripcion, agregarAlCarrito }) {
   const [location, setLocation] = useLocation();
-  const { agregarAlCarrito } = useCarrito();
   const producto = { id, nombre, precio, imagen, descripcion };
 
   const irADetalle = () => setLocation(`/producto/${id}`);
@@ -33,3 +31,4 @@ function TarjetaProducto({ id, nombre, precio, imagen, descripcion }) {
 }
 
 export default TarjetaProducto;
+
