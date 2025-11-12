@@ -1,5 +1,9 @@
-import { useLocation } from "wouter";
-import './TarjetaProductos.css';
+import { Link } from "wouter";
+import { useState } from "react";
+import TarjetaProducto from './TarjetaProductos.jsx';
+import HeaderMenu from "../Menu/Header-Menu.jsx";
+import { productos } from '../../data/productos'; 
+import './VistaProductos.css';
 
 function VistaProductos({ agregarAlCarrito }) {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
