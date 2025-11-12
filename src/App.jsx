@@ -21,19 +21,25 @@ function App() {
       }
     });
   };
+  const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
 
   return (
     <Router>
       <div className="App">
         <Switch>
           <Route path="/">
-            <VistaProductos agregarAlCarrito={agregarAlCarrito} />
+            <VistaProductos 
+                agregarAlCarrito={agregarAlCarrito} 
+                totalItems={totalItems}
+            />
           </Route>
           <Route path="/carrito">
             <VistaCarrito carrito={carrito} setCarrito={setCarrito} />
           </Route>
           <Route path="/producto/:id">
-            <VistaProductoDetalle agregarAlCarrito={agregarAlCarrito} />
+            <VistaProductoDetalle 
+                agregarAlCarrito={agregarAlCarrito}
+            />
           </Route>
           <Route path="/miperfil">
             <MiPerfil />
