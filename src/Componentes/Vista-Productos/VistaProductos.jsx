@@ -4,7 +4,7 @@ import HeaderMenu from "../Header/Header-Menu.jsx";
 import { productos } from '../../data/productos'; 
 import './VistaProductos.css';
 
-function VistaProductos({ agregarAlCarrito, totalItems = 0 }) { // Agregar totalItems aquí
+function VistaProductos({ agregarAlCarrito, totalItems = 0 }) { 
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [productosMostrados, setProductosMostrados] = useState(productos);
   

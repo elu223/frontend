@@ -39,6 +39,7 @@ function App() {
           <Route path="/producto/:id">
             <VistaProductoDetalle 
                 agregarAlCarrito={agregarAlCarrito}
+                totalItems={totalItems}
             />
           </Route>
           <Route path="/miperfil">
