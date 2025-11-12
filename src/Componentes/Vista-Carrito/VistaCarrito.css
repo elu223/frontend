@@ -7,15 +7,14 @@
 }
 
 .tituloCarrito {
-    height: 20px;
-    text-align:start;
+  height: 49px;
+  width: 100%;
+  text-align:start;
   color:#ffffff;
   background-color: #AB0C70;
   text-align: center;
   margin: 0;
-  
-<<<<<<< HEAD
-=======
+  font-size: 34px;
 }
 
 h2.tituloCarrito {
@@ -27,14 +26,7 @@ h2.tituloCarrito {
     font-style: normal;
     align-items: center;
     justify-content: center;
->>>>>>> 3c0342cae76c4c9743df841b99ae1f63865d9d7d
-}
-
-h2.tituloCarrito {
-  font-family: "Playfair Display", serif;
-  font-optical-sizing: auto;
-  font-weight: weight;
-  font-style: normal;
+  
 }
 
 
@@ -74,12 +66,6 @@ h2{
   align-items: center;
 }
 
-<<<<<<< HEAD
-.Cantidad-producto{
-  display: flex;
-  flex-direction: column;
-
-=======
 .Cantidad-producto {
     display: flex;
     flex-direction: column;
@@ -97,7 +83,6 @@ h2{
     border: none;
     border-radius: 23px;
     cursor: pointer;
->>>>>>> 3c0342cae76c4c9743df841b99ae1f63865d9d7d
 }
 
 .Boton-Eliminar {
@@ -113,11 +98,7 @@ h2{
 }
 
 .Carrito-total {
-<<<<<<< HEAD
-  box-shadow: 0px 1px 4px 1px #9a1368;
-=======
   box-shadow: 0px 1px 4px 1px #7a7a7a;
->>>>>>> 3c0342cae76c4c9743df841b99ae1f63865d9d7d
     top: -8px;
     left: 460px;
     position: relative;
@@ -149,20 +130,13 @@ h2{
     box-shadow: 1px 0px 1px 1px #7a7a7a;
     cursor: pointer;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 3c0342cae76c4c9743df841b99ae1f63865d9d7d
 .Aumentar-cantidad,
 .Disminuir-cantidad {
   border: none;
   background: none;
   cursor: pointer;
   font-size: 20px;
-<<<<<<< HEAD
-  padding: 5px 10px;
-=======
->>>>>>> 3c0342cae76c4c9743df841b99ae1f63865d9d7d
 }
 .cantidad-input {
   -webkit-appearance: none;
@@ -182,9 +156,5 @@ h2{
 .cantidad-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-<<<<<<< HEAD
-}
-=======
 }
 
->>>>>>> 3c0342cae76c4c9743df841b99ae1f63865d9d7d
