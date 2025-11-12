@@ -1,93 +1,34 @@
-import { Link } from "wouter";
-import { useState } from "react";
-import TarjetaProducto from './TarjetaProductos.jsx';
-import HeaderMenu from "../Menu/Header-Menu.jsx";
-import './VistaProductos.css';
+import { useLocation } from "wouter";
+import './TarjetaProductos.css';
 
-function VistaProductos({ agregarAlCarrito }) {
-  const [terminoBusqueda, setTerminoBusqueda] = useState('');
+function TarjetaProducto({ id, nombre, precio, imagen, descripcion, agregarAlCarrito }) {
+  const [location, setLocation] = useLocation();
+  const producto = { id, nombre, precio, imagen, descripcion };
 
-  const productos = [
-    { id: '1', nombre: 'Ajolote Amigurumi Amarillo', precio: 6500, imagen: '/img/ajolote amarillo.jpeg' },
-    { id: '2', nombre: 'Tulipan Rojo Tejido', precio: 7500, imagen: 'img/tulipan rojo.jpeg' },
-    { id: '3', nombre: 'Llavero Corazón', precio: 7800, imagen: 'img/llaveros en forma de corazon.jpeg' },
-    { id: '4', nombre: 'Pelota Tejida', precio: 6500, imagen: '/img/pelota.jpeg' },
-    { id: '5', nombre: 'Rosa Blanca Tejida', precio: 7500, imagen: 'img/rosa blanca.jpeg' },
-    { id: '6', nombre: 'Rosa Roja Tejida', precio: 7500, imagen: 'img/rosa.png' },
-    { id: '7', nombre: 'Crochet Domo Hat', precio: 10000, imagen: 'img/gorro domo.png' },
-    { id: '8', nombre: 'Smart Watch', precio: 500000, imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch' },
-    { id: '9', nombre: 'Smart Watch', precio: 500000, imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch' },
-    { id: '10', nombre: 'Smart Watch', precio: 500000, imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch' },
-  ];
-
-  const productosFiltrados = productos.filter(producto =>
-    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
-  );
+  const irADetalle = () => setLocation(`/producto/${id}`);
+  const handleAgregarYRedirigir = (e) => {
+    e.stopPropagation();
+    agregarAlCarrito(producto);
+    setLocation("/carrito");
+  };
 
   return (
-    <div className="vista-productos">
-      <header className="header-ecommerce">
-        <div className="container">
-          <div className="logo-container">
-            <Link href="/" className="logo-link">
-              <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-              <h1 className="logo-texto">TejidosMiki</h1>
-            </Link>
-          </div>
-
-          <div className="buscador-container">
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={terminoBusqueda}
-              onChange={(e) => setTerminoBusqueda(e.target.value)}
-              className="buscador-input"
-            />
-            <button className="buscador-btn">🔍</button>
-          </div>
-
-          <HeaderMenu />
+    <div className="tarjeta-producto" key={id} onClick={irADetalle}>
+      <div className="imagen-producto">
+        <img src={imagen} alt={nombre} />
+      </div>
+      <div className="info-producto">
+        <h3 className="nombre-producto">{nombre}</h3>
+        <div className="precio-producto">${precio}</div>
+        <div className="acciones-producto">
+          <button className="btn-agregar-carrito" onClick={handleAgregarYRedirigir}>
+            Agregar al carrito
+          </button>
         </div>
-      </header>
-
-      <main className="main-content">
-        <div className="container">
-          {terminoBusqueda && (
-            <div className="resultados-busqueda">
-              <p>
-                {productosFiltrados.length > 0
-                  ? `Se encontraron ${productosFiltrados.length} productos para "${terminoBusqueda}"`
-                  : `No se encontraron productos para "${terminoBusqueda}"`
-                }
-              </p>
-            </div>
-          )}
-
-          <div className="contenedor-productos">
-            <div className="lista-productos-horizontal">
-              {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
-                <TarjetaProducto
-                  key={producto.id}
-                  id={producto.id}
-                  nombre={producto.nombre}
-                  precio={producto.precio}
-                  imagen={producto.imagen}
-                  descripcion={producto.descripcion}
-                  agregarAlCarrito={agregarAlCarrito}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <footer className="footer">
-        <div className="container">
-          <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 }
 
-export default VistaProductos;
+export default TarjetaProducto;
+

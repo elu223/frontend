@@ -1,7 +1,7 @@
 .perfil-contenedor {
     display: flex;
     background-color: #6b0f47;
-    height: 90vh;
+    height: 100vh;
     color: #ffffff;
     box-sizing: border-box;
     flex-direction: column;
@@ -15,7 +15,7 @@
 
 h2 {
     color: black;
-    width: 99%;
+    width: 100vw;
     text-align: center;
     background-color: beige;
     margin: 0;
