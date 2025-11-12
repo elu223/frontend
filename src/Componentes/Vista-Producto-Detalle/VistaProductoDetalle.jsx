@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import { productos } from '../../data/productos'; 
@@ -64,7 +64,6 @@ function VistaProductoDetalle() {
         size={24}
         style={{ cursor: 'pointer' }}
         onClick={() => handleRatingClick(index + 1)}
-        onMouseEnter={() => setRating(index + 1)}
       />
     ));
   };
@@ -100,11 +99,13 @@ function VistaProductoDetalle() {
               <div className="productos-relacionados">
                 <h3>Productos Relacionados</h3>
                 <div className="grid-productos">
-                  {(terminoBusqueda ? productosFiltrados : productosRelacionados).map(prod => (
+                  {productosRelacionados.map(prod => (
                     <div key={prod.id} className="producto-miniatura">
-                      <img src={prod.imagen} alt={prod.nombre} className="imagen-miniatura" />
+                      <Link href={`/producto/${prod.id}`}>
+                        <img src={prod.imagen} alt={prod.nombre} className="imagen-miniatura" />
+                      </Link>
                       <div className="precio-miniatura">${prod.precio.toLocaleString()}</div>
-                      <button className="btn-miniatura">Agregar al carrito</button>
+                      <button className="btn-miniatura">Ver Detalles</button>
                     </div>
                   ))}
                 </div>
@@ -163,7 +164,7 @@ function VistaProductoDetalle() {
                   </div>
                   
                   <div className="info-producto-detalle">
-                    <h3>Lo que tenés que saber de este producto</h3>
+                    <h3>Características del Producto</h3>
                     <ul>
                       {(producto.caracteristicas || []).map((caracteristica, index) => (
                         <li key={index}>{caracteristica}</li>
@@ -176,16 +177,17 @@ function VistaProductoDetalle() {
 
               {/* SECCIÓN DE COMENTARIOS */}
               <div className="seccion-comentarios-detalle">
-                <h3>Agregar comentario:</h3>
+                <h3>Comentarios y Reseñas</h3>
                 
                 <div className="formulario-comentario">
+                  <h4>Agregar comentario:</h4>
                   <div className="rating-comentario">
                     {renderSelectableStars()}
                   </div>
                   <textarea 
                     className="textarea-comentario"
-                    placeholder="..."
-                    rows="2"
+                    placeholder="Comparte tu experiencia con este producto..."
+                    rows="4"
                     value={comentario}
                     onChange={(e) => setComentario(e.target.value)}
                   />
@@ -213,9 +215,9 @@ function VistaProductoDetalle() {
                     <div key={index} className="comentario-item">
                       <div className="usuario-comentario">{com.usuario}</div>
                       <div className="texto-comentario">{com.texto}</div>
-                      {com.puntuacion === 5 && (
-                        <div className="estrellas-comentario">★★★★★</div>
-                      )}
+                      <div className="estrellas-comentario">
+                        {"★".repeat(com.puntuacion)}{"☆".repeat(5 - com.puntuacion)}
+                      </div>
                     </div>
                   ))}
                 </div>

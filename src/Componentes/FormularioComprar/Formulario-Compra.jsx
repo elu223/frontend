@@ -40,19 +40,8 @@ function FormularioCompra({ carrito, total, onClose }) {
 
     console.log('Procesar pago:', pago);
     alert('Pago procesado con éxito ✅');
-    setMostrarFormulario(false);
+    onClose(); // Usamos la función del padre para cerrar
   };
-
-  if (!mostrarFormulario) {
-    return (
-      <button
-        className="btn-abrir-formulario"
-        onClick={() => setMostrarFormulario(true)}
-      >
-        Iniciar pago
-      </button>
-    );
-  }
 
   return (
     <div className="formulario-overlay">
