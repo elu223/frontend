@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './Formulario-Compra.css';
 
-function FormularioCompra({ carrito, total }) {
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+function FormularioCompra({ carrito, total, onClose }) {
   const [voucher, setVoucher] = useState('');
   const [lugarEnvio, setLugarEnvio] = useState('');
   const [cardNombre, setCardNombre] = useState('');
@@ -41,19 +40,8 @@ function FormularioCompra({ carrito, total }) {
 
     console.log('Procesar pago:', pago);
     alert('Pago procesado con éxito ✅');
-    setMostrarFormulario(false);
+    onClose(); // Usamos la función del padre para cerrar
   };
-
-  if (!mostrarFormulario) {
-    return (
-      <button
-        className="btn-abrir-formulario"
-        onClick={() => setMostrarFormulario(true)}
-      >
-        Iniciar pago
-      </button>
-    );
-  }
 
   return (
     <div className="formulario-overlay">
@@ -157,7 +145,7 @@ function FormularioCompra({ carrito, total }) {
           <button
             type="button"
             className="btn-cancelar"
-            onClick={() => setMostrarFormulario(false)}
+            onClick={onClose} // Usamos la función del padre para cerrar
           >
             Cancelar
           </button>
