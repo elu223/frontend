@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './Formulario-Compra.css';
 
-function FormularioCompra({ carrito, total }) {
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+function FormularioCompra({ carrito, total, onClose }) {
   const [voucher, setVoucher] = useState('');
   const [lugarEnvio, setLugarEnvio] = useState('');
   const [cardNombre, setCardNombre] = useState('');
@@ -157,7 +156,7 @@ function FormularioCompra({ carrito, total }) {
           <button
             type="button"
             className="btn-cancelar"
-            onClick={() => setMostrarFormulario(false)}
+            onClick={onClose} // Usamos la función del padre para cerrar
           >
             Cancelar
           </button>

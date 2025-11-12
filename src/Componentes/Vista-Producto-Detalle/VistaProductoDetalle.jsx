@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Menu/Header-Menu.jsx";
-import { productos } from '../../data/productos'; 
+import { productos } from '../../data/productos'; // 
 import './VistaProductoDetalle.css';
 
 function VistaProductoDetalle({ agregarAlCarrito }) {
@@ -12,14 +12,8 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [comentariosLocales, setComentariosLocales] = useState([]);
 
-  // Datos del producto principal
-  const producto = {
-    nombre: "Mini Crochet Banana",
-    precio: 5500,
-    puntuacion: 5,
-    imagen: "https://via.placeholder.com/400x400/6f42c1/ffffff?text=Mini+Banana",
-    stock: 1
-  };
+  //BUSCAR PRODUCTO POR ID - 
+  const producto = productos.find(p => p.id === params?.id);
 
   // 6 productos relacionados 
   const productosRelacionados = [

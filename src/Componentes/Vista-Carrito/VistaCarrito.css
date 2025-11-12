@@ -7,14 +7,24 @@
 }
 
 .tituloCarrito {
-  height: 49px;
-  width: 100%;
-  text-align:start;
+    height: 20px;
+    text-align:start;
   color:#ffffff;
   background-color: #AB0C70;
   text-align: center;
   margin: 0;
   font-size: 34px;
+}
+
+h2.tituloCarrito {
+    display: flex;
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    align-items: center;
+    justify-content: center;
 }
 
 h2.tituloCarrito {
@@ -34,6 +44,13 @@ h2.tituloCarrito {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+}
+
+
+h2{
+  
+  font-size: 34px;
+  padding: 15px;
 }
 
 :hover.Carrito-item {
@@ -57,6 +74,7 @@ h2.tituloCarrito {
   justify-content: space-between;
   align-items: center;
 }
+
 
 .Cantidad-producto {
     display: flex;
@@ -91,6 +109,7 @@ h2.tituloCarrito {
 
 .Carrito-total {
   box-shadow: 0px 1px 4px 1px #7a7a7a;
+  box-shadow: 0px 1px 4px 1px #9a1368;
     top: -8px;
     left: 460px;
     position: relative;
@@ -129,6 +148,7 @@ h2.tituloCarrito {
   background: none;
   cursor: pointer;
   font-size: 20px;
+  padding: 5px 10px;
 }
 .cantidad-input {
   -webkit-appearance: none;
