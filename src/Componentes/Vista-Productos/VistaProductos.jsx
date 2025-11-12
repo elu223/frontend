@@ -1,54 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
 import HeaderMenu from "../Header/Header-Menu.jsx";
-import { productos } from '../../data/productos'; 
 import './VistaProductos.css';
+import { useCarrito } from "../CarritoContext/CarritoContext.jsx";
 
-function VistaProductos({ agregarAlCarrito }) {
+function VistaProductos() {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
-  const [productosMostrados, setProductosMostrados] = useState(productos);
-  
-  // Leer parámetro de búsqueda de la URL al cargar
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('search');
-    if (searchParam) {
-      setTerminoBusqueda(searchParam);
-      // Filtrar productos basado en la búsqueda
-      const productosFiltrados = productos.filter(producto =>
-        producto.nombre.toLowerCase().includes(searchParam.toLowerCase())
-      );
-      setProductosMostrados(productosFiltrados);
-    }
-  }, []);
+  const { agregarAlCarrito } = useCarrito();
 
-  const ejecutarBusqueda = (termino) => {
-    setTerminoBusqueda(termino);
-    if (termino.trim() === '') {
-      setProductosMostrados(productos);
-    } else {
-      const filtrados = productos.filter(producto =>
-        producto.nombre.toLowerCase().includes(termino.toLowerCase())
-      );
-      setProductosMostrados(filtrados);
-    }
-  };
+  const productos = [
+    { id: '1', nombre: 'Ajolote Amigurumi Amarillo', precio: 6500, imagen: '/img/ajolote amarillo.jpeg' },
+    { id: '2', nombre: 'Tulipan Rojo Tejido', precio: 7500, imagen: 'img/tulipan rojo.jpeg' },
+    { id: '3', nombre: 'Llavero Corazón', precio: 7800, imagen: 'img/llaveros en forma de corazon.jpeg' },
+    { id: '4', nombre: 'Pelota Tejida', precio: 6500, imagen: '/img/pelota.jpeg' },
+    { id: '5', nombre: 'Rosa Blanca Tejida', precio: 7500, imagen: 'img/rosa blanca.jpeg' },
+    { id: '6', nombre: 'Rosa Roja Tejida', precio: 7500, imagen: 'img/rosa.png' },
+    { id: '7', nombre: 'Crochet Domo Hat', precio: 10000, imagen: 'img/gorro domo.png' },
+    { id: '8', nombre: 'Smart Watch', precio: 500000, imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch' },
+    { id: '9', nombre: 'Smart Watch', precio: 500000, imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch' },
+    { id: '10', nombre: 'Smart Watch', precio: 500000, imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch' },
+  ];
+
+  const productosFiltrados = productos.filter(producto =>
+    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
+  );
 
   return (
     <div className="vista-productos">
-      <HeaderMenu onSearch={ejecutarBusqueda} searchTerm={terminoBusqueda} />
+      <HeaderMenu onSearch={setTerminoBusqueda} searchTerm={terminoBusqueda} />
 
       <main className="main-content">
         <div className="container">
           {terminoBusqueda && (
             <div className="resultados-busqueda">
               <p>
-                {productosMostrados.length > 0
-                  ? `Se encontraron ${productosMostrados.length} productos para "${terminoBusqueda}"`
+                {productosFiltrados.length > 0
+                  ? `Se encontraron ${productosFiltrados.length} productos para "${terminoBusqueda}"`
                   : `No se encontraron productos para "${terminoBusqueda}". Mostrando todos los productos.`
                 }
               </p>
-              {productosMostrados.length === 0 && (
+              {productosFiltrados.length === 0 && (
                 <button 
                   className="btn-ver-todos"
                   onClick={() => {
@@ -64,7 +55,7 @@ function VistaProductos({ agregarAlCarrito }) {
 
           <div className="contenedor-productos">
             <div className="lista-productos-horizontal">
-              {productosMostrados.map((producto) => (
+              {productosFiltrados.map((producto) => (
                 <TarjetaProducto
                   key={producto.id}
                   id={producto.id}
@@ -72,7 +63,6 @@ function VistaProductos({ agregarAlCarrito }) {
                   precio={producto.precio}
                   imagen={producto.imagen}
                   descripcion={producto.descripcion}
-                  agregarAlCarrito={agregarAlCarrito}
                 />
               ))}
             </div>

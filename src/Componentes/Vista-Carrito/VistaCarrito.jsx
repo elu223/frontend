@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'wouter';
 import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
+import Header from '../Header/Header.jsx'; // Importa el nuevo componente Header
+import { useCarrito } from '../CarritoContext/CarritoContext.jsx';
 import './VistaCarrito.css';
 
-function VistaCarrito({ carrito, setCarrito }) {
+function VistaCarrito() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const { carrito, setCarrito, eliminarItem, actualizarCantidad, incrementarCantidad, disminuirCantidad } = useCarrito();
 
   const eliminarItem = (id) => {
     setCarrito(carrito.filter(item => item.id !== id));
@@ -36,16 +39,7 @@ function VistaCarrito({ carrito, setCarrito }) {
 
   return (
     <div className="Carrito-container">
-      <header className="header-ecommerce">
-        <div className="container">
-          <div className="logo-container">
-            <Link href="/" className="logo-link">
-              <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-              <h1 className="logo-texto">TejidosMiki</h1>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header /> {/* Usa el componente Header reutilizable */}
 
       <h2 className="tituloCarrito">Carrito de Compras</h2>
 
@@ -113,3 +107,4 @@ function VistaCarrito({ carrito, setCarrito }) {
 }
 
 export default VistaCarrito;
+  
