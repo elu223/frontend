@@ -1,27 +1,27 @@
 import { Link } from "wouter";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { productos } from '../../data/productos';
 import './Header-Menu.css';
 
-function HeaderMenu({ onSearch, searchTerm = '' }) {
+function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const [terminoLocal, setTerminoLocal] = useState(searchTerm);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [sugerencias, setSugerencias] = useState([]);
-  const [indiceSeleccionado, setIndiceSeleccionado] = useState(-1);
-  const sugerenciasRef = useRef([]);
 
-  const manejarBusqueda = (e) => {
-    const valor = e.target.value;
+  // Actualizar término local cuando searchTerm cambie
+  useEffect(() => {
+    setTerminoLocal(searchTerm);
+  }, [searchTerm]);
+
+  const manejarBusqueda = (valor) => {
     setTerminoLocal(valor);
     
-    // solo filtrar sugerencias en tiempo real, no ejecutar búsqueda
     if (valor.length > 0) {
       const sugerenciasFiltradas = productos.filter(producto =>
         producto.nombre.toLowerCase().includes(valor.toLowerCase())
       ).slice(0, 5);
       setSugerencias(sugerenciasFiltradas);
       setMostrarSugerencias(true);
-      setIndiceSeleccionado(-1);
     } else {
       setMostrarSugerencias(false);
     }
@@ -29,11 +29,9 @@ function HeaderMenu({ onSearch, searchTerm = '' }) {
 
   const manejarEnvioBusqueda = () => {
     if (terminoLocal.trim()) {
-      // Si hay sugerencias, ir a la primera
       if (sugerencias.length > 0) {
         seleccionarSugerencia(sugerencias[0]);
       } else {
-        // Si no hay sugerencias, redirigir a home
         window.location.href = '/';
       }
     }
@@ -41,70 +39,22 @@ function HeaderMenu({ onSearch, searchTerm = '' }) {
   };
 
   const manejarTecla = (e) => {
-    if (!mostrarSugerencias || sugerencias.length === 0) {
-      if (e.key === 'Enter') {
-        manejarEnvioBusqueda();
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setIndiceSeleccionado(prev => 
-          prev < sugerencias.length - 1 ? prev + 1 : 0
-        );
-        break;
-      
-      case 'ArrowUp':
-        e.preventDefault();
-        setIndiceSeleccionado(prev => 
-          prev > 0 ? prev - 1 : sugerencias.length - 1
-        );
-        break;
-      
-      case 'Enter':
-        e.preventDefault();
-        if (indiceSeleccionado >= 0 && indiceSeleccionado < sugerencias.length) {
-          seleccionarSugerencia(sugerencias[indiceSeleccionado]);
-        } else {
-          manejarEnvioBusqueda();
-        }
-        break;
-      
-      case 'Escape':
-        setMostrarSugerencias(false);
-        setIndiceSeleccionado(-1);
-        break;
-      
-      default:
-        break;
+    if (e.key === 'Enter') {
+      manejarEnvioBusqueda();
+    } else if (e.key === 'Escape') {
+      setMostrarSugerencias(false);
     }
   };
 
   const seleccionarSugerencia = (producto) => {
     setTerminoLocal(producto.nombre);
     setMostrarSugerencias(false);
-    setIndiceSeleccionado(-1);
-    // Redirigir a la página del producto
     window.location.href = `/producto/${producto.id}`;
   };
 
   const cerrarSugerencias = () => {
-    setTimeout(() => {
-      setMostrarSugerencias(false);
-      setIndiceSeleccionado(-1);
-    }, 200);
+    setTimeout(() => setMostrarSugerencias(false), 200);
   };
-
-  // Efecto para scroll a la sugerencia seleccionada
-  useEffect(() => {
-    if (indiceSeleccionado >= 0 && sugerenciasRef.current[indiceSeleccionado]) {
-      sugerenciasRef.current[indiceSeleccionado].scrollIntoView({
-        block: 'nearest'
-      });
-    }
-  }, [indiceSeleccionado]);
 
   return (
     <header className="header-ecommerce">
@@ -123,7 +73,7 @@ function HeaderMenu({ onSearch, searchTerm = '' }) {
             type="text"
             placeholder="Buscar productos..."
             value={terminoLocal}
-            onChange={manejarBusqueda}
+            onChange={(e) => manejarBusqueda(e.target.value)}
             onKeyDown={manejarTecla}
             onFocus={() => terminoLocal.length > 0 && setMostrarSugerencias(true)}
             onBlur={cerrarSugerencias}
@@ -135,13 +85,11 @@ function HeaderMenu({ onSearch, searchTerm = '' }) {
           {mostrarSugerencias && (
             <div className="sugerencias-lista">
               {sugerencias.length > 0 ? (
-                sugerencias.map((producto, index) => (
+                sugerencias.map((producto) => (
                   <div 
                     key={producto.id} 
-                    ref={el => sugerenciasRef.current[index] = el}
-                    className={`sugerencia-item ${index === indiceSeleccionado ? 'sugerencia-seleccionada' : ''}`}
+                    className="sugerencia-item"
                     onClick={() => seleccionarSugerencia(producto)}
-                    onMouseEnter={() => setIndiceSeleccionado(index)}
                   >
                     <div className="sugerencia-info">
                       <div className="sugerencia-nombre">{producto.nombre}</div>
@@ -150,9 +98,7 @@ function HeaderMenu({ onSearch, searchTerm = '' }) {
                 ))
               ) : terminoLocal.length > 0 ? (
                 <div className="sin-resultados">
-                  <div className="mensaje-no-encontrado">
-                    No encontramos productos para "{terminoLocal}"
-                  </div>
+                  No encontramos productos para "{terminoLocal}"
                 </div>
               ) : null}
             </div>
@@ -174,9 +120,8 @@ function HeaderMenu({ onSearch, searchTerm = '' }) {
           </Link>
           
           <Link href="/carrito" className="menu-opcion carrito-opcion">
-            {/* Reemplazar emoji por imagen */}
-           <span className="menu-texto">🛒</span>
-            <span className="carrito-contador">0</span>
+            <span className="menu-texto">🛒</span>
+            <span className="carrito-contador">{totalItems}</span>
           </Link>
         </nav>
       </div>
