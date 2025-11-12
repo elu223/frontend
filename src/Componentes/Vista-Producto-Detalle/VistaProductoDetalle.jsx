@@ -2,16 +2,17 @@ import { useState } from "react";
 import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Header/Header-Menu.jsx";
-import { productos } from '../../data/productos';
+import { productos } from '../../data/productos'; 
 import './VistaProductoDetalle.css';
+import { useCarrito } from "../CarritoContext/CarritoContext.jsx";
 
-function VistaProductoDetalle({ agregarAlCarrito }) {
-  const [match, params] = useRoute("/producto/:id");
+function VistaProductoDetalle() {
+  const { agregarAlCarrito } = useCarrito();
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
   const [comentariosLocales, setComentariosLocales] = useState([]);
-
+  const [match, params] = useRoute("/producto/:id");
   const producto = productos.find(p => p.id === params?.id);
 
   // Si no se encuentra el producto, mostrar mensaje de error

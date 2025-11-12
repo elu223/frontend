@@ -6,18 +6,11 @@ import './Mi-Perfil.css';
 function MiPerfil() {
   const [usuario, setUsuario] = useState({
     nombre: 'Milagros',
-    email: '',
-    direccion: '',
+    email: '', // Puedes inicializarlo con datos del usuario si los tienes
+    direccion: '', // O dejarlo vacío para que el usuario lo complete
   });
 
-  const colores = [
-  'black', 'blue', 'purple', 'red',
-  'green', 'orange', 'pink', 'gray'
-];
-const [nombre, setNombre] = useState('');
-  const [correo] = useState('CorreoUs@gmail.com');
-  const [avatar, setAvatar] = useState('green');
-    const manejarCambio = (e) => {
+  const manejarCambio = (e) => {
     setUsuario({
       ...usuario,
       [e.target.name]: e.target.value,

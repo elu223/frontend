@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Router, Switch } from 'wouter';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 import VistaProductoDetalle from './Componentes/Vista-Producto-Detalle/VistaProductoDetalle'
 import MiPerfil from './Componentes/MiPerfil/Mi-Perfil';  
 import './App.css';
-
 function App() {
 
   return (
@@ -13,13 +12,13 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/">
-            <VistaProductos agregarAlCarrito={agregarAlCarrito} />
+            <VistaProductos />
           </Route>
           <Route path="/carrito">
-            <VistaCarrito carrito={carrito} setCarrito={setCarrito} />
+            <VistaCarrito />
           </Route>
           <Route path="/producto/:id">
-            <VistaProductoDetalle agregarAlCarrito={agregarAlCarrito} />
+            <VistaProductoDetalle />
           </Route>
           <Route path="/miperfil">
             <MiPerfil />
