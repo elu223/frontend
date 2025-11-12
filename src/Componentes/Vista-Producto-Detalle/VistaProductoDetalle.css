@@ -423,6 +423,25 @@
     width: 90%;
   }
 }
+.btn-miniatura {
+  background: #ce0078;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-miniatura:hover {
+  background: #b3007a;
+}
+
+/* Para que el Link no afecte el estilo del botón */
+.producto-miniatura a {
+  text-decoration: none;
+}
 
 @media (max-width: 768px) {
   .contenedor-principal {

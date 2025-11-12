@@ -29,18 +29,6 @@ h2.tituloCarrito {
   
 }
 
-h2.tituloCarrito {
-    display: flex;
-    text-align: center;
-    font-family: "Playfair Display", serif;
-    font-optical-sizing: auto;
-    font-weight: bold;
-    font-style: normal;
-    align-items: center;
-    justify-content: center;
-  
-}
-
 .itemsLista {
   margin-left: 450px;
   display: flex;
@@ -69,7 +57,6 @@ h2.tituloCarrito {
   justify-content: space-between;
   align-items: center;
 }
-
 
 .Cantidad-producto {
     display: flex;
@@ -104,7 +91,6 @@ h2.tituloCarrito {
 
 .Carrito-total {
   box-shadow: 0px 1px 4px 1px #7a7a7a;
-  box-shadow: 0px 1px 4px 1px #9a1368;
     top: -8px;
     left: 460px;
     position: relative;
@@ -143,7 +129,6 @@ h2.tituloCarrito {
   background: none;
   cursor: pointer;
   font-size: 20px;
-  padding: 5px 10px;
 }
 .cantidad-input {
   -webkit-appearance: none;
@@ -163,209 +148,5 @@ h2.tituloCarrito {
 .cantidad-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.pago-option {
-    cursor: pointer;
-    display: inline-block;
-}
-
-.pago-option input[type="radio"] {
-    display: none;
-}
-
-.pago-icon {
-    display: inline-block;
-    background: #fff;
-    padding: 8px 12px;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    font-weight: 700;
-    font-size: 13px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.pago-option:hover .pago-icon {
-    background: #f8f8f8;
-}
-
-.pago-option input[type="radio"]:checked + .pago-icon {
-    border-color: #6f1b4b;
-    background: #fff8dc;
-    color: #6f1b4b;
-}
-
-.formulario-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-
-.formulario-container {
-    background: #fff8dc;
-    padding: 24px;
-    border-radius: 12px;
-    width: 480px;
-    max-width: 95%;
-}
-
-.fila-voucher {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.fila-voucher input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ffffff;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.btn-aplicar {
-    height: 31px;
-    background: #6f1b4b;
-    color: white;
-    border: none;
-    padding: 9px 11px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.campo-envio input {
-    width: 93%;
-    padding: 12px;
-    border: 1px solid #ffffff;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.medios-pago {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    gap: 10px;
-}
-
-.pago-option {
-    flex: 1;
-    text-align: center;
-}
-
-.pago-icon {
-    width: 76%;
-    padding: 12px 8px;
-    background: white;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0px 2px 0px currentColor;
-}
-
-.pago-option input[type="radio"]:checked + .pago-icon {
-    border-color: #6f1b4b;
-    color: #6f1b4b;
-}
-
-.label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    font-size: 14px;
-}
-input .datos-tarjeta{
-    width: 75%;
-    padding: 12px;
-}
-
-.input{
-    box-shadow: 0px 2px 0px currentColor;
-    width: 90%;
-    padding: 10px;
-    border: 1px solid #ffffff;
-    border-radius: 7px;
-    margin-bottom: 6px;
-    font-size: 14px;
-}
-
-.fila-pequena {
-    display: flex;
-    
-    margin-bottom: 24px;
-}
-
-.col-pequena {
-    flex: 1;
-}
-
-.resumen-pago {
-    box-shadow: 2px 2px 2px #2a2a2a;
-    height: 40px;
-    border-radius: 15px;
-    padding: 6px;
-    background-color: #520837;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.total-text {
-    font-size: 20px;
-    font-weight: 600;
-    color: #6f1b4b;
-}
-
-.btn-pagar {
-    border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 2px;
-  padding: 5px 10px;
-}
-.btn-confirmar-pago {
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: white;
-    font-size: 21px;
-    font-weight: bold;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-
-:hover.btn-cancelar{
-    box-shadow: 2px 4px 4px 1px #7a7a7a;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: #a10000;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 16px;
-    height: 26px;
-    background-color: #ffffff;
-}
-
-.btn-cancelar{
-    box-shadow: 2px 2px 2px #7a7a7a;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 16px;
-    height: 26px;
-    background-color: #a10000;
 }
 

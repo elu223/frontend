@@ -4,7 +4,7 @@ import HeaderMenu from "../Header/Header-Menu.jsx";
 import './VistaProductos.css';
 import { useCarrito } from "../CarritoContext/CarritoContext.jsx";
 
-function VistaProductos() {
+function VistaProductos({ agregarAlCarrito, totalItems = 0 }) { 
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const { agregarAlCarrito } = useCarrito();
 
@@ -27,7 +27,12 @@ function VistaProductos() {
 
   return (
     <div className="vista-productos">
-      <HeaderMenu onSearch={setTerminoBusqueda} searchTerm={terminoBusqueda} />
+      {/* Pasar totalItems al HeaderMenu */}
+      <HeaderMenu 
+        onSearch={ejecutarBusqueda} 
+        searchTerm={terminoBusqueda} 
+        totalItems={totalItems} 
+      />
 
       <main className="main-content">
         <div className="container">
