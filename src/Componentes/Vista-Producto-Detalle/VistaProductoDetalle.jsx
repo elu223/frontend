@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Menu/Header-Menu.jsx";
+import { productos } from '../../data/productos'; 
 import './VistaProductoDetalle.css';
 
 function VistaProductoDetalle({ agregarAlCarrito }) {
@@ -67,7 +68,7 @@ function VistaProductoDetalle({ agregarAlCarrito }) {
 
   const comentarios = [
     { 
-      usuario: "TuchakalitalwU", 
+      usuario: "TuchakalitalUwU", 
       texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
       puntuacion: 5,
     },

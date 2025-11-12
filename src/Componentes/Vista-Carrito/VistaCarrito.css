@@ -25,6 +25,8 @@ h2.tituloCarrito {
     font-style: normal;
     align-items: center;
     justify-content: center;
+    font-size: 34px;
+    padding: 15px;
 }
 
 .itemsLista {
@@ -32,12 +34,6 @@ h2.tituloCarrito {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-}
-
-h2{
-  
-  font-size: 34px;
-  padding: 15px;
 }
 
 :hover.Carrito-item {
