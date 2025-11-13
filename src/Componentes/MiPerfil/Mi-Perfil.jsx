@@ -124,14 +124,14 @@ function MiPerfil() {
               <p>Seleccioná tu avatar:</p>
               <div className="opciones-avatar">
                 {[
-                  "./img/AjoBlancoPerfil.png",
-                  "./img/ajoNegroPerfil.png",
-                  "./img/ajoloteNaranjaPerfil.png",
-                  "./img/ajoloteRosaPerfil.png",
-                  "./img/foto_p_AzulAjo.png",
-                  "./img/ajoRojoPErfil.png",
-                  "./img/AjoloteVerdePerfil.png",
-                  "./img/ajoVioletaPerfil.png",
+                  "./img/1.png",
+                  "./img/2.png",
+                  "./img/3.png",
+                  "./img/4.png",
+                  "./img/5.png",
+                  "./img/6.png",
+                  "./img/7.png",
+                  "./img/8.png",
                 ].map((ruta) => (
                   <img
                     key={ruta}
@@ -165,22 +165,20 @@ function MiPerfil() {
             )}
           </ul>
         </div>
-
         {/* COMPRAS */}
-        <div className="mis-compras-titulo">
-          <h2>Mis Compras</h2>
         </div>
         <div className="mis-compras">
+          <h3>Mis Compras</h3>      
           <ul>
             {comprasPorUsuario[usuario.nombre] ? (
               comprasPorUsuario[usuario.nombre].map((compra, i) => (
-                <li key={i}>{compra}</li>
+                <li key={i}>{compra}</li> 
+
               ))
             ) : (
-              <li>No realizaste compras todavía.</li>
+              <li>No has realizado compras aún.</li>
             )}
           </ul>
-        </div>
       </div>
     </div>
   );
