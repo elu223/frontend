@@ -1,90 +1,189 @@
-import { Link } from "wouter";
 import { useState } from "react";
-import HeaderMenu from "../Header/Header-Menu.jsx";
-import './Mi-Perfil.css';
+import { Link } from "wouter";
+import "./Mi-Perfil.css";
 
 function MiPerfil() {
   const [usuario, setUsuario] = useState({
-    nombre: 'Milagros',
-    email: '',
-    direccion: '',
+    nombre: "Milagros",
+    email: "milagros@gmail.com",
+    direccion: "Río Grande, Tierra del Fuego",
+    avatar: "/img/avatares/avatar1.png", // imagen de perfil
   });
 
-  const colores = [
-  'black', 'blue', 'purple', 'red',
-  'green', 'orange', 'pink', 'gray'
-];
-const [nombre, setNombre] = useState('');
-  const [correo] = useState('CorreoUs@gmail.com');
-  const [avatar, setAvatar] = useState('green');
-    const manejarCambio = (e) => {
-    setUsuario({
-      ...usuario,
-      [e.target.name]: e.target.value,
-    });
+  const [modoEdicion, setModoEdicion] = useState(false);
+
+  const comentariosPorUsuario = {
+    "Milagros": [
+      "Me encanta este sitio web!",
+      "Los productos son de excelente calidad.",
+      "El servicio al cliente es muy amable.",
+    ],
+    "Invitado": ["Aún no tienes comentarios."],
   };
-    return (
-      <div className="mi-perfil">
-        <header className="header-ecommerce">
-          <div className="container">
-            <div className="logo-container">
-              <Link href="/" className="logo-link">
-                <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-                <h1 className="logo-texto">TejidosMiki</h1>
-              </Link>
-            </div>
-            <HeaderMenu />
-          </div>
-        </header>
-        <main className="main-content">
-          <div className="container perfil-contenedor">
-            <div className="perfil-titulo"> 
-                <h2>Mi Perfil</h2>
-            </div>
-            
-            <form className="perfil-formulario">
-                <label> Nombre:
-                  <input
-                    type="text" 
-                    name="nombre"
-                    value={usuario.nombre}
-                    onChange={manejarCambio}
-                  />
-                </label>            
-                <label> Email:
-                  <input
-                    type="email"    
-                    name="email"
-                    value={usuario.email}
-                    onChange={manejarCambio}
-                  />
-                </label>
-                <label> Dirección:
-                  <input
-                    type="text"
-                    name="direccion"
-                    value={usuario.direccion}
-                    onChange={manejarCambio}
-                  />
-                </label>
-                <button type="submit" className="perfil-guardar-btn">Guardar Cambios</button>
-                <button type="button" className="perfil-cancelar-btn">Cancelar</button>
 
-                
-                <div className="mis-comentarios">
-                    <h3>Mis Comentarios</h3>
-                    <ul>
-                        <li>Comentario 1: Me encanta este sitio web!</li>
-                        <li>Comentario 2: Los productos son de excelente calidad.</li>
-                        <li>Comentario 3: El servicio al cliente es muy amable.</li>
-                    </ul>
+  const comprasPorUsuario = {
+    "Milagros": [
+      "Suéter de lana - 20/05/2024",
+      "Bufanda tejida - 15/06/2024",
+      "Guantes de punto - 10/07/2024",
+    ],
+    "Invitado": ["Todavía no realizaste compras."],
+  };
 
-                </div>
-            </form>
+  const manejarCambio = (e) => {
+    const { name, value } = e.target;
+    setUsuario((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const manejarAvatar = (ruta) => {
+    setUsuario((prev) => ({ ...prev, avatar: ruta }));
+  };
+
+  const manejarSubmit = (e) => {
+    e.preventDefault();
+    console.log("Perfil actualizado:", usuario);
+    setModoEdicion(false);
+  };
+
+  return (
+    <div className="mi-perfil">
+      {/* HEADER */}
+      <header className="header-ecommerce">
+        <div className="container">
+          <div className="logo-container">
+            <Link href="/" className="logo-link">
+              <img
+                src="/img/logo.png"
+                alt="Logo TejidosMiki"
+                className="logo-imagen"
+              />
+              <h1 className="logo-texto">TejidosMiki</h1>
+            </Link>
           </div>
-        </main>
         </div>
-    );
+      </header>
+
+      {/* PERFIL */}
+      <div className="perfil-titulo">
+        <h2>Mi Perfil</h2>
+      </div>
+
+      <div className="container-perfil">
+        <div className="perfil-usuario">
+          <img
+            src={usuario.avatar}
+            alt="Avatar del usuario"
+            className="avatar-imagen"
+          />
+          <h3>{usuario.nombre}</h3>
+          <p>{usuario.email}</p>
+          <p>{usuario.direccion}</p>
+
+          <button
+            className="editar-perfil-btn"
+            onClick={() => setModoEdicion(!modoEdicion)}
+          >
+            {modoEdicion ? "Cancelar" : "Editar Perfil"}
+          </button>
+        </div>
+
+        {/* FORMULARIO DE EDICIÓN */}
+        {modoEdicion && (
+          <form className="perfil-formulario" onSubmit={manejarSubmit}>
+            <label>
+              Nombre:
+              <input
+                type="text"
+                name="nombre"
+                value={usuario.nombre}
+                onChange={manejarCambio}
+              />
+            </label>
+
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={usuario.email}
+                onChange={manejarCambio}
+              />
+            </label>
+
+            <label>
+              Dirección:
+              <input
+                type="text"
+                name="direccion"
+                value={usuario.direccion}
+                onChange={manejarCambio}
+              />
+            </label>
+
+            <div className="seleccion-avatar">
+              <p>Seleccioná tu avatar:</p>
+              <div className="opciones-avatar">
+                {[
+                  "./img/AjoBlancoPerfil.png",
+                  "./img/ajoNegroPerfil.png",
+                  "./img/ajoloteNaranjaPerfil.png",
+                  "./img/ajoloteRosaPerfil.png",
+                  "./img/foto_p_AzulAjo.png",
+                  "./img/ajoRojoPErfil.png",
+                  "./img/AjoloteVerdePerfil.png",
+                  "./img/ajoVioletaPerfil.png",
+                ].map((ruta) => (
+                  <img
+                    key={ruta}
+                    src={ruta}
+                    alt="Avatar"
+                    className={`avatar-opcion ${
+                      usuario.avatar === ruta ? "seleccionado" : ""
+                    }`}
+                    onClick={() => manejarAvatar(ruta)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <button type="submit" className="guardar-btn">
+              Guardar Cambios
+            </button>
+          </form>
+        )}
+
+        {/* COMENTARIOS */}
+        <div className="mis-comentarios">
+          <h3>Mis Comentarios</h3>
+          <ul>
+            {comentariosPorUsuario[usuario.nombre] ? (
+              comentariosPorUsuario[usuario.nombre].map((comentario, i) => (
+                <li key={i}>{comentario}</li>
+              ))
+            ) : (
+              <li>No tienes comentarios aún.</li>
+            )}
+          </ul>
+        </div>
+
+        {/* COMPRAS */}
+        <div className="mis-compras-titulo">
+          <h2>Mis Compras</h2>
+        </div>
+        <div className="mis-compras">
+          <ul>
+            {comprasPorUsuario[usuario.nombre] ? (
+              comprasPorUsuario[usuario.nombre].map((compra, i) => (
+                <li key={i}>{compra}</li>
+              ))
+            ) : (
+              <li>No realizaste compras todavía.</li>
+            )}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default MiPerfil;
