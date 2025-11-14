@@ -173,7 +173,9 @@
 
 /* Estilos para cuando no hay resultados */
 .sin-resultados {
-  padding: 1rem;
+  padding: 10px;
+  color: #333;
+  text-align: center;
 }
 
 .mensaje-no-encontrado {
