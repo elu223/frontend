@@ -7,6 +7,30 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const [terminoLocal, setTerminoLocal] = useState(searchTerm);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [sugerencias, setSugerencias] = useState([]);
+  const [user, setUser] = useState(null);
+
+  // Cargar usuario desde localStorage
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // Escuchar cambios en localStorage (para cuando se haga login en otra página)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      } else {
+        setUser(null);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Actualizar término local cuando searchTerm cambie
   useEffect(() => {
@@ -56,6 +80,12 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
     setTimeout(() => setMostrarSugerencias(false), 200);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    window.location.href = '/';
+  };
+
   return (
     <header className="header-ecommerce">
       <div className="container">
@@ -81,7 +111,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
           />
           <button className="buscador-btn" onClick={manejarEnvioBusqueda}>🔍</button>
           
-          {/* Lista de sugerencias */}
+          {/* Lista de sugerencias - CORREGIDO */}
           {mostrarSugerencias && (
             <div className="sugerencias-lista">
               {sugerencias.length > 0 ? (
@@ -96,28 +126,53 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
                     </div>
                   </div>
                 ))
-              ) : terminoLocal.length > 0 ? (
+              ) : (
+                // CORRECCIÓN: Esto se muestra cuando hay término de búsqueda pero NO hay sugerencias
                 <div className="sin-resultados">
                   No encontramos productos para "{terminoLocal}"
                 </div>
-              ) : null}
+              )}
             </div>
           )}
         </div>
 
         {/* Menú de Navegación */}
         <nav className="menu-opciones">
-          <Link href="/registrarse" className="menu-opcion">
-            <span className="menu-texto">Crea tu cuenta</span>
-          </Link>
-          
-          <Link href="/iniciar-sesion" className="menu-opcion">
-            <span className="menu-texto">Ingresa</span>
-          </Link>
-          
-          <Link href="/compras" className="menu-opcion">
-            <span className="menu-texto">Mis compras</span>
-          </Link>
+          {user ? (
+            // USUARIO LOGUEADO - muestra Mi Perfil y Cerrar Sesión
+            <>
+              <span className="menu-opcion usuario-bienvenida">
+                ¡Hola, {user.name}!
+              </span>
+              <Link href="/compras" className="menu-opcion">
+                <span className="menu-texto">Mis compras</span>
+              </Link>
+              <Link href="/miperfil" className="menu-opcion">
+                <span className="menu-texto">Mi perfil</span>
+              </Link>
+              <button 
+                onClick={handleLogout} 
+                className="menu-opcion btn-logout"
+              >
+                <span className="menu-texto">Cerrar sesión</span>
+              </button>
+            </>
+          ) : (
+            // USUARIO NO LOGUEADO - muestra Crea cuenta e Ingresa
+            <>
+              <Link href="/registrarse" className="menu-opcion">
+                <span className="menu-texto">Crea tu cuenta</span>
+              </Link>
+              
+              <Link href="/iniciar-sesion" className="menu-opcion">
+                <span className="menu-texto">Ingresa</span>
+              </Link>
+              
+              <Link href="/compras" className="menu-opcion">
+                <span className="menu-texto">Mis compras</span>
+              </Link>
+            </>
+          )}
           
           <Link href="/carrito" className="menu-opcion carrito-opcion">
             <span className="menu-texto">🛒</span>
