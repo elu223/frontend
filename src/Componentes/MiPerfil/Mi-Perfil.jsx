@@ -1,74 +1,43 @@
+
 import { useState } from "react";
-import { Link } from "wouter";
-import "./Mi-Perfil.css";
+import HeaderMenu from "../Header/Header-Menu.jsx";
+import './Mi-Perfil.css';
 
 function MiPerfil() {
   const [usuario, setUsuario] = useState({
-    nombre: "Milagros",
-    email: "milagros@gmail.com",
-    direccion: "Río Grande, Tierra del Fuego",
-    avatar: "/img/avatares/avatar1.png", // imagen de perfil
+    nombre: 'Milagros',
+    email: '',
+    direccion: '',
   });
 
-  const [modoEdicion, setModoEdicion] = useState(false);
-
-  const comentariosPorUsuario = {
-    "Milagros": [
-      "Me encanta este sitio web!",
-      "Los productos son de excelente calidad.",
-      "El servicio al cliente es muy amable.",
-    ],
-    "Invitado": ["Aún no tienes comentarios."],
+  const colores = [
+  'black', 'blue', 'purple', 'red',
+  'green', 'orange', 'pink', 'gray'
+  ];
+  const [nombre, setNombre] = useState('');
+  const [correo] = useState('CorreoUs@gmail.com');
+  const [avatar, setAvatar] = useState('green');
+    const manejarCambio = (e) => {
+    setUsuario({
+      ...usuario,
+      [e.target.name]: e.target.value,
+    });
   };
-
-  const comprasPorUsuario = {
-    "Milagros": [
-      "Suéter de lana - 20/05/2024",
-      "Bufanda tejida - 15/06/2024",
-      "Guantes de punto - 10/07/2024",
-    ],
-    "Invitado": ["Todavía no realizaste compras."],
-  };
-
-  const manejarCambio = (e) => {
-    const { name, value } = e.target;
-    setUsuario((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const manejarAvatar = (ruta) => {
-    setUsuario((prev) => ({ ...prev, avatar: ruta }));
-  };
-
-  const manejarSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Perfil actualizado:", usuario);
-    setModoEdicion(false);
+    console.log('Información del usuario:', usuario);
   };
 
-  return (
-    <div className="mi-perfil">
-      {/* HEADER */}
-      <header className="header-ecommerce">
-        <div className="container">
-          <div className="logo-container">
-            <Link href="/" className="logo-link">
-              <img
-                src="/img/logo.png"
-                alt="Logo TejidosMiki"
-                className="logo-imagen"
-              />
-              <h1 className="logo-texto">TejidosMiki</h1>
-            </Link>
-          </div>
-        </div>
-      </header>
 
-      {/* PERFIL */}
-      <div className="perfil-titulo">
-        <h2>Mi Perfil</h2>
+
+}
+return (
+  <div className="mi-perfil">
+    <HeaderMenu />
+      <div className="perfil-titulo"> 
+        <h2 className="perfil-h2">Mi Perfil</h2>
       </div>
-
-      <div className="container-perfil">
+        <div className="container-perfil">
         <div className="perfil-usuario">
           <img
             src={usuario.avatar}
@@ -145,13 +114,17 @@ function MiPerfil() {
                 ))}
               </div>
             </div>
-
-            <button type="submit" className="guardar-btn">
-              Guardar Cambios
-            </button>
+            <div className="mis-comentarios">
+              <h3>Mis Comentarios</h3>
+              <ul>
+                <li>Comentario 1: Me encanta este sitio web!</li>
+                <li>Comentario 2: Los productos son de excelente calidad.</li>
+                <li>Comentario 3: El servicio al cliente es muy amable.</li>
+              </ul>
+            </div>
           </form>
         )}
-
+        
         {/* COMENTARIOS */}
         <div className="mis-comentarios">
           <h3>Mis Comentarios</h3>
@@ -180,8 +153,8 @@ function MiPerfil() {
             )}
           </ul>
       </div>
-    </div>
-  );
-}
+  </div>
+  
+);
 
 export default MiPerfil;
