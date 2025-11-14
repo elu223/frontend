@@ -1,103 +1,119 @@
-import { useState } from 'react';
-import { useLocation } from 'wouter';
-import HeaderMenu from '../Header/Header-Menu';
-import './registro.css';
+import { useState } from "react";
+import { useLocation } from "wouter";
+import HeaderMenu from "../Header/Header-Menu";
+import "./registro.css";
 
 function Registro() {
-  const [nombre, setNombre] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
+
   const [, setLocation] = useLocation();
-A
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
-      alert('Las contraseñas no coinciden');
+      alert("Las contraseñas no coinciden");
       return;
     }
 
-    // Guardar usuario en localStorage
     const userData = {
       name: nombre,
       email: email,
-      fechaRegistro: new Date().toLocaleDateString()
+      fechaRegistro: new Date().toLocaleDateString(),
     };
-    
-    localStorage.setItem('user', JSON.stringify(userData));
-    
-    // Forzar actualización del header
-    window.dispatchEvent(new Event('storage'));
-    
-    setLocation('/');
+
+    localStorage.setItem("user", JSON.stringify(userData));
+    window.dispatchEvent(new Event("storage"));
+    setLocation("/");
   };
 
   return (
     <div className="registro-container">
       <HeaderMenu />
-      
+
       <div className="registro-box">
-        <h2 className="registro-title">Crear Cuenta</h2>
-        
+        <h2 className="registro-title">Registrarse</h2>
+
+        <div className="avatar-circle">
+          <img src="/img/icon-user.png" alt="icono usuario" className="avatar-img" />
+        </div>
+
         <form onSubmit={handleSubmit} className="registro-form">
           <div className="input-group">
-            <label className="input-label">Nombre completo</label>
+            <label>Nombre</label>
             <input
               type="text"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              required
               className="input-field"
-              placeholder="Tu nombre completo"
+              required
             />
           </div>
 
           <div className="input-group">
-            <label className="input-label">Correo electrónico</label>
+            <label>Correo electronico</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
               className="input-field"
-              placeholder="tu@email.com"
+              required
             />
           </div>
 
           <div className="input-group">
-            <label className="input-label">Contraseña</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input-field"
-              placeholder="Contraseña segura"
-              minLength="6"
-            />
+            <label>Contraseña</label>
+            <div className="input-icon-wrapper">
+              <input
+                type={showPass ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field"
+                required
+              />
+              <span
+                className="icon-eye"
+                onClick={() => setShowPass(!showPass)}
+              >
+                👁
+              </span>
+            </div>
           </div>
 
           <div className="input-group">
-            <label className="input-label">Confirmar contraseña</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="input-field"
-              placeholder="Repite tu contraseña"
-            />
+            <label>Confirmar contraseña</label>
+            <div className="input-icon-wrapper">
+              <input
+                type={showConfirmPass ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="input-field"
+                required
+              />
+              <span
+                className="icon-arrow"
+                onClick={() => setShowConfirmPass(!showConfirmPass)}
+              >
+                ⌄
+              </span>
+            </div>
           </div>
 
-          <button type="submit" className="registro-button">
-            Crear Cuenta
-          </button>
+          <div className="button-row">
+            <button type="submit" className="btn-confirmar">
+              Confirmar
+            </button>
+
+            <a href="/iniciar-sesion" className="btn-login">
+              Iniciar sesión
+            </a>
+          </div>
         </form>
-
-        <div className="registro-links">
-          <a href="/iniciar-sesion" className="link">¿Ya tienes cuenta? Inicia sesión</a>
-        </div>
       </div>
     </div>
   );

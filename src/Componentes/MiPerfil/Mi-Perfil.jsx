@@ -35,7 +35,7 @@ return (
   <div className="mi-perfil">
     <HeaderMenu />
       <div className="perfil-titulo"> 
-        <h2>Mi Perfil</h2>
+        <h2 className="perfil-h2">Mi Perfil</h2>
       </div>
         <div className="container-perfil">
         <div className="perfil-usuario">
