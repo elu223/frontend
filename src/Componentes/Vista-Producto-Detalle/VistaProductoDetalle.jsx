@@ -5,6 +5,7 @@ import HeaderMenu from "../Header/Header-Menu.jsx";
 import { productos } from '../../data/productos';
 import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import './VistaProductoDetalle.css';
+import Footer from "../Footer/Footer.jsx";
 
 function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar totalItems
   const [match, params] = useRoute("/producto/:id");
@@ -269,11 +270,12 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
         />
       )}
 
-      <footer className="footer">
+      {/* <footer className="footer">
         <div className="container">
           <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
         </div>
-      </footer>
+      </footer> */}
+      <Footer />
     </div>
   );
 }

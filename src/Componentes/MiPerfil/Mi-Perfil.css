@@ -1,6 +1,11 @@
+.mi-perfil {
+  background-color: #6b0f47;
+  
+}
+
 .container-perfil{
+  
     display: flex;
-    background-color: #6b0f47;
     height: 100vh;
     color: #ffffff;
     flex-direction: column;
@@ -9,7 +14,7 @@
     flex-wrap: nowrap;
 }
 
-.perfil-h2 {
+.h2 {
     color: black;
     width: 100vw;
     text-align: center;
@@ -36,7 +41,7 @@
     background-color: rgb(241, 241, 139);
     padding: 10px;
     width: 80%;
-    border-radius: 8px;
+    border-radius: 19px 19px 19px 19px;
     box-sizing: border-box;
     color: black;
     display: flex;
@@ -45,6 +50,7 @@
     align-content: flex-start;
     flex-wrap: nowrap;
     justify-content: flex-end;
+   
 }
 
 .mis-comentarios {
@@ -54,6 +60,7 @@
     padding: 10px;
     border-radius: 8px;
     box-sizing: border-box;
+     
 }
 
 .perfil-usuario {
@@ -96,4 +103,14 @@
   border-radius: 6px;
   cursor: pointer;
   margin-top: 10px;
+}
+.perfil-formulario{
+  height: auto;
+    display: flex;
+    background-color: #efef91;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    width: 80%;
+    border-radius: 0px 0px 19px 19px;
 }

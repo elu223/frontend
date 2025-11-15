@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'wouter';
 import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import './VistaCarrito.css';
+import Footer from '../Footer/Footer.jsx';
 
 function VistaCarrito({ carrito, setCarrito }) {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -108,6 +109,7 @@ function VistaCarrito({ carrito, setCarrito }) {
           />
         )}
       </div>
+      <Footer />
     </div>
   );
 }

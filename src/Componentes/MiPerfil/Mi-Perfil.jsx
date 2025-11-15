@@ -1,5 +1,6 @@
 import { useState } from "react";
 import HeaderMenu from "../Header/Header-Menu.jsx";
+import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
 
 function MiPerfil() {
@@ -48,62 +49,38 @@ function MiPerfil() {
     <div className="mi-perfil">
       <HeaderMenu />
 
-      <div className="perfil-titulo">
-        <h2 className="perfil-h2">Mi Perfil</h2>
+      <div className="titulo">
+        <h2 className="h2">Mi Perfil</h2>
       </div>
 
       <div className="container-perfil">
-        {/* INFO DEL PERFIL */}
-        <div className="perfil-usuario">
-          <img
-            src={usuario.avatar}
-            alt="Avatar del usuario"
-            className="avatar-imagen"
-          />
 
+        <div className="perfil-usuario">
+          <img src={usuario.avatar} alt="Avatar del usuario" className="avatar-imagen" />
           <h3>{usuario.nombre}</h3>
           <p>{usuario.email || "Sin email"}</p>
           <p>{usuario.direccion || "Sin dirección"}</p>
 
-          <button
-            className="editar-perfil-btn"
-            onClick={() => setModoEdicion(!modoEdicion)}
-          >
+          <button className="editar-perfil-btn" onClick={() => setModoEdicion(!modoEdicion)}>
             {modoEdicion ? "Cancelar" : "Editar Perfil"}
           </button>
         </div>
 
-        {/* FORMULARIO DE EDICIÓN */}
         {modoEdicion && (
           <form className="perfil-formulario" onSubmit={manejarSubmit}>
             <label>
               Nombre:
-              <input
-                type="text"
-                name="nombre"
-                value={usuario.nombre}
-                onChange={manejarCambio}
-              />
+              <input type="text" name="nombre" value={usuario.nombre} onChange={manejarCambio} />
             </label>
 
             <label>
               Email:
-              <input
-                type="email"
-                name="email"
-                value={usuario.email}
-                onChange={manejarCambio}
-              />
+              <input type="email" name="email" value={usuario.email} onChange={manejarCambio} />
             </label>
 
             <label>
               Dirección:
-              <input
-                type="text"
-                name="direccion"
-                value={usuario.direccion}
-                onChange={manejarCambio}
-              />
+              <input type="text" name="direccion" value={usuario.direccion} onChange={manejarCambio} />
             </label>
 
             <div className="seleccion-avatar">
@@ -123,22 +100,17 @@ function MiPerfil() {
                     key={ruta}
                     src={ruta}
                     alt="Avatar"
-                    className={`avatar-opcion ${
-                      usuario.avatar === ruta ? "seleccionado" : ""
-                    }`}
+                    className={`avatar-opcion ${usuario.avatar === ruta ? "seleccionado" : ""}`}
                     onClick={() => manejarAvatar(ruta)}
                   />
                 ))}
               </div>
             </div>
 
-            <button type="submit" className="guardar-btn">
-              Guardar Cambios
-            </button>
+            <button type="submit" className="guardar-btn">Guardar Cambios</button>
           </form>
         )}
 
-        {/* COMENTARIOS */}
         <div className="mis-comentarios">
           <h3>Mis Comentarios</h3>
           <ul>
@@ -153,9 +125,11 @@ function MiPerfil() {
         </div>
       </div>
 
-      {/* COMPRAS */}
       <div className="mis-compras">
-        <h3>Mis Compras</h3>
+        <div className="titulo">
+          <h2 className="h2">Mis Compras</h2>
+        </div>
+
         <ul>
           {comprasPorUsuario[usuario.nombre] ? (
             comprasPorUsuario[usuario.nombre].map((compra, i) => (
@@ -166,6 +140,8 @@ function MiPerfil() {
           )}
         </ul>
       </div>
+
+      <Footer />
     </div>
   );
 }
