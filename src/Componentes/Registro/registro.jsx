@@ -41,7 +41,7 @@ function Registro() {
 
         <div className="avatar-circle">
           <img src="/img/icon-user.png" alt="icono usuario" className="avatar-img" />
-        </div>
+        </div>{/* CIRCULO DE AVATAR */}
 
         <form onSubmit={handleSubmit} className="registro-form">
           <div className="input-group">
