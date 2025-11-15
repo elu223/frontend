@@ -4,7 +4,7 @@ import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 import VistaProductoDetalle from './Componentes/Vista-Producto-Detalle/VistaProductoDetalle';
 import MiPerfil from './Componentes/MiPerfil/Mi-Perfil';  
-import Login from './Componentes/Login/Login';
+import Login from './Componentes/Login/login';
 import Registro from './Componentes/Registro/registro';
 import './App.css';
 
