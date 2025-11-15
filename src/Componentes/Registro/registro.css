@@ -1,12 +1,17 @@
 .registro-container {
-  background-color: #6A1452;
-  min-height: 100vh;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #6A1452;
+    flex-direction: column;
 }
 
 .registro-box {
+ margin-top: 25px;
   background-color: #FCEFB0;
   max-width: 380px;
-  margin: auto;
+  height: 600px;
   padding: 0rem 2rem 2rem 2rem;
   border-radius: 30px;
   text-align: center;
@@ -50,14 +55,14 @@
   position: relative;
 }
 
-.icon-eye,
-.icon-arrow {
+.icon-eye
+/* .icon-arrow */ {
   position: absolute;
   right: 20px;
-  top: 50%;
+  top: 60%;
   transform: translateY(-50%);
   cursor: pointer;
-  font-size: 18px;
+  font-size: 28px;
   color: #6A1452;
 }
 

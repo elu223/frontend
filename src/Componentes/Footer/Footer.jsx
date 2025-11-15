@@ -19,9 +19,9 @@ function Footer() {
           <a href="https://www.instagram.com/tejidosmiki">
             <i className="bx bxl-instagram">instagram</i>
           </a>
-          <a href="#">
+          {/* <a href="#">
             <i className="bx bxl-facebook">facebook</i>
-          </a>
+          </a> */}
           <a href="https://wa.me/542901533532">
             <i className="bx bxl-whatsapp">whatsapp</i>
           </a>
