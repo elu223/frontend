@@ -1,52 +1,69 @@
-
 import { useState } from "react";
 import HeaderMenu from "../Header/Header-Menu.jsx";
-import './Mi-Perfil.css';
+import "./Mi-Perfil.css";
 
 function MiPerfil() {
   const [usuario, setUsuario] = useState({
-    nombre: 'Milagros',
-    email: '',
-    direccion: '',
+    nombre: "Milagros",
+    email: "",
+    direccion: "",
+    avatar: "./img/1.png",
   });
 
-  const colores = [
-  'black', 'blue', 'purple', 'red',
-  'green', 'orange', 'pink', 'gray'
-  ];
-  const [nombre, setNombre] = useState('');
-  const [correo] = useState('CorreoUs@gmail.com');
-  const [avatar, setAvatar] = useState('green');
-    const manejarCambio = (e) => {
+  const [modoEdicion, setModoEdicion] = useState(false);
+
+  const comentariosPorUsuario = {
+    Milagros: [
+      "Me encanta este sitio web!",
+      "Los productos son de excelente calidad.",
+      "El servicio al cliente es muy amable.",
+    ],
+  };
+
+  const comprasPorUsuario = {
+    Milagros: ["Falda satinada", "Blusa rosa pastel", "Hilo encerado x2"],
+  };
+
+  const manejarCambio = (e) => {
     setUsuario({
       ...usuario,
       [e.target.name]: e.target.value,
     });
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Información del usuario:', usuario);
+
+  const manejarAvatar = (ruta) => {
+    setUsuario({
+      ...usuario,
+      avatar: ruta,
+    });
   };
 
+  const manejarSubmit = (e) => {
+    e.preventDefault();
+    console.log("Información del usuario actualizada:", usuario);
+    setModoEdicion(false);
+  };
 
+  return (
+    <div className="mi-perfil">
+      <HeaderMenu />
 
-}
-return (
-  <div className="mi-perfil">
-    <HeaderMenu />
-      <div className="perfil-titulo"> 
+      <div className="perfil-titulo">
         <h2 className="perfil-h2">Mi Perfil</h2>
       </div>
-        <div className="container-perfil">
+
+      <div className="container-perfil">
+        {/* INFO DEL PERFIL */}
         <div className="perfil-usuario">
           <img
             src={usuario.avatar}
             alt="Avatar del usuario"
             className="avatar-imagen"
           />
+
           <h3>{usuario.nombre}</h3>
-          <p>{usuario.email}</p>
-          <p>{usuario.direccion}</p>
+          <p>{usuario.email || "Sin email"}</p>
+          <p>{usuario.direccion || "Sin dirección"}</p>
 
           <button
             className="editar-perfil-btn"
@@ -114,17 +131,13 @@ return (
                 ))}
               </div>
             </div>
-            <div className="mis-comentarios">
-              <h3>Mis Comentarios</h3>
-              <ul>
-                <li>Comentario 1: Me encanta este sitio web!</li>
-                <li>Comentario 2: Los productos son de excelente calidad.</li>
-                <li>Comentario 3: El servicio al cliente es muy amable.</li>
-              </ul>
-            </div>
+
+            <button type="submit" className="guardar-btn">
+              Guardar Cambios
+            </button>
           </form>
         )}
-        
+
         {/* COMENTARIOS */}
         <div className="mis-comentarios">
           <h3>Mis Comentarios</h3>
@@ -138,23 +151,23 @@ return (
             )}
           </ul>
         </div>
-        {/* COMPRAS */}
-        </div>
-        <div className="mis-compras">
-          <h3>Mis Compras</h3>      
-          <ul>
-            {comprasPorUsuario[usuario.nombre] ? (
-              comprasPorUsuario[usuario.nombre].map((compra, i) => (
-                <li key={i}>{compra}</li> 
-
-              ))
-            ) : (
-              <li>No has realizado compras aún.</li>
-            )}
-          </ul>
       </div>
-  </div>
-  
-);
+
+      {/* COMPRAS */}
+      <div className="mis-compras">
+        <h3>Mis Compras</h3>
+        <ul>
+          {comprasPorUsuario[usuario.nombre] ? (
+            comprasPorUsuario[usuario.nombre].map((compra, i) => (
+              <li key={i}>{compra}</li>
+            ))
+          ) : (
+            <li>No has realizado compras aún.</li>
+          )}
+        </ul>
+      </div>
+    </div>
+  );
+}
 
 export default MiPerfil;
