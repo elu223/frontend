@@ -6,6 +6,7 @@ import VistaProductoDetalle from './Componentes/Vista-Producto-Detalle/VistaProd
 import MiPerfil from './Componentes/MiPerfil/Mi-Perfil';  
 import Login from './Componentes/Login/login';
 import Registro from './Componentes/Registro/registro';
+import AdminPanel from './Componentes/Admin/AdminPanel';
 import './App.css';
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
         <Route path="/registrarse">
           <Registro />
         </Route>
+        <Route path="/admin" component={AdminPanel} />
       </Switch>
     </div>
   );

@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: space-between;
   height: 95px;
-  max-width: 1200px;
+  /*max-width: 1200px;*/
   margin: 0 auto;
   padding: 0 20px;
   gap: 1rem;
@@ -113,9 +113,13 @@
   position: relative;
   padding: 0.5rem 0.75rem;
 }
-
+.carrito-icono {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
 .carrito-contador {
-  background: #d10077;
+  background: #6a1452;
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -126,7 +130,10 @@
   font-size: 0.8rem;
   position: absolute;
   top: -5px;
-  right: -5px;
+  right: 1px;
+}
+.menu-opcion.carrito-opcion {
+  position: relative;
 }
 
 /* Sugerencias de búsqueda */
@@ -253,11 +260,6 @@
   .menu-opcion .menu-texto {
     display: none;
   }
-  
-  .carrito-opcion .menu-texto {
-    display: none;
-  }
-  
   .logo-texto {
     font-size: 1.2rem;
   }
