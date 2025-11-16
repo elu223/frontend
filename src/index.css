@@ -2,8 +2,22 @@
   --background-color: #7c0850; /* se cambia para el fondo*/
 }
 
-body {
+/* body {
   margin: 0;
   background-color: red;
   background-color: var(--background-color);
+} */
+ html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  margin-top: auto;
 }

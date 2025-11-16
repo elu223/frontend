@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
@@ -46,10 +47,11 @@ function MiPerfil() {
   };
 
   return (
-    <div className="mi-perfil">
+    <div className="mi-perfil-contenedor">
       <HeaderMenu />
-
-      <div className="titulo">
+      <div className="mi-perfil">
+      
+      <div className="titulo-perfil">
         <h2 className="h2">Mi Perfil</h2>
       </div>
 
@@ -126,7 +128,7 @@ function MiPerfil() {
       </div>
 
       <div className="mis-compras">
-        <div className="titulo">
+        <div className="titulo-compras">
           <h2 className="h2">Mis Compras</h2>
         </div>
 
@@ -139,6 +141,7 @@ function MiPerfil() {
             <li>No has realizado compras aún.</li>
           )}
         </ul>
+      </div>
       </div>
 
       <Footer />

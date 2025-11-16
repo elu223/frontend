@@ -1,8 +1,12 @@
 .footer {
-    margin-top: 40px;
+  margin:0;
+  margin-top: 40px;
   background: #FCEFB0;
   color: black;
+  padding: 20px 0;
+  box-shadow: 0px -4px 8px rgba(0,0,0,0.1);
 }
+
 
 .footer-contenedor {
   width: 100vw;
