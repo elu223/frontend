@@ -34,9 +34,8 @@
 /* --- CONTENEDORES DE PERFIL --- */
 .container-perfil {
   margin-top: 30px; ;
-  background-color: #FCEFB0;
   padding: 25px;
-  border-radius: 18px;
+
   width: 90%;
   max-width: 1000px;
   display: flex;
