@@ -1,9 +1,14 @@
 
 .Carrito-container {
-  font-size: 20px;
   width: 100vw;
   height: auto;
   background-color: #ffffff;
+}
+.carrito {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
 }
 
 .tituloCarrito {
@@ -34,7 +39,7 @@ h2.tituloCarrito {
 
 
 .itemsLista {
-  margin-left: 450px;
+
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -95,11 +100,10 @@ h2.tituloCarrito {
 
 .Carrito-total {
   box-shadow: 0px 1px 4px 1px #7a7a7a;
-    top: 4px;
-    left: 451px;
     position: relative;
     border-radius: 16px;
     background: white;
+    margin-top: 20px;
     width: 58%;
     text-align: center;
 }
