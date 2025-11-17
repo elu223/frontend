@@ -9,6 +9,7 @@ function FormularioCompra({ carrito, total, onClose }) {
   const [cardFecha, setCardFecha] = useState('');
   const [cardCVV, setCardCVV] = useState('');
   const [metodoPago, setMetodoPago] = useState('');
+  
 
   const mediosPago = [
     { id: 'VISA', nombre: 'VISA' },

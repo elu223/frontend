@@ -5,6 +5,7 @@ import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
 
 function MiPerfil() {
+  
   const [usuario, setUsuario] = useState({
     nombre: "Milagros",
     email: "",
