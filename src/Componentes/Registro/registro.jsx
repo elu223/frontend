@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import HeaderMenu from "../Header/Header-Menu";
 import "./registro.css";
+import Footer from "../Footer/Footer";
 
 function Registro() {
   const [nombre, setNombre] = useState("");
@@ -84,7 +85,6 @@ function Registro() {
 
   return (
     <div className="registro-container">
-      <HeaderMenu />
 
       <div className="registro-box">
         <h2 className="registro-title">Registrarse</h2>
@@ -182,6 +182,7 @@ function Registro() {
           </div>
         </form>
       </div>
+        <Footer />
     </div>
   );
 }

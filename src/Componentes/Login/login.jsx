@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import HeaderMenu from '../Header/Header-Menu';
+import '../Footer/Footer.jsx';
 import './Login.css'; 
+import Footer from '../Footer/Footer.jsx';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -58,9 +59,8 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <HeaderMenu />
-      
+    <div className="login-container"> 
+   
       <div className="login-box">
         <h2 className="login-title">Iniciar Sesión</h2>
         
@@ -103,7 +103,9 @@ function Login() {
           <a href="/registrarse" className="link">Registrarse</a>
         </div>
       </div>
+      <Footer />  
     </div>
+
   );
 }
 

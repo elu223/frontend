@@ -1,14 +1,14 @@
 
 .Carrito-container {
   font-size: 20px;
-  width: 100%;
+  width: 100vw;
   height: auto;
   background-color: #ffffff;
 }
 
 .tituloCarrito {
   height: 49px;
-  width: 100%;
+  width: 100vw;
   text-align:start;
   color:#ffffff;
   background-color: #AB0C70;
@@ -18,6 +18,8 @@
 }
 
 h2.tituloCarrito {
+   font-size: 34px;
+   height: 55px;
     display: flex;
     text-align: center;
     font-family: "Playfair Display", serif;
@@ -36,12 +38,6 @@ h2.tituloCarrito {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-}
-
-h2{
-  
-  font-size: 34px;
-  padding: 15px;
 }
 
 :hover.Carrito-item {

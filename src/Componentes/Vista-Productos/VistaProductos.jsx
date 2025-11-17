@@ -3,6 +3,7 @@ import TarjetaProducto from './TarjetaProductos.jsx';
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import { productos } from '../../data/productos'; 
 import './VistaProductos.css';
+import Footer from "../Footer/Footer.jsx";
 
 function VistaProductos({ agregarAlCarrito, totalItems = 0 }) { 
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
@@ -85,11 +86,12 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
         </div>
       </main>
 
-      <footer className="footer">
+      {/* <footer className="footer">
         <div className="container">
           <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
         </div>
-      </footer>
+      </footer> */}
+      <Footer />
     </div>
   );
 }
