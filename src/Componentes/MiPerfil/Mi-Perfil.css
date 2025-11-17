@@ -34,7 +34,6 @@
 /* --- CONTENEDORES DE PERFIL --- */
 .container-perfil {
   margin-top: 30px; ;
-  background-color: #FCEFB0;
   padding: 25px;
   border-radius: 18px;
   width: 90%;
@@ -133,33 +132,6 @@
 
 .opciones-avatar {
   display: flex;
-<<<<<<< HEAD
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.avatar-opcion {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
-.avatar-opcion.seleccionado {
-  border-color: #4CAF50;
-}
-
-.editar-perfil-btn,
-.guardar-btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
-=======
   flex-wrap: wrap;
   gap: 10px;
 }
@@ -239,5 +211,4 @@
   .mis-comentarios {
     width: 90%;
   }
->>>>>>> e87ff2e51ac414105e3a4f54c7438f381416cad6
 }

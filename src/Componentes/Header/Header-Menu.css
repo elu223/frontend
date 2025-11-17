@@ -13,10 +13,7 @@
   align-items: center;
   justify-content: space-between;
   height: 95px;
-<<<<<<< HEAD
-=======
   /* max-width: 1200px; */
->>>>>>> e87ff2e51ac414105e3a4f54c7438f381416cad6
   margin: 0 auto;
   padding: 0 20px;
   gap: 1rem;
@@ -105,7 +102,6 @@
   border: none;
   background: none;
   cursor: pointer;
-  font-family: inherit;
 }
 
 .menu-opcion:hover {
