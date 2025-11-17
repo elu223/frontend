@@ -13,7 +13,6 @@
   align-items: center;
   justify-content: space-between;
   height: 95px;
-  /* max-width: 1200px; */
   margin: 0 auto;
   padding: 0 20px;
   gap: 1rem;
@@ -99,6 +98,10 @@
   padding: 0.5rem 0.75rem;
   white-space: nowrap;
   font-size: 0.9rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .menu-opcion:hover {
@@ -114,8 +117,14 @@
   padding: 0.5rem 0.75rem;
 }
 
+.carrito-icono {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
 .carrito-contador {
-  background: #d10077;
+  background: #6a1452;
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -126,7 +135,16 @@
   font-size: 0.8rem;
   position: absolute;
   top: -5px;
-  right: -5px;
+  right: 1px;
+}
+
+.menu-opcion.carrito-opcion {
+  position: relative;
+}
+
+/* ELIMINAMOS el estilo de usuario-bienvenida ya que lo vamos a quitar */
+.usuario-bienvenida {
+  display: none; /* O simplemente elimina esta regla */
 }
 
 /* Sugerencias de búsqueda */
@@ -253,11 +271,6 @@
   .menu-opcion .menu-texto {
     display: none;
   }
-  
-  .carrito-opcion .menu-texto {
-    display: none;
-  }
-  
   .logo-texto {
     font-size: 1.2rem;
   }

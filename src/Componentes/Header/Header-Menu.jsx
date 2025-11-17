@@ -175,7 +175,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
           )}
           
           <Link href="/carrito" className="menu-opcion carrito-opcion">
-            <span className="menu-texto">🛒</span>
+            <img src="/img/carrito.png" alt="Carrito de compras" className="carrito-icono" />
             <span className="carrito-contador">{totalItems}</span>
           </Link>
         </nav>
