@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import MisCompras from "../MisCompras/Mis-Compras.jsx";
+import HeaderMenu from "../Header/Header-Menu.jsx";
 import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
 
