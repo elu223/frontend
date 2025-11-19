@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import '../Footer/Footer.jsx';
+import axios from 'axios'; // Importar axios
 import './Login.css'; 
 import Footer from '../Footer/Footer.jsx';
 
@@ -15,44 +15,45 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/usuarios/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          email: email, 
-          password: password 
-        })
+      // USAR AXIOS - no fetch
+      const response = await axios.post('/usuarios/login', {
+        email: email, 
+        password: password 
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Guardar todos los datos del usuario en localStorage
-        const userData = {
-          token: data.token,
-          name: data.nombre,
-          apellido: data.apellido,
-          email: email,
-          rol: data.rol
-        };
-        
-        localStorage.setItem('user', JSON.stringify(userData));
-        
-        // Disparar evento para que HeaderMenu detecte el cambio
-        window.dispatchEvent(new Event('storage'));
-        
-        // Redirigir al home
-        setLocation('/');
-        
-      } else {
-        const errorMessage = await response.text();
-        alert(`Error: ${errorMessage}`);
-      }
+      const data = response.data;
+      
+      console.log('Respuesta del login:', data); // Para debugging
+      
+      // Guardar todos los datos del usuario en localStorage
+      const userData = {
+        token: data.token,
+        name: data.usuario.nombre,   
+        apellido: data.usuario.apellido, 
+        email: data.usuario.email, 
+        rol: data.usuario.id_rol   
+      };
+      
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      // Disparar evento para que HeaderMenu detecte el cambio
+      window.dispatchEvent(new Event('storage'));
+      
+      // Redirigir al home
+      setLocation('/');
+      
     } catch (error) {
       console.error('Error en login:', error);
-      alert('Error de conexión. Intenta nuevamente.');
+      console.log('Response data:', error.response?.data);
+      console.log('Response status:', error.response?.status);
+      
+      if (error.response) {
+        alert(`Error: ${error.response.data.error || error.response.data}`);
+      } else if (error.request) {
+        alert('Error de conexión. Verifica que el backend esté corriendo en puerto 5000.');
+      } else {
+        alert('Error inesperado: ' + error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -60,7 +61,6 @@ function Login() {
 
   return (
     <div className="login-container"> 
-   
       <div className="login-box">
         <h2 className="login-title">Iniciar Sesión</h2>
         
@@ -105,7 +105,6 @@ function Login() {
       </div>
       <Footer />  
     </div>
-
   );
 }
 

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import HeaderMenu from "../Header/Header-Menu";
+import axios from 'axios'; // Importar axios
 import "./registro.css";
 import Footer from "../Footer/Footer";
 
 function Registro() {
   const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState(""); // Agregar apellido
+  const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,50 +34,49 @@ function Registro() {
     }
 
     try {
-      // Enviar datos al backend
-      const response = await fetch('http://localhost:5000/api/usuarios/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nombre: nombre,
-          apellido: apellido,
-          email: email,
-          password: password,
-          telefono: "", // Puedes agregar campo para teléfono si lo necesitas
-          direccion: "", // Puedes agregar campo para dirección si lo necesitas
-          id_rol: 2 // Rol de usuario normal (2)
-        })
+      // USAR AXIOS - no fetch
+      const response = await axios.post('/usuarios/register', {
+        nombre: nombre,
+        apellido: apellido,
+        email: email,
+        password: password,
+        telefono: "",
+        direccion: ""
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Guardar usuario en localStorage (igual que en login)
-        const userData = {
-          token: data.token,
-          name: data.nombre,
-          apellido: data.apellido,
-          email: email,
-          rol: data.rol
-        };
-        
-        localStorage.setItem('user', JSON.stringify(userData));
-        
-        // Disparar evento para que HeaderMenu se actualice
-        window.dispatchEvent(new Event('storage'));
-        
-        // Redirigir al home
-        setLocation("/");
-        
-      } else {
-        const errorData = await response.text();
-        alert(`Error en el registro: ${errorData}`);
-      }
+      const data = response.data;
+      
+      console.log('Respuesta del backend:', data); // Para debugging
+      
+      // Guardar usuario en localStorage
+      const userData = {
+        token: data.token,
+        name: data.usuario.nombre,
+        apellido: data.usuario.apellido,
+        email: data.usuario.email,
+        rol: data.usuario.id_rol
+      };
+      
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      // Disparar evento para que HeaderMenu se actualice
+      window.dispatchEvent(new Event('storage'));
+      
+      // Redirigir al home
+      setLocation("/");
+      
     } catch (error) {
       console.error('Error en el registro:', error);
-      alert('Error de conexión. Intenta nuevamente.');
+      console.log('Response data:', error.response?.data);
+      console.log('Response status:', error.response?.status);
+      
+      if (error.response) {
+        alert(`Error: ${error.response.data}`);
+      } else if (error.request) {
+        alert('Error de conexión. Verifica que el backend esté corriendo.');
+      } else {
+        alert('Error inesperado: ' + error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -85,7 +84,6 @@ function Registro() {
 
   return (
     <div className="registro-container">
-
       <div className="registro-box">
         <h2 className="registro-title">Registrarse</h2>
 
@@ -182,7 +180,7 @@ function Registro() {
           </div>
         </form>
       </div>
-        <Footer />
+      <Footer />
     </div>
   );
 }
