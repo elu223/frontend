@@ -1,0 +1,236 @@
+/* --- Contenedor Principal y Títulos --- */
+/* ================================================= */
+/* 1. ESTILOS BASE DEL CONTENEDOR Y TÍTULO */
+/* ================================================= */
+.admin-usuarios-container {
+    /* Corregido: width: 100vw para que ocupe todo el ancho de la ventana */
+    width: 100vw; 
+    margin: 0 auto;
+    padding: 20px; /* Añadimos padding para que no se pegue a los bordes */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+.logo-admin{
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+}
+.titulo-h2{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px; /* Añadimos espacio entre la imagen y el texto */
+}
+
+/* Nota: la clase .titulo-usuarios no se usa en el último JSX, pero la dejo por si la necesitas */
+.titulo-usuarios {
+    font-size: 2em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.input-busqueda {
+    width: 83%;
+    padding: 10px 15px;
+    margin-bottom: 14px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+/* ================================================= */
+/* 2. ESTILOS DE LA TABLA (GRID) */
+/* ================================================= */
+
+.tabla-encabezado,
+.usuario-item {
+    display: grid;
+    /* Columnas: 8% Select/Avatar, 25% Username, 35% Email, 15% Estado, 17% Login */
+    grid-template-columns: 8% 25% 35% 15% 17%;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Encabezado --- */
+.tabla-encabezado {
+    font-weight: 700;
+    color: #444;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+/* --- Lista y Fila de Usuario --- */
+.usuarios-lista {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.usuario-item {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 10px 10px;
+    transition: background-color 0.2s;
+    font-size: 0.95em;
+}
+
+.usuario-item:last-child {
+    border-bottom: none;
+}
+
+/* Clase para hacer la fila clicable y abrir el modal */
+.usuario-item.clickable-item {
+    cursor: pointer;
+}
+.usuario-item.clickable-item:hover {
+    background-color: #f0f0f0; /* Color un poco más claro al pasar el mouse */
+}
+
+/* --- Columna Checkbox y Avatar --- */
+.columna-select {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+.check {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* --- Estilo del Estado (Badges) --- */
+.estado {
+    padding: 5px 10px;
+    border-radius: 16px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.estado-activo {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.estado-inactivo {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.estado-bloqueado {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.no-usuarios {
+    padding: 20px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+
+/* ================================================= */
+/* 3. ESTILOS PARA LA VENTANA EMERGENTE (MODAL) */
+/* (Copiados del AccionesUsuarioModal.css) */
+/* ================================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+}
+
+.modal-content h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    flex-grow: 1;
+}
+
+.btn-block {
+    background-color: #ffc107; 
+    color: #333;
+}
+
+.btn-block:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: #dc3545; 
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-close {
+    background: none;
+    border: 1px solid #ccc;
+    color: #6c757d;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-close:hover {
+    background-color: #f0f0f0;
+}

@@ -18,6 +18,7 @@ const CompraCard = ({ fecha, imagen, estado, descripcion }) => {
         </div>
       </div>
     </div>
+
   );
 };
 

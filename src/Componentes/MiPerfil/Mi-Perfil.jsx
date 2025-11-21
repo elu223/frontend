@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import HeaderMenu from "../Header/Header-Menu.jsx";
 import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
 
 function MiPerfil() {
-  
   const [usuario, setUsuario] = useState({
     nombre: "Milagros",
     email: "",
@@ -49,16 +47,16 @@ function MiPerfil() {
 
   return (
     <div className="mi-perfil-contenedor">
-     <header className="header-ecommerce">
-             <div className="container">
-               <div className="logo-container">
-                 <Link href="/" className="logo-link">
-                   <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-                   <h1 className="logo-texto">TejidosMiki</h1>
-                 </Link>
-               </div>
-             </div>
-           </header>
+      <header className="header-ecommerce">
+              <div className="container">
+                <div className="logo-container">
+                  <Link href="/" className="logo-link">
+                    <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
+                    <h1 className="logo-texto">TejidosMiki</h1>
+                  </Link>
+                </div>
+              </div>
+            </header>
       <div className="mi-perfil">
       
       <div className="titulo-perfil">
@@ -137,9 +135,22 @@ function MiPerfil() {
         </div>
       </div>
 
-     <MisCompras />
-    </div>
+      <div className="mis-compras">
+        <div className="titulo-compras">
+          <h2 className="h2">Mis Compras</h2>
+        </div>
 
+        <ul>
+          {comprasPorUsuario[usuario.nombre] ? (
+            comprasPorUsuario[usuario.nombre].map((compra, i) => (
+              <li key={i}>{compra}</li>
+            ))
+          ) : (
+            <li>No has realizado compras aún.</li>
+          )}
+        </ul>
+      </div>
+      </div>
 
       <Footer />
     </div>
