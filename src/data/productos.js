@@ -88,7 +88,7 @@ export const productos = [
       'Tallo np flexible',
       'Realista',
       'Ideal para arreglos',
-      'Hecho a mano'
+      'Hecho a manow'
     ],
     rating: 4.6,
     reviews: 19,

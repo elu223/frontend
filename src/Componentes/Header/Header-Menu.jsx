@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
-import { productos } from '../../data/productos';
+import {productos}  from '../../data/productos.js';
 import './Header-Menu.css';
 
 function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {

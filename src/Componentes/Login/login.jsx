@@ -1,8 +1,12 @@
+// En Login.jsx
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import axios from 'axios'; // Importar axios
+import axios from 'axios';
 import './Login.css'; 
 import Footer from '../Footer/Footer.jsx';
+
+// Configuración simple de axios
+axios.defaults.baseURL = 'http://localhost:5000';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -15,7 +19,6 @@ function Login() {
     setLoading(true);
 
     try {
-      // USAR AXIOS - no fetch
       const response = await axios.post('/usuarios/login', {
         email: email, 
         password: password 
@@ -23,9 +26,6 @@ function Login() {
 
       const data = response.data;
       
-      console.log('Respuesta del login:', data); // Para debugging
-      
-      // Guardar todos los datos del usuario en localStorage
       const userData = {
         token: data.token,
         name: data.usuario.nombre,   
@@ -35,25 +35,18 @@ function Login() {
       };
       
       localStorage.setItem('user', JSON.stringify(userData));
-      
-      // Disparar evento para que HeaderMenu detecte el cambio
       window.dispatchEvent(new Event('storage'));
       
-      // Redirigir al home
-      setLocation('/');
+      // Redirigir según el rol
+      if (data.usuario.id_rol === 1) {
+        setLocation('/admin');
+      } else {
+        setLocation('/');
+      }
       
     } catch (error) {
       console.error('Error en login:', error);
-      console.log('Response data:', error.response?.data);
-      console.log('Response status:', error.response?.status);
-      
-      if (error.response) {
-        alert(`Error: ${error.response.data.error || error.response.data}`);
-      } else if (error.request) {
-        alert('Error de conexión. Verifica que el backend esté corriendo en puerto 5000.');
-      } else {
-        alert('Error inesperado: ' + error.message);
-      }
+      alert('Error: ' + (error.response?.data?.error || error.message));
     } finally {
       setLoading(false);
     }
