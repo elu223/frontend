@@ -34,6 +34,7 @@ function AdminPanel({ seccionActiva, setSeccionActiva }) {
           <img className="logo-panel" src="img/logo.png" alt="Panel Admin" />
       </Link>
       <nav className="navegacion-panel">
+        {/* ELIMINADO: Botón de Dashboard */}
         <button 
           className={`item-navegacion ${seccionActiva === 'productos' ? 'activo' : ''}`}
           onClick={() => setSeccionActiva('productos')}
