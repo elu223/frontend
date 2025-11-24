@@ -7,10 +7,12 @@ import MiPerfil from './Componentes/MiPerfil/Mi-Perfil';
 import Login from './Componentes/Login/login';
 import Registro from './Componentes/Registro/registro';
 import AdminPanel from './Componentes/Admin/AdminPanel';
+import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import './App.css';
 
 function App() {
   const [carrito, setCarrito] = useState([]);
+  const [seccionAdminActiva, setSeccionAdminActiva] = useState('dashboard');
 
   const agregarAlCarrito = (producto) => {
     setCarrito(prevCarrito => {
@@ -26,6 +28,23 @@ function App() {
   };
 
   const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
+
+  // Función para renderizar contenido del admin
+  const renderContenidoAdmin = () => {
+    if (seccionAdminActiva === 'dashboard' || seccionAdminActiva === 'productos') {
+      return <ProductosAdmin />;
+    }
+    if (seccionAdminActiva === 'usuarios') {
+      return <div>Contenido de usuarios...</div>;
+    }
+    if (seccionAdminActiva === 'compras') {
+      return <div>Contenido de compras...</div>;
+    }
+    if (seccionAdminActiva === 'envios') {
+      return <div>Contenido de envíos...</div>;
+    }
+    return <ProductosAdmin />;
+  };
 
   return (
     <div className="App">
@@ -54,7 +73,15 @@ function App() {
         <Route path="/registrarse">
           <Registro />
         </Route>
-        <Route path="/admin" component={AdminPanel} />
+        <Route path="/admin">
+          <div className="contenedor-admin">
+            <AdminPanel 
+              seccionActiva={seccionAdminActiva} 
+              setSeccionActiva={setSeccionAdminActiva} 
+            />
+            {renderContenidoAdmin()}
+          </div>
+        </Route>
       </Switch>
     </div>
   );
