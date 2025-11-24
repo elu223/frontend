@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import HeaderMenu from "../Header/Header-Menu.jsx";
 import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
 
@@ -47,16 +48,7 @@ function MiPerfil() {
 
   return (
     <div className="mi-perfil-contenedor">
-      <header className="header-ecommerce">
-              <div className="container">
-                <div className="logo-container">
-                  <Link href="/" className="logo-link">
-                    <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-                    <h1 className="logo-texto">TejidosMiki</h1>
-                  </Link>
-                </div>
-              </div>
-            </header>
+      <HeaderMenu />
       <div className="mi-perfil">
       
       <div className="titulo-perfil">

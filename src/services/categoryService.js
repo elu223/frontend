@@ -11,3 +11,4 @@ export const createCategory = (data) =>
 export const deleteCategory = (id) =>
   axios.delete(`${API_URL}/categories/${id}`);
 
+categoryServices.js

@@ -16,3 +16,5 @@ export const updateProduct = (id, data) =>
 
 export const deleteProduct = (id) => 
   axios.delete(`${API_URL}/products/${id}`);
+
+productService.js

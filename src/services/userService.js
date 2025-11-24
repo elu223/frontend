@@ -10,3 +10,5 @@ export const registerUser = (data) =>
 
 export const getUserProfile = (id) =>
   axios.get(`${API_URL}/users/${id}`);
+
+userService.js
