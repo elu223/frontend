@@ -1,30 +1,35 @@
-.admin-container {
+/* Este CSS debe estar en AdminPanel.css */
+.contenedor-admin {
   display: flex;
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* Sidebar */
-.admin-sidebar {
+/* Barra Lateral */
+.barra-lateral-admin {
   width: 250px;
   background: linear-gradient(180deg, #6A1452 0%, #8A2B6A 100%);
   color: white;
   padding: 20px 0;
   text-align: center;
+  flex-shrink: 0; 
 }
 
-.logo-img {
-  width: 76px;
-  height: 95px;
-  object-fit: contain;
+.logo-panel {
+    width: 111px;
+    height: 92px;
+    object-fit: contain;
+    object-position: center center;
+    margin: auto;
+
 }
 
-.sidebar-nav {
+.navegacion-panel {
   display: flex;
   flex-direction: column;
 }
 
-.nav-item {
+.item-navegacion {
   background: none;
   border: none;
   color: white;
@@ -36,135 +41,41 @@
   border-left: 4px solid transparent;
 }
 
-.nav-item:hover {
+.item-navegacion:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nav-item.active {
+.item-navegacion.activo {
   background-color: rgba(255, 255, 255, 0.2);
   border-left-color: #FCEFB0;
   font-weight: bold;
 }
 
-/* Contenido Principal */
-.admin-content {
-  flex: 1;
-  padding: 30px;
-}
-
-.content-title {
-  color: #6A1452;
-  margin-bottom: 30px;
-  font-size: 2rem;
-}
-
-/* Grid de Estadísticas */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.stat-card {
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  border-left: 5px solid #6A1452;
-}
-
-.stat-card h3 {
-  color: #6A1452;
-  margin-bottom: 15px;
-  font-size: 1.1rem;
-}
-
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #6A1452;
-  margin: 15px 0;
-}
-
-.stat-link {
-  background: #6A1452;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-.stat-link:hover {
-  background: #8A2B6A;
-}
-
-/* Línea Divisoria */
-.divider {
-  height: 2px;
-  background: #ddd;
-  margin: 30px 0;
-}
-
-/* Sección de Listados */
-.listados-section {
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.listados-section h2 {
-  color: #6A1452;
-  margin-bottom: 20px;
-}
-
-.listado-placeholder {
-  background: #f9f9f9;
-  border: 2px dashed #ddd;
-  padding: 40px;
-  text-align: center;
-  color: #666;
-  border-radius: 8px;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
-  .admin-container {
+  .contenedor-admin {
     flex-direction: column;
   }
   
-  .admin-sidebar {
+  .barra-lateral-admin {
     width: 100%;
     padding: 15px 0;
   }
   
-  .sidebar-nav {
+  .navegacion-panel {
     flex-direction: row;
     overflow-x: auto;
     padding: 0 10px;
   }
   
-  .nav-item {
+  .item-navegacion {
     white-space: nowrap;
     border-left: none;
     border-bottom: 4px solid transparent;
   }
   
-  .nav-item.active {
+  .item-navegacion.activo {
     border-left: none;
     border-bottom-color: #FCEFB0;
-  }
-  
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .admin-content {
-    padding: 20px;
   }
 }

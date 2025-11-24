@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
-import { productos } from '../../data/productos';
+import {productos}  from '../../data/productos.js';
 import './Header-Menu.css';
 
 function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
@@ -31,7 +31,13 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
+  //Para verficar si es admin
+  const esAdmin = () =>{
+    if (user && user.rol === 1) {
+      return true;
+    }
+    return false;
+  }
   // Actualizar término local cuando searchTerm cambie
   useEffect(() => {
     setTerminoLocal(searchTerm);
@@ -79,12 +85,15 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const cerrarSugerencias = () => {
     setTimeout(() => setMostrarSugerencias(false), 200);
   };
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-    window.location.href = '/';
-  };
+//Confirmacion de cierre de sesión
+  const handleLogout = () =>{
+    const confirmar = window.confirm("¿Estás seguro que deseas cerrar sesión?");
+    if(confirmar){
+      localStorage.removeItem('user');
+      setUser(null);
+      window.location.href = '/';
+    }
+  }
 
   return (
     <header className="header-ecommerce">
@@ -111,7 +120,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
           />
           <button className="buscador-btn" onClick={manejarEnvioBusqueda}>🔍</button>
           
-          {/* Lista de sugerencias - CORREGIDO */}
+          {/* Lista de sugerencias  */}
           {mostrarSugerencias && (
             <div className="sugerencias-lista">
               {sugerencias.length > 0 ? (
@@ -127,7 +136,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
                   </div>
                 ))
               ) : (
-                // CORRECCIÓN: Esto se muestra cuando hay término de búsqueda pero NO hay sugerencias
+                //  cuando hay término de búsqueda pero NO hay sugerencias
                 <div className="sin-resultados">
                   No encontramos productos para "{terminoLocal}"
                 </div>
@@ -141,21 +150,25 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
           {user ? (
             // USUARIO LOGUEADO - muestra Mi Perfil y Cerrar Sesión
             <>
-              <span className="menu-opcion usuario-bienvenida">
-                ¡Hola, {user.name}!
-              </span>
               <Link href="/compras" className="menu-opcion">
                 <span className="menu-texto">Mis compras</span>
               </Link>
               <Link href="/miperfil" className="menu-opcion">
                 <span className="menu-texto">Mi perfil</span>
               </Link>
+              {/* OPCIÓN PANEL ADMIN - SOLO PARA ADMINS */}
+              {esAdmin() && (
+                <Link href="/admin" className="menu-opcion">
+                  <span className="menu-texto">Panel Admin</span>
+                </Link>
+              )}
               <button 
                 onClick={handleLogout} 
                 className="menu-opcion btn-logout"
               >
                 <span className="menu-texto">Cerrar sesión</span>
               </button>
+              
             </>
           ) : (
             // USUARIO NO LOGUEADO - muestra Crea cuenta e Ingresa

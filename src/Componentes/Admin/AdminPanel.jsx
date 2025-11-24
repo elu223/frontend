@@ -1,84 +1,64 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'wouter';
 import './AdminPanel.css';
 
-function AdminPanel() {
-  const [seccionActiva, setSeccionActiva] = useState('dashboard');
+function AdminPanel({ seccionActiva, setSeccionActiva }) {
+  const [, setLocation] = useLocation();
+
+  // Verificar si es admin
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user.rol !== 1) {
+      setLocation('/');
+    }
+  }, [setLocation]);
+
+  // Si no es admin, no muestra nada
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (user.rol !== 1) {
+    return (
+      <div style={{ 
+        textAlign: 'center', 
+        padding: '50px',
+        fontSize: '18px'
+      }}>
+        <h2>No tienes permisos para acceder a esta página</h2>
+        <a href="/">Volver al inicio</a>
+      </div>
+    );
+  }
 
   return (
-    <div className="admin-container">
-      {/* Sidebar */}
-      <div className="admin-sidebar">
-        <img className="logo-img" src="img/logo.png" alt="Panel Admin" />
-        <nav className="sidebar-nav">
-          <button 
-            className={`nav-item ${seccionActiva === 'dashboard' ? 'active' : ''}`}
-            onClick={() => setSeccionActiva('dashboard')}
-          >
-            Dashboard
-          </button>
-          <button 
-            className={`nav-item ${seccionActiva === 'usuarios' ? 'active' : ''}`}
-            onClick={() => setSeccionActiva('usuarios')}
-          >
-            Usuarios
-          </button>
-          <button 
-            className={`nav-item ${seccionActiva === 'compras' ? 'active' : ''}`}
-            onClick={() => setSeccionActiva('compras')}
-          >
-            Compras recientes
-          </button>
-          <button 
-            className={`nav-item ${seccionActiva === 'envios' ? 'active' : ''}`}
-            onClick={() => setSeccionActiva('envios')}
-          >
-            Envíos pendientes
-          </button>
-        </nav>
-      </div>
-
-      {/* Contenido Principal */}
-      <div className="admin-content">
-        <h1 className="content-title">Productos</h1>
-
-        {/* Cards de Estadísticas */}
-        <div className="stats-grid">
-          <div className="stat-card">
-            <h3>Ventas Hoy</h3>
-            <div className="stat-number">2</div>
-            <button className="stat-link">= Ir al listado</button>
-          </div>
-
-          <div className="stat-card">
-            <h3>Ventas Mes</h3>
-            <div className="stat-number">3</div>
-            <button className="stat-link">= Ir al listado</button>
-          </div>
-
-          <div className="stat-card">
-            <h3>Pagos por Aprobar</h3>
-            <div className="stat-number">1</div>
-            <button className="stat-link">= Ir al listado</button>
-          </div>
-
-          <div className="stat-card">
-            <h3>Mensajes Abiertos</h3>
-            <div className="stat-number">0</div>
-            <button className="stat-link">= Ir al listado</button>
-          </div>
-        </div>
-
-        {/* Línea divisoria */}
-        <div className="divider"></div>
-
-        {/* Sección de Listados */}
-        <div className="listados-section">
-          <h2>Acá van los listados</h2>
-          <div className="listado-placeholder">
-            <p>Los listados de productos aparecerán aquí...</p>
-          </div>
-        </div>
-      </div>
+    <div className="barra-lateral-admin">
+      <Link href='/' className={"logo-link"}>
+          <img className="logo-panel" src="img/logo.png" alt="Panel Admin" />
+      </Link>
+      <nav className="navegacion-panel">
+        <button 
+          className={`item-navegacion ${seccionActiva === 'productos' ? 'activo' : ''}`}
+          onClick={() => setSeccionActiva('productos')}
+        >
+          Productos
+        </button>
+        <button 
+          className={`item-navegacion ${seccionActiva === 'usuarios' ? 'activo' : ''}`}
+          onClick={() => setSeccionActiva('usuarios')}
+        >
+          Usuarios
+        </button>
+        <button 
+          className={`item-navegacion ${seccionActiva === 'compras' ? 'activo' : ''}`}
+          onClick={() => setSeccionActiva('compras')}
+        >
+          Compras recientes
+        </button>
+        <button 
+          className={`item-navegacion ${seccionActiva === 'envios' ? 'activo' : ''}`}
+          onClick={() => setSeccionActiva('envios')}
+        >
+          Envíos pendientes
+        </button>
+      </nav>
     </div>
   );
 }

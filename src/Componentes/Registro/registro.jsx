@@ -61,6 +61,12 @@ function Registro() {
       
       // Disparar evento para que HeaderMenu se actualice
       window.dispatchEvent(new Event('storage'));
+            if (data.usuario.id_rol === 1) {
+        setLocation('/admin');//Va al panel admin
+      }
+      else{
+        setLocation('/');//Va al home, en caso de no ser admin
+      }
       
       // Redirigir al home
       setLocation("/");

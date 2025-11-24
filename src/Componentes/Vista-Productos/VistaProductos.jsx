@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
 import HeaderMenu from "../Header/Header-Menu.jsx";
-import { productos } from '../../data/productos'; 
+import  {productos}  from '../../data/productos.js';
 import './VistaProductos.css';
 import Footer from "../Footer/Footer.jsx";
 
