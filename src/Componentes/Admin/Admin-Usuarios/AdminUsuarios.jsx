@@ -62,6 +62,7 @@ function AdminUsuarios() {
     }
   };
 
+
   const handleEliminar = () => {
     if (usuarioSeleccionado) {
       console.log(`Eliminando usuario con ID: ${usuarioSeleccionado.id}`);

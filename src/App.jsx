@@ -8,6 +8,7 @@ import Login from './Componentes/Login/login';
 import Registro from './Componentes/Registro/registro';
 import AdminPanel from './Componentes/Admin/AdminPanel';
 import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
+import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import './App.css';
 
 function App() {
@@ -81,6 +82,9 @@ function App() {
             />
             {renderContenidoAdmin()}
           </div>
+        </Route>
+        <Route path="/admin/usuarios">
+        <AdminUsuarios/>
         </Route>
       </Switch>
     </div>
