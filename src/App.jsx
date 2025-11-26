@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'wouter';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
@@ -9,11 +9,30 @@ import Registro from './Componentes/Registro/registro';
 import AdminPanel from './Componentes/Admin/AdminPanel';
 import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import ComprasAdmin from './Componentes/Admin/Compras-Admin/ComprasAdmin'; 
+import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import './App.css';
 
 function App() {
   const [carrito, setCarrito] = useState([]);
-  const [seccionAdminActiva, setSeccionAdminActiva] = useState('productos'); // ← Cambiado a 'productos' por defecto
+  const [seccionAdminActiva, setSeccionAdminActiva] = useState('productos');
+  
+  // cargar carrito desde localStorage al iniciar
+  useEffect(() => {
+    const carritoGuardado = localStorage.getItem('carrito');
+    if (carritoGuardado) {
+      try {
+        setCarrito(JSON.parse(carritoGuardado));
+      } catch (error) {
+        console.error('Error al cargar carrito:', error);
+        localStorage.removeItem('carrito');
+      }
+    }
+  }, []);
+
+  // guardar carrito en localStorage cada vez que cambie
+  useEffect(() => {
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+  }, [carrito]);
 
   const agregarAlCarrito = (producto) => {
     setCarrito(prevCarrito => {
@@ -30,10 +49,10 @@ function App() {
 
   const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
 
-  // Función para renderizar contenido del admin - SIN DASHBOARD
+  // Función para renderizar contenido del admin
   const renderContenidoAdmin = () => {
     if (seccionAdminActiva === 'productos') {
-      return <div>Contenido de productos...</div>;
+      return <ProductosAdmin />;
     }
     if (seccionAdminActiva === 'usuarios') {
       return <div>Contenido de usuarios...</div>;
@@ -44,7 +63,7 @@ function App() {
     if (seccionAdminActiva === 'envios') {
       return <div>Contenido de envíos...</div>;
     }
-    return <div>Contenido de productos...</div>; // ← Por defecto productos
+    return <div>Contenido de productos...</div>;
   };
 
   return (

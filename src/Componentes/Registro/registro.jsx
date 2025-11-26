@@ -34,7 +34,6 @@ function Registro() {
     }
 
     try {
-      // USAR AXIOS - no fetch
       const response = await axios.post('/usuarios/register', {
         nombre: nombre,
         apellido: apellido,
