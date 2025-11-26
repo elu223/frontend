@@ -1,147 +1,158 @@
 import React, { useEffect, useState } from "react";
 import "./AdminUsuarios.css";
-// Importamos el nuevo componente Modal
-
+import axios from "axios";
+import { getUsuarios } from "../services/usuariosService.js";
+import AccionesUsuarioModal from "./AccionesUsuarioModal";
 
 function AdminUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
-  // Nuevo estado: Almacena el usuario seleccionado para el modal
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null); 
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
-  const handleBusqueda = (e) => {
-    setBusqueda(e.target.value);
-  };
+  const handleBusqueda = (e) => setBusqueda(e.target.value);
 
-  // --- Lógica de la API o Simulación ---
+  // ================================
+  // 🔌 OBTENER USUARIOS DEL BACKEND
+  // ================================
   useEffect(() => {
-    // Datos simulados (con tus rutas de imagen)
-    setUsuarios([
-      {
-        id: 1,
-        avatar: "./img/1.png",
-        username: "MAmyBorrALASftos",
-        email: "jeloumoto@gmail.com",
-        estado: "Activo",
-        ultimoLogin: "2025-02-04 14:32"
-      },
-      {
-        id: 2,
-        avatar: "./img/8.png",
-        username: "juanito124_owo",
-        email: "kkck2@gmail.com",
-        estado: "Inactivo",
-        ultimoLogin: "2025-02-01 10:05"
-      },
-      {
-        id: 3,
-        avatar: "./img/8.png",
-        username: "TuChacalitaUwU",
-        email: "example3@gmail.com",
-        estado: "Bloqueado",
-        ultimoLogin: "2025-01-18 19:10"
+    const obtenerUsuarios = async () => {
+      try {
+        const data = await getUsuarios(); // 👉 usando tu SERVICE
+        setUsuarios(data);
+      } catch (error) {
+        console.error("Error obteniendo usuarios:", error);
       }
-    ]);
+    };
+
+    obtenerUsuarios();
   }, []);
 
-  // --- Funciones para el Modal ---
-  const abrirModal = (user) => {
-    setUsuarioSeleccionado(user);
-  };
+  // ================================
+  // 🟡 BLOQUEAR / DESBLOQUEAR
+  // ================================
+  const handleBloquear = async () => {
+    if (!usuarioSeleccionado) return;
 
-  const cerrarModal = () => {
-    setUsuarioSeleccionado(null);
-  };
-  
-  // Implementar acciones (Bloquear/Eliminar)
-  const handleBloquear = () => {
-    if (usuarioSeleccionado) {
-      console.log(`Bloqueando usuario con ID: ${usuarioSeleccionado.id}`);
-      // *Aquí va la llamada a la API de Bloqueo*
-      cerrarModal();
+    try {
+      await axios.put(
+        `http://localhost:3000/usuarios/bloquear/${usuarioSeleccionado.id_usuario}`
+      );
+
+      setUsuarios((prev) =>
+        prev.map((u) =>
+          u.id_usuario === usuarioSeleccionado.id_usuario
+            ? { ...u, estado: u.estado === "Bloqueado" ? "Activo" : "Bloqueado" }
+            : u
+        )
+      );
+
+      setUsuarioSeleccionado(null);
+    } catch (error) {
+      console.error("Error al bloquear:", error);
     }
   };
 
+  // ================================
+  // 🔴 ELIMINAR USUARIO
+  // ================================
+  const handleEliminar = async () => {
+    if (!usuarioSeleccionado) return;
 
-  const handleEliminar = () => {
-    if (usuarioSeleccionado) {
-      console.log(`Eliminando usuario con ID: ${usuarioSeleccionado.id}`);
-      // *Aquí va la llamada a la API de Eliminación*
-      cerrarModal();
+    try {
+      await axios.delete(
+        `http://localhost:3000/usuarios/${usuarioSeleccionado.id_usuario}`
+      );
+
+      setUsuarios((prev) =>
+        prev.filter((u) => u.id_usuario !== usuarioSeleccionado.id_usuario)
+      );
+
+      setUsuarioSeleccionado(null);
+    } catch (error) {
+      console.error("Error al eliminar usuario:", error);
     }
   };
 
-  // Función para determinar la clase de estilo basada en el estado
-  const getEstadoClass = (estado) => {
-    if (estado === "Activo") return "estado-activo";
-    if (estado === "Inactivo") return "estado-inactivo";
-    if (estado === "Bloqueado") return "estado-bloqueado";
-    return "";
-  };
-  
-  // Filtrado
-  const usuariosFiltrados = usuarios.filter(user =>
-    user.username.toLowerCase().includes(busqueda.toLowerCase()) ||
-    user.email.toLowerCase().includes(busqueda.toLowerCase())
+  // ================================
+  // 🔍 BUSCADOR
+  // ================================
+  const usuariosFiltrados = usuarios.filter(
+    (user) =>
+      `${user.nombre} ${user.apellido}`
+        .toLowerCase()
+        .includes(busqueda.toLowerCase()) ||
+      user.email.toLowerCase().includes(busqueda.toLowerCase())
   );
 
   return (
     <div className="admin-usuarios-container">
-      
-      <h2 className="titulo-h2"><img className="logo-admin" src="./img/logo.png" alt="logo" /> Usuarios</h2>
-    
+      <h2 className="titulo-h2">
+        <img className="logo-admin" src="./img/logo.png" alt="logo" /> Usuarios
+      </h2>
+
+      {/* ========================== */}
+      {/* 🔎 BUSCADOR                */}
+      {/* ========================== */}
       <input
         type="text"
-        placeholder="Buscar usuarios por nombre o email..."
+        placeholder="Buscar por nombre o email..."
         value={busqueda}
         onChange={handleBusqueda}
         className="input-busqueda"
       />
 
-      {/* --- ESTRUCTURA DE LA TABLA --- */}
-      <div className="tabla-encabezado">
-        <div className="columna-select"></div> 
-        <span>User_Name</span>
-        <span>Correo Electrónico</span>
-        <span>Estado</span>
-        <span>Último inicio de sesión</span>
-      </div>
+      {/* ========================== */}
+      {/* 🧾 TABLA DE USUARIOS       */}
+      {/* ========================== */}
+      <table className="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Registro</th>
+            <th>Rol</th>
+          </tr>
+        </thead>
 
-      <div className="usuarios-lista">
-        {usuariosFiltrados.length > 0 ? (
-          usuariosFiltrados.map((user) => (
-            // AÑADIMOS EL EVENTO onClick y la clase 'clickable-item'
-            <div 
-                className="usuario-item clickable-item" 
-                key={user.id}
-                onClick={() => abrirModal(user)} // Al hacer clic en la fila, abre el modal
-            >
-              <div className="columna-select">
-                {/* Agregamos e.stopPropagation() para que al chequear NO se abra el modal */}
-                <input type="checkbox" className="check" onClick={(e) => e.stopPropagation()} />
-                <img src={user.avatar} alt={`Avatar de ${user.username}`} className="avatar" />
-              </div>
+        <tbody>
+          {usuariosFiltrados.length > 0 ? (
+            usuariosFiltrados.map((user) => (
+              <tr
+                key={user.id_usuario}
+                className="clickable-item"
+                onClick={() => setUsuarioSeleccionado(user)}
+              >
+                <td>{user.id_usuario}</td>
+                <td>{user.nombre}</td>
+                <td>{user.apellido}</td>
+                <td>{user.email}</td>
+                <td>{user.telefono}</td>
+                <td>{user.direccion}</td>
+                <td>{user.fecha_registro}</td>
+                <td>{user.id_rol}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="8" className="no-usuarios">
+                No hay usuarios.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
 
-              <span className="user-name">{user.username}</span>
-              <span className="email">{user.email}</span>
-              
-              <span className={`estado ${getEstadoClass(user.estado)}`}>
-                {user.estado}
-              </span>
-              
-              <span className="ultimo-login">{user.ultimoLogin}</span>
-            </div>
-          ))
-        ) : (
-          <p className="no-usuarios">No se encontraron usuarios.</p>
-        )}
-      </div>
-
-      {/* 3. Renderizamos el Modal si hay un usuario seleccionado */}
+      {/* ========================== */}
+      {/* 🪟 MODAL DE ACCIONES        */}
+      {/* ========================== */}
       {usuarioSeleccionado && (
         <AccionesUsuarioModal
           usuario={usuarioSeleccionado}
-          onClose={cerrarModal}
+          onClose={() => setUsuarioSeleccionado(null)}
           onBlock={handleBloquear}
           onDelete={handleEliminar}
         />

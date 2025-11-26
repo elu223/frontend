@@ -1,5 +1,5 @@
 import React from "react";
-import "./ModalUsuarios.css";
+import "./AdminUsuarios.css";
 
 function AccionesUsuarioModal({ usuario, onClose, onBlock, onDelete }) {
   return (
