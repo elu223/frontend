@@ -127,7 +127,6 @@ function ProductosAdmin() {
   };
 
   const formatearPrecio = (precio) => {
-    // Formato argentino sin decimales
     return `$${parseInt(precio).toLocaleString('es-AR')}`;
   };
 

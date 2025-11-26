@@ -54,7 +54,7 @@ function App() {
       return <ProductosAdmin />;
     }
     if (seccionAdminActiva === 'usuarios') {
-      return <div>Contenido de usuarios...</div>;
+      return <AdminUsuarios/>;
     }
     if (seccionAdminActiva === 'compras') {
       return <ComprasAdmin />;

@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
 
 function MiPerfil() {
+  // estado inicial cargando desde localStorage
   const [usuario, setUsuario] = useState({
-    nombre: "Milagros",
+    nombre: "",
     email: "",
     direccion: "",
     avatar: "./img/1.png",
@@ -14,38 +15,50 @@ function MiPerfil() {
 
   const [modoEdicion, setModoEdicion] = useState(false);
 
+  // cargar datos desde localStorage cuando el componente se monta
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem('miPerfilUsuario');
+    if (usuarioGuardado) {
+      setUsuario(JSON.parse(usuarioGuardado));
+    }
+  }, []);
+
+  // guardar datos en localStorage cada vez que el usuario cambie
+  useEffect(() => {
+    localStorage.setItem('miPerfilUsuario', JSON.stringify(usuario));
+  }, [usuario]);
+
   const comentariosPorUsuario = {
-    Milagros: [
-      "Me encanta este sitio web!",
-      "Los productos son de excelente calidad.",
-      "El servicio al cliente es muy amable.",
-    ],
+    "": [],
   };
 
   const comprasPorUsuario = {
-    Milagros: ["Falda satinada", "Blusa rosa pastel", "Hilo encerado x2"],
+    "": [],
   };
 
   const manejarCambio = (e) => {
-    setUsuario({
+    const nuevoUsuario = {
       ...usuario,
       [e.target.name]: e.target.value,
-    });
+    };
+    setUsuario(nuevoUsuario);
   };
 
   const manejarAvatar = (ruta) => {
-    setUsuario({
+    const nuevoUsuario = {
       ...usuario,
       avatar: ruta,
-    });
+    };
+    setUsuario(nuevoUsuario);
   };
 
   const manejarSubmit = (e) => {
     e.preventDefault();
     console.log("Información del usuario actualizada:", usuario);
+    
+    alert("Perfil actualizado correctamente");
     setModoEdicion(false);
   };
-
   return (
     <div className="mi-perfil-contenedor">
       <HeaderMenu />
@@ -59,7 +72,7 @@ function MiPerfil() {
 
         <div className="perfil-usuario">
           <img src={usuario.avatar} alt="Avatar del usuario" className="avatar-imagen" />
-          <h3>{usuario.nombre}</h3>
+          <h3>{usuario.nombre || "Sin nombre"}</h3>
           <p>{usuario.email || "Sin email"}</p>
           <p>{usuario.direccion || "Sin dirección"}</p>
 
@@ -72,17 +85,35 @@ function MiPerfil() {
           <form className="perfil-formulario" onSubmit={manejarSubmit}>
             <label>
               Nombre:
-              <input type="text" name="nombre" value={usuario.nombre} onChange={manejarCambio} />
+              <input 
+                type="text" 
+                name="nombre" 
+                value={usuario.nombre} 
+                onChange={manejarCambio} 
+                placeholder="Ingresa tu nombre"
+              />
             </label>
 
             <label>
               Email:
-              <input type="email" name="email" value={usuario.email} onChange={manejarCambio} />
+              <input 
+                type="email" 
+                name="email" 
+                value={usuario.email} 
+                onChange={manejarCambio} 
+                placeholder="Ingresa tu email"
+              />
             </label>
 
             <label>
               Dirección:
-              <input type="text" name="direccion" value={usuario.direccion} onChange={manejarCambio} />
+              <input 
+                type="text" 
+                name="direccion" 
+                value={usuario.direccion} 
+                onChange={manejarCambio} 
+                placeholder="Ingresa tu dirección"
+              />
             </label>
 
             <div className="seleccion-avatar">
