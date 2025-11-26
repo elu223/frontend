@@ -55,7 +55,7 @@ function App() {
       return <ProductosAdmin />;
     }
     if (seccionAdminActiva === 'usuarios') {
-      return <div>Contenido de usuarios...</div>;
+      return <AdminUsuarios/>
     }
     if (seccionAdminActiva === 'compras') {
       return <ComprasAdmin />;
@@ -101,9 +101,6 @@ function App() {
             />
             {renderContenidoAdmin()}
           </div>
-        </Route>
-        <Route path="/admin/usuarios">
-        <AdminUsuarios/>
         </Route>
       </Switch>
     </div>

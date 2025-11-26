@@ -1,119 +1,98 @@
-/* --- Contenedor Principal y Títulos --- */
-/* ================================================= */
-/* 1. ESTILOS BASE DEL CONTENEDOR Y TÍTULO */
-/* ================================================= */
+/* Contenedor general */
 .admin-usuarios-container {
-    /* Corregido: width: 100vw para que ocupe todo el ancho de la ventana */
-    width: 100vw; 
+    width: 100vw;
     margin: 0 auto;
-    padding: 20px; /* Añadimos padding para que no se pegue a los bordes */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
 }
-.logo-admin{
+
+/* Logo + Título */
+.logo-admin {
     width: 90px;
     height: 90px;
     object-fit: cover;
 }
-.titulo-h2{
+
+.titulo-h2 {
     display: flex;
     flex-direction: row;
-    align-content: center;
-    justify-content: flex-start;
     align-items: center;
-    gap: 15px; /* Añadimos espacio entre la imagen y el texto */
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-/* Nota: la clase .titulo-usuarios no se usa en el último JSX, pero la dejo por si la necesitas */
-.titulo-usuarios {
-    font-size: 2em;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-}
-
+/* Buscador */
 .input-busqueda {
     width: 83%;
     padding: 10px 15px;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 20px;
-    box-sizing: border-box;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
 }
 
-/* ================================================= */
-/* 2. ESTILOS DE LA TABLA (GRID) */
-/* ================================================= */
-
-.tabla-encabezado,
-.usuario-item {
-    display: grid;
-    /* Columnas: 8% Select/Avatar, 25% Username, 35% Email, 15% Estado, 17% Login */
-    grid-template-columns: 8% 25% 35% 15% 17%;
-    align-items: center;
-    gap: 10px;
+.input-busqueda:focus {
+    border-color: #610c64;
+    box-shadow: 0 0 4px rgb(88, 15, 85);
 }
 
-/* --- Encabezado --- */
-.tabla-encabezado {
-    font-weight: 700;
-    color: #444;
-    background-color: #e9ecef;
-    border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-    font-size: 0.9em;
-}
+/* =============================== */
+/*        TABLA DE USUARIOS        */
+/* =============================== */
 
-/* --- Lista y Fila de Usuario --- */
-.usuarios-lista {
-    border: 1px solid #ddd;
-    border-radius: 6px;
+.tabla-usuarios {
+    width: 95%;
+    margin-left: 15px;
+    border-collapse: collapse;
+    border-radius: 10px;
     overflow: hidden;
-}
-
-.usuario-item {
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
-    padding: 10px 10px;
-    transition: background-color 0.2s;
     font-size: 0.95em;
 }
 
-.usuario-item:last-child {
-    border-bottom: none;
+/* Encabezado */
+.tabla-usuarios thead {
+    background-color: #6d074e; /* violeta suave */
+    color: white;
 }
 
-/* Clase para hacer la fila clicable y abrir el modal */
-.usuario-item.clickable-item {
+.tabla-usuarios th {
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.85em;
+}
+
+/* Celdas */
+.tabla-usuarios td {
+    padding: 10px 10px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+/* Filas alternadas */
+.tabla-usuarios tbody tr:nth-child(even) {
+    background-color: #f7f5ff;
+}
+
+/* Hover */
+.tabla-usuarios tbody tr:hover {
+    background-color: #ece8ff;
     cursor: pointer;
-}
-.usuario-item.clickable-item:hover {
-    background-color: #f0f0f0; /* Color un poco más claro al pasar el mouse */
+    transition: 0.2s;
 }
 
-/* --- Columna Checkbox y Avatar --- */
-.columna-select {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+/* No hay usuarios */
+.no-usuarios {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: #6c757d;
+    font-size: 0.9em;
 }
 
-.avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid #ddd;
-}
-
-.check {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-}
-
-/* --- Estilo del Estado (Badges) --- */
 .estado {
     padding: 5px 10px;
     border-radius: 16px;
@@ -128,28 +107,27 @@
     color: #155724;
 }
 
-.estado-inactivo {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
 .estado-bloqueado {
     background-color: #f8d7da;
     color: #721c24;
 }
 
-.no-usuarios {
-    padding: 20px;
-    text-align: center;
-    color: #6c757d;
-    font-style: italic;
+/* Responsive */
+@media (max-width: 768px) {
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .titulo-h2 {
+        font-size: 1.2em;
+    }
 }
 
 
-/* ================================================= */
 /* 3. ESTILOS PARA LA VENTANA EMERGENTE (MODAL) */
-/* (Copiados del AccionesUsuarioModal.css) */
-/* ================================================= */
+
 
 .modal-overlay {
     position: fixed;
