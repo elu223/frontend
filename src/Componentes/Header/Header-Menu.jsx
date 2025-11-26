@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import {productos}  from '../../data/productos.js';
 import './Header-Menu.css';
 
@@ -8,7 +9,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [sugerencias, setSugerencias] = useState([]);
   const [user, setUser] = useState(null);
-
+  const [, setLocation] = useLocation();
   // Cargar usuario desde localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -62,7 +63,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
       if (sugerencias.length > 0) {
         seleccionarSugerencia(sugerencias[0]);
       } else {
-        window.location.href = '/';
+        setLocation(`/buscar/${terminoLocal}`);
       }
     }
     setMostrarSugerencias(false);
@@ -79,7 +80,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const seleccionarSugerencia = (producto) => {
     setTerminoLocal(producto.nombre);
     setMostrarSugerencias(false);
-    window.location.href = `/producto/${producto.id}`;
+    setLocation(`/producto/${producto.id}`);
   };
 
   const cerrarSugerencias = () => {
@@ -91,7 +92,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
     if(confirmar){
       localStorage.removeItem('user');
       setUser(null);
-      window.location.href = '/';
+      setLocation('/');
     }
   }
 

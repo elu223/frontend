@@ -3,9 +3,17 @@ import './TarjetaProductos.css';
 
 function TarjetaProducto({ id, nombre, precio, imagen, descripcion, agregarAlCarrito }) {
   const [location, setLocation] = useLocation();
-  const producto = { id, nombre, precio, imagen, descripcion };
+
+  const producto = { 
+    id, 
+    nombre, 
+    precio, 
+    img: imagen,   
+    descripcion 
+  };
 
   const irADetalle = () => setLocation(`/producto/${id}`);
+
   const handleAgregarYRedirigir = (e) => {
     e.stopPropagation();
     agregarAlCarrito(producto);
@@ -31,4 +39,3 @@ function TarjetaProducto({ id, nombre, precio, imagen, descripcion, agregarAlCar
 }
 
 export default TarjetaProducto;
-

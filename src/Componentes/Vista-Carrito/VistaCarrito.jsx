@@ -57,8 +57,8 @@ function VistaCarrito({ carrito, setCarrito }) {
           ) : (
             carrito.map(item => (
               <div key={item.id} className="Carrito-item">
+                 <img src={item.img} alt={item.nombre} className="carrito-img" />
                 <h3>{item.nombre}</h3>
-
                 <div className="Precio-producto">
                   <p>Precio</p>
                   <h3>${item.precio}</h3>
