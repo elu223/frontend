@@ -85,7 +85,7 @@ export const productos = [
     material: 'Hilo de algodón premium',
     stock: 10,
     caracteristicas: [
-      'Tallo np flexible',
+      'Tallo no flexible',
       'Realista',
       'Ideal para arreglos',
       'Hecho a manow'

@@ -1,123 +1,270 @@
 import React, { useEffect, useState } from "react";
-import "./AdminUsuarios.css";
 import axios from "axios";
+import "./AdminUsuarios.css";
 
 function AdminUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [usuarioEditando, setUsuarioEditando] = useState(null);
 
-  const handleBusqueda = (e) => setBusqueda(e.target.value);
+  const [formData, setFormData] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    password: "",
+    telefono: "",
+    direccion: "",
+    id_rol: ""
+  });
 
-  // OBTENER USUARIOS
+  // CARGAR USUARIOS
+  const obtenerUsuarios = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/usuarios");
+      setUsuarios(res.data);
+    } catch (error) {
+      console.log("Error obteniendo usuarios:", error);
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/usuarios")
-      .then((res) => setUsuarios(res.data))
-      .catch((err) => console.log("Error obteniendo usuarios:", err));
+    obtenerUsuarios();
   }, []);
 
-  // BLOQUEAR
-  const handleBloquear = () => {
-    if (!usuarioSeleccionado) return;
+  const manejarCambio = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    axios
-      .put(
-        `http://localhost:5000/usuarios/bloquear/${usuarioSeleccionado.id_usuario}`
-      )
-      .then(() => {
-        setUsuarios((prev) =>
-          prev.map((u) =>
-            u.id_usuario === usuarioSeleccionado.id_usuario
-              ? { ...u, estado: u.estado === "Bloqueado" ? "Activo" : "Bloqueado" }
-              : u
-          )
+  // ABRIR MODAL NUEVO
+  const abrirModalNuevo = () => {
+    setUsuarioEditando(null);
+    setFormData({
+      nombre: "",
+      apellido: "",
+      email: "",
+      password: "",
+      telefono: "",
+      direccion: "",
+      id_rol: 1,
+    });
+    setMostrarModal(true);
+  };
+
+  // ABRIR MODAL EDITAR
+  const abrirModalEditar = (usuario) => {
+    setUsuarioEditando(usuario.id_usuario);
+    setFormData(usuario);
+    setMostrarModal(true);
+  };
+
+  const cerrarModal = () => setMostrarModal(false);
+
+  // ENVIAR FORMULARIO
+  const enviarFormulario = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (usuarioEditando) {
+        await axios.put(
+          `http://localhost:5000/usuarios/${usuarioEditando}`,
+          formData
         );
-        setUsuarioSeleccionado(null);
-      })
-      .catch((err) => console.log("Error al bloquear:", err));
+      } else {
+        await axios.post("http://localhost:5000/usuarios", formData);
+      }
+
+      obtenerUsuarios();
+      cerrarModal();
+    } catch (error) {
+      console.log("Error guardando usuario:", error);
+    }
   };
 
   // ELIMINAR
-  const handleEliminar = () => {
-    if (!usuarioSeleccionado) return;
+  const eliminarUsuario = async (id) => {
+    if (!window.confirm("¿Seguro quieres eliminar este usuario?")) return;
 
-    axios
-      .delete(
-        `http://localhost:5000/usuarios/${usuarioSeleccionado.id_usuario}`
-      )
-      .then(() => {
-        setUsuarios((prev) =>
-          prev.filter((u) => u.id_usuario !== usuarioSeleccionado.id_usuario)
-        );
-        setUsuarioSeleccionado(null);
-      })
-      .catch((err) => console.log("Error al eliminar:", err));
+    try {
+      await axios.delete(`http://localhost:5000/usuarios/${id}`);
+      obtenerUsuarios();
+    } catch (error) {
+      console.log("Error eliminando usuario:", error);
+    }
   };
 
-  const usuariosFiltrados = usuarios.filter(
-    (user) =>
-      `${user.nombre} ${user.apellido}`
-        .toLowerCase()
-        .includes(busqueda.toLowerCase()) ||
-      user.email.toLowerCase().includes(busqueda.toLowerCase())
+  // FILTRO
+  const usuariosFiltrados = usuarios.filter((u) =>
+    (u.nombre + " " + u.apellido).toLowerCase().includes(busqueda.toLowerCase())
   );
 
   return (
     <div className="admin-usuarios-container">
-      <h2 className="titulo-h2">
-        <img className="logo-admin" src="./img/logo.png" alt="logo" /> Usuarios
-      </h2>
+    <div className="header-productos">
+        <h1 className="titulo-principal">Usuarios</h1>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Buscar por nombre o email..."
-        value={busqueda}
-        onChange={handleBusqueda}
-        className="input-busqueda"
-      />
+      <div className="acciones-superiores">
+        <input
+          type="text"
+          placeholder="Buscar usuario..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="input-busqueda"
+        />
+
+        <button className="btn-agregar" onClick={abrirModalNuevo}>
+          + Agregar Usuario
+        </button>
+      </div>
 
       <table className="tabla-usuarios">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
+            <th>Nombre completo</th>
             <th>Email</th>
             <th>Teléfono</th>
             <th>Dirección</th>
-            <th>Registro</th>
             <th>Rol</th>
+            <th>Acciones</th>
           </tr>
         </thead>
 
         <tbody>
-          {usuariosFiltrados.length > 0 ? (
-            usuariosFiltrados.map((user) => (
-              <tr
-                key={user.id_usuario}
-                className="clickable-item"
-                onClick={() => setUsuarioSeleccionado(user)}
-              >
-                <td>{user.id_usuario}</td>
-                <td>{user.nombre}</td>
-                <td>{user.apellido}</td>
-                <td>{user.email}</td>
-                <td>{user.telefono}</td>
-                <td>{user.direccion}</td>
-                <td>{user.fecha_registro}</td>
-                <td>{user.id_rol}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="8" className="no-usuarios">
-                No hay usuarios.
+          {usuariosFiltrados.map((u) => (
+            <tr key={u.id_usuario}>
+              <td>{u.id_usuario}</td>
+              <td>{u.nombre} {u.apellido}</td>
+              <td>{u.email}</td>
+              <td>{u.telefono}</td>
+              <td>{u.direccion}</td>
+              <td>{u.id_rol}</td>
+              <td className="acciones-td">
+                <button
+                  className="btn-editar"
+                  onClick={() => abrirModalEditar(u)}
+                >
+                  <img src="./img/lapiz.png" alt="" />
+                </button>
+
+                <button
+                  className="btn-eliminar"
+                  onClick={() => eliminarUsuario(u.id_usuario)}
+                >
+                  <img src="./img/basura.png" alt="" />
+                </button>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
+
+      {/* MODAL */}
+      {mostrarModal && (
+        <div className="overlay-formulario">
+          <div className="modal-formulario">
+            <h3>{usuarioEditando ? "Editar Usuario" : "Agregar Usuario"}</h3>
+
+            <form onSubmit={enviarFormulario}>
+              <div className="input-group">
+                <label>Nombre:</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  value={formData.nombre}
+                  onChange={manejarCambio}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Apellido:</label>
+                <input
+                  type="text"
+                  name="apellido"
+                  value={formData.apellido}
+                  onChange={manejarCambio}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Email:</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={manejarCambio}
+                  required
+                />
+              </div>
+
+              {!usuarioEditando && (
+                <div className="input-group">
+                  <label>Contraseña:</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={manejarCambio}
+                    required
+                  />
+                </div>
+              )}
+
+              <div className="input-group">
+                <label>Teléfono:</label>
+                <input
+                  type="text"
+                  name="telefono"
+                  value={formData.telefono}
+                  onChange={manejarCambio}
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Dirección:</label>
+                <input
+                  type="text"
+                  name="direccion"
+                  value={formData.direccion}
+                  onChange={manejarCambio}
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Rol (ID):</label>
+                <input
+                  type="number"
+                  name="id_rol"
+                  value={formData.id_rol}
+                  onChange={manejarCambio}
+                  min="1"
+                />
+              </div>
+
+              <div className="botones-formulario">
+                <button type="submit" className="btn-confirmar">
+                  {usuarioEditando ? "Actualizar" : "Agregar"}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-cancelar"
+                  onClick={cerrarModal}
+                >
+                  Cancelar
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
