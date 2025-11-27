@@ -1,0 +1,218 @@
+/* Contenedor general */
+.admin-usuarios-container {
+    width: 100vw;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Logo + Título */
+.logo-admin {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+}
+
+.titulo-h2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Buscador */
+.input-busqueda {
+    width: 83%;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-busqueda:focus {
+    border-color: #610c64;
+    box-shadow: 0 0 4px rgb(88, 15, 85);
+}
+
+/* =============================== */
+/*        TABLA DE USUARIOS        */
+/* =============================== */
+
+.tabla-usuarios {
+    width: 95%;
+    margin-left: 15px;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.95em;
+}
+
+/* Encabezado */
+.tabla-usuarios thead {
+    background-color: #6d074e; /* violeta suave */
+    color: white;
+}
+
+.tabla-usuarios th {
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.85em;
+}
+
+/* Celdas */
+.tabla-usuarios td {
+    padding: 10px 10px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+/* Filas alternadas */
+.tabla-usuarios tbody tr:nth-child(even) {
+    background-color: #f7f5ff;
+}
+
+/* Hover */
+.tabla-usuarios tbody tr:hover {
+    background-color: #ece8ff;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* No hay usuarios */
+.no-usuarios {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.estado {
+    padding: 5px 10px;
+    border-radius: 16px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.estado-activo {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.estado-bloqueado {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .titulo-h2 {
+        font-size: 1.2em;
+    }
+}
+
+
+/* 3. ESTILOS PARA LA VENTANA EMERGENTE (MODAL) */
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+}
+
+.modal-content h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    flex-grow: 1;
+}
+
+.btn-block {
+    background-color: #ffc107; 
+    color: #333;
+}
+
+.btn-block:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: #dc3545; 
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-close {
+    background: none;
+    border: 1px solid #ccc;
+    color: #6c757d;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-close:hover {
+    background-color: #f0f0f0;
+}
+
+.btn-agregar{
+    margin: 14px
+}

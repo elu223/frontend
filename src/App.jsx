@@ -9,6 +9,8 @@ import Registro from './Componentes/Registro/registro';
 import AdminPanel from './Componentes/Admin/AdminPanel';
 import ComprasAdmin from './Componentes/Admin/Compras-Admin/ComprasAdmin'; 
 import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
+import EnviosPendiente from './Componentes/Admin/Admin-Envios-Pendientes/EnvioPendiente';
+import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import './App.css';
 
 function App() {
@@ -60,9 +62,8 @@ function App() {
       return <ComprasAdmin />;
     }
     if (seccionAdminActiva === 'envios') {
-      return <div>Contenido de envíos...</div>;
+      return <EnviosPendiente />;
     }
-    return <div>Contenido de productos...</div>;
   };
 
   return (

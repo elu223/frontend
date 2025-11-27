@@ -151,9 +151,6 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
           {user ? (
             // USUARIO LOGUEADO - muestra Mi Perfil y Cerrar Sesión
             <>
-              <Link href="/compras" className="menu-opcion">
-                <span className="menu-texto">Mis compras</span>
-              </Link>
               <Link href="/miperfil" className="menu-opcion">
                 <span className="menu-texto">Mi perfil</span>
               </Link>

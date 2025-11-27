@@ -1,0 +1,170 @@
+/* CONTENEDOR GENERAL */
+.envios-recientes-container {
+  padding: 20px;
+   width :100vw;;
+  font-family: Arial, sans-serif;
+}
+
+/* ESTADOS */
+.cargando,
+.no-envios {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+/* TABLA */
+.tabla-envios {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tabla-envios th {
+  background: #790b73;
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.tabla-envios td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabla-envios tr:hover {
+  background: #f6f6f6;
+}
+
+/* BOTONES DE TABLA */
+.tabla-envios button {
+  padding: 6px 12px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tabla-envios button:hover {
+  opacity: 0.8;
+}
+
+.tabla-envios button:first-child {
+  background: #ffc107;
+  color: #000;
+}
+
+.tabla-envios button:last-child {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* ---- MODAL ---- */
+.overlay-formulario {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-formulario {
+  background: #fff;
+  padding: 25px;
+  width: 400px;
+  border-radius: 8px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ANIMACIÓN DEL MODAL */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-formulario h3 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* INPUTS */
+.input-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-group input {
+  padding: 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+/* BOTONES DEL MODAL */
+.botones-formulario {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-confirmar {
+  background: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-confirmar:hover {
+  background: #218838;
+}
+
+.btn-cancelar {
+  background: #6c757d;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-cancelar:hover {
+  background: #5a6268;
+}
+
+/* ITEM DE ENVÍO PENDIENTE (si usás EnviosPendiente.jsx individual) */
+.envio-pendiente {
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  background: #fafafa;
+}
+
+.envio-pendiente button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.envio-pendiente button:hover {
+  background: #0056b3;
+}
