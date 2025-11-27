@@ -20,14 +20,18 @@
   background: #ffffff;
   border-radius: 6px;
   overflow: hidden;
+  text-align: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .tabla-envios th {
-  background: #790b73;
-  padding: 12px;
-  text-align: left;
+  background-color: #6d074e;
+  padding: 12px 10px;
+  color: white;
   font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.85em;
 }
 
 .tabla-envios td {
@@ -48,18 +52,23 @@
   cursor: pointer;
 }
 
-.tabla-envios button:hover {
-  opacity: 0.8;
+ .btn-editar img{
+  width: 29px;
+  height: 29px;
+  object-fit: contain;
+}
+.btn-eliminar img{
+  width: 29px;
+  height: 29px;
+  object-fit: contain;
 }
 
-.tabla-envios button:first-child {
-  background: #ffc107;
-  color: #000;
+.btn-editar:hover img{
+  filter: brightness(1);
 }
 
-.tabla-envios button:last-child {
-  background: #dc3545;
-  color: #fff;
+.btn-eliminar:hover img{
+  filter: brightness(1);
 }
 
 /* ---- MODAL ---- */

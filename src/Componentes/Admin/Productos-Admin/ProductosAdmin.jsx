@@ -10,6 +10,7 @@ function ProductosAdmin() {
   const [error, setError] = useState('');
   const [mostrarModal, setMostrarModal] = useState(false);
   const [productoEditando, setProductoEditando] = useState(null);
+  const [busqueda, setBusqueda] = useState('');
   const [formData, setFormData] = useState({
     nombre: '',
     descripcion: '',
@@ -35,6 +36,11 @@ function ProductosAdmin() {
         setLoading(false);
       });
   };
+
+  // filtro de búsqueda
+  const productosFiltrados = productos.filter((producto) =>
+    producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
 
   const abrirModalAgregar = () => {
     setProductoEditando(null);
@@ -78,13 +84,12 @@ function ProductosAdmin() {
     const datos = {
       nombre: formData.nombre,
       descripcion: formData.descripcion,
-      precio: parseInt(formData.precio), // parseInt para quitar decimales
+      precio: parseInt(formData.precio),
       stock: parseInt(formData.stock),
       imagen_url: formData.imagen_url
     };
 
     if (productoEditando) {
-      // Editar producto existente
       axios.put(`/api/productos/${productoEditando.id_producto}`, datos)
         .then(() => {
           alert('Producto actualizado correctamente');
@@ -96,7 +101,6 @@ function ProductosAdmin() {
           alert('Error al actualizar el producto');
         });
     } else {
-      // Agregar nuevo producto
       axios.post('/api/productos', datos)
         .then(() => {
           alert('Producto agregado correctamente');
@@ -151,8 +155,21 @@ function ProductosAdmin() {
 
   return (
     <div className="contenido-admin">
+      {/* título solo */}
       <div className="header-productos">
         <h1 className="titulo-principal">Productos</h1>
+      </div>
+
+      {/* buscador y botón juntos */}
+      <div className="acciones-superiores">
+        <input
+          type="text"
+          placeholder="Buscar producto..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="input-busqueda"
+        />
+
         <button className="btn-agregar" onClick={abrirModalAgregar}>
           + Agregar Producto
         </button>
@@ -171,7 +188,7 @@ function ProductosAdmin() {
             </tr>
           </thead>
           <tbody>
-            {productos.map((producto) => (
+            {productosFiltrados.map((producto) => (
               <tr key={producto.id_producto} className={Number(producto.stock) === 0 ? 'agotado' : ''}>
                 <td>{producto.id_producto}</td>
                 <td className="nombre-producto">{producto.nombre}</td>
@@ -261,7 +278,7 @@ function ProductosAdmin() {
                   onChange={manejarCambio}
                   required
                   min="0"
-                  step="1"  // 1 para números enteros
+                  step="1"
                 />
               </div>
               

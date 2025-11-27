@@ -115,8 +115,12 @@ function EnviosRecientes() {
                 <td>{e.fecha}</td>
 
                 <td>
-                  <button onClick={() => abrirModalEditar(e)}>Editar</button>
-                  <button onClick={() => eliminarEnvio(e.id_envio)}>Eliminar</button>
+                  <button className="btn-editar" onClick={() => abrirModalEditar(e)}>
+                     <img src='/img/lapiz.png' alt="Editar" />
+                  </button>
+                  <button className="btn-eliminar" onClick={() => eliminarEnvio(e.id_envio)}>
+                    <img src='/img/basura.png' alt="Eliminar" />
+                  </button>
                 </td>
               </tr>
             ))}

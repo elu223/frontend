@@ -18,7 +18,7 @@ function AdminUsuarios() {
     id_rol: ""
   });
 
-  // CARGAR USUARIOS
+  // cargar usuarios
   const obtenerUsuarios = async () => {
     try {
       const res = await axios.get("http://localhost:5000/usuarios");
@@ -39,7 +39,7 @@ function AdminUsuarios() {
     });
   };
 
-  // ABRIR MODAL NUEVO
+  // abrir modal nuevo
   const abrirModalNuevo = () => {
     setUsuarioEditando(null);
     setFormData({
@@ -84,7 +84,7 @@ function AdminUsuarios() {
     }
   };
 
-  // ELIMINAR
+  // eliminar usuario
   const eliminarUsuario = async (id) => {
     if (!window.confirm("¿Seguro quieres eliminar este usuario?")) return;
 
@@ -96,7 +96,7 @@ function AdminUsuarios() {
     }
   };
 
-  // FILTRO
+  // filtrar usuarios por búsqueda
   const usuariosFiltrados = usuarios.filter((u) =>
     (u.nombre + " " + u.apellido).toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -163,7 +163,7 @@ function AdminUsuarios() {
         </tbody>
       </table>
 
-      {/* MODAL */}
+      {/* modal */}
       {mostrarModal && (
         <div className="overlay-formulario">
           <div className="modal-formulario">
