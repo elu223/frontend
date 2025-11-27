@@ -95,3 +95,179 @@
 .btn-ver-todos:hover {
   background: #a60066;
 }
+/* Tablets (768px y menos) */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem 0;
+  }
+  
+  .container {
+    padding: 0 15px;
+  }
+  
+  .contenedor-productos {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+  }
+  
+  /* 2 productos por fila en tablets */
+  .lista-productos-horizontal {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .resultados-busqueda {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer {
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+  }
+  
+  .footer p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Móviles (576px y menos) */
+@media (max-width: 576px) {
+  .main-content {
+    padding: 0.5rem 0;
+  }
+  
+  .container {
+    padding: 0 10px;
+  }
+  
+  .contenedor-productos {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  /* 2 productos por fila en móviles */
+  .lista-productos-horizontal {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .resultados-busqueda {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer {
+    padding: 1rem 0;
+    margin-top: 1.5rem;
+  }
+  
+  .footer p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  .btn-ver-todos {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    width: 100%;
+  }
+}
+
+/* Móviles pequeños (480px y menos) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 8px;
+  }
+  
+  .contenedor-productos {
+    padding: 0.8rem;
+    border-radius: 6px;
+  }
+  
+  /* 2 productos por fila en móviles pequeños */
+  .lista-productos-horizontal {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+  
+  /* Ajustar el minmax para móviles muy pequeños */
+  .lista-productos-horizontal {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+  
+  .resultados-busqueda {
+    font-size: 0.85rem;
+  }
+  
+  .footer {
+    padding: 0.8rem 0;
+  }
+  
+  .footer p {
+    font-size: 0.75rem;
+  }
+}
+
+/* Móviles muy pequeños (360px y menos) */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 6px;
+  }
+  
+  .contenedor-productos {
+    padding: 0.6rem;
+  }
+  
+  /* 1 producto por fila en móviles muy pequeños */
+  .lista-productos-horizontal {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .lista-productos-horizontal {
+    grid-template-columns: repeat(1, minmax(150px, 1fr));
+  }
+}
+
+/* Ajustes para orientación landscape en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  .lista-productos-horizontal {
+    /* 3 productos por fila en landscape */
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+  
+  .main-content {
+    padding: 1rem 0;
+  }
+}
+
+/* Tablets en landscape (1024px y menos) */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .lista-productos-horizontal {
+    /* 4 productos por fila en tablets landscape */
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+  }
+}
+
+/* Ajustes para pantallas muy altas pero estrechas */
+@media (max-height: 600px) and (max-width: 768px) {
+  .vista-productos {
+    min-height: auto;
+  }
+  
+  .main-content {
+    padding: 0.5rem 0;
+  }
+  
+  .contenedor-productos {
+    padding: 1rem;
+  }
+  
+  /* Mantener 2 productos por fila */
+  .lista-productos-horizontal {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

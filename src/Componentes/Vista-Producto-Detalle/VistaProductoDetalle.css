@@ -405,6 +405,7 @@
 }
 
 /* RESPONSIVE */
+/* Tablets (1024px y menos) */
 @media (max-width: 1024px) {
   .contenedor-principal {
     grid-template-columns: 1fr;
@@ -414,69 +415,59 @@
   .columna-izquierda {
     position: static;
   }
+}
+
+/* Tabletas y móviles (768px y menos) - ELIMINAR STICKY */
+@media (max-width: 768px) {
+  .contenedor-imagen-principal {
+    position: static; /* Esto es clave */
+    top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .imagen-principal {
+    width: 100%;
+    max-width: 500px;
+    max-height: 400px;
+    cursor: default;
+  }
   
   .seccion-superior {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-  
-  .grid-productos {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .header-con-buscador {
-    justify-content: center;
-  }
-
-  .buscador-container {
-    width: 90%;
+    padding: 1.5rem;
   }
 }
-.btn-miniatura {
-  background: #ce0078;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-}
 
-.btn-miniatura:hover {
-  background: #b3007a;
-}
-
-/* Para que el Link no afecte el estilo del botón */
-.producto-miniatura a {
-  text-decoration: none;
-}
-
-@media (max-width: 768px) {
+/* Móviles (576px y menos) */
+@media (max-width: 576px) {
   .contenedor-principal {
     padding: 0 15px 1rem;
   }
   
-  .grid-productos {
-    grid-template-columns: repeat(2, 1fr);
+  .contenedor-imagen-principal {
+    margin-bottom: 1rem;
   }
   
-  .botones-producto {
-    grid-template-columns: 1fr;
+  .imagen-principal {
+    max-height: 350px;
   }
   
-  .stock-cantidad-detalle {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .seccion-superior,
-  .seccion-comentarios-detalle {
-    padding: 1.5rem;
-  }
-
-  .header-con-buscador {
+  .seccion-superior {
     padding: 1rem;
+  }
+}
+
+/* Móviles pequeños (375px y menos) */
+@media (max-width: 375px) {
+  .contenedor-imagen-principal {
+    margin-bottom: 0.8rem;
+  }
+  
+  .imagen-principal {
+    max-height: 280px;
   }
 }
