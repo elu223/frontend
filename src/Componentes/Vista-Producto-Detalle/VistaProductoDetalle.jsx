@@ -180,20 +180,6 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
                       <div className="stock-disponible">
                         <strong>Stock disponible:</strong> {producto.stock || 0}
                       </div>
-                      <div className="selector-cantidad-detalle">
-                        <strong>Cantidad:</strong>
-                        <select 
-                          value={cantidad} 
-                          onChange={(e) => setCantidad(parseInt(e.target.value))}
-                          className="select-cantidad"
-                        >
-                          {[...Array(Math.min(producto.stock || 1, 10))].map((_, i) => (
-                            <option key={i + 1} value={i + 1}>
-                              {i + 1} unidad{i + 1 > 1 ? 'es' : ''}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
                     </div>
                   </div>
                   
