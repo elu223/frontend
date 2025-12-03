@@ -92,18 +92,40 @@ function App() {
         </Route>
         <Route path="/registrarse">
           <Registro />
-        </Route>
-        <Route path="/admin">
+       </Route>       
+
+        {/* Rutas de admin */}
+         <Route path="/admin">
           <div className="contenedor-admin">
-            <AdminPanel 
-              seccionActiva={seccionAdminActiva} 
-              setSeccionActiva={setSeccionAdminActiva} 
-            />
-            {renderContenidoAdmin()}
+            <AdminPanel />
+            <ProductosAdmin />
+          </div>
+        </Route>
+        
+        {/* Otras rutas de admin */}        
+        <Route path="/admin/usuarios">
+          <div className="contenedor-admin">
+            <AdminPanel />
+            <AdminUsuarios />
+          </div>
+        </Route>
+        
+        <Route path="/admin/compras">
+          <div className="contenedor-admin">
+            <AdminPanel />
+            <ComprasAdmin />
+          </div>
+        </Route>
+        
+        <Route path="/admin/envios">
+          <div className="contenedor-admin">
+            <AdminPanel />
+            <EnviosPendiente />
           </div>
         </Route>
       </Switch>
     </div>
+
   );
 }
 

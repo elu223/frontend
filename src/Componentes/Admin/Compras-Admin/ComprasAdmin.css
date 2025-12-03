@@ -94,3 +94,158 @@
     grid-template-columns: 1fr;
   }
 }
+/* Estilos para listado activo */
+.seccion-listados-activa {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  animation: aparecer 0.3s ease;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cabecera-listado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #6A1452;
+  padding-bottom: 10px;
+}
+
+.cabecera-listado h2 {
+  color: #6A1452;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.btn-cerrar-listado {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.btn-cerrar-listado:hover {
+  background: #c82333;
+}
+
+/* Tabla de ventas */
+.tabla-ventas {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.tabla-ventas th {
+  background-color: #6A1452;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.tabla-ventas td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.tabla-ventas tr:hover {
+  background-color: #f9f0ff;
+}
+
+/* Estados de venta */
+.estado-venta {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.estado-venta.pagado,
+.estado-venta.entregado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.estado-venta.pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.estado-venta.enviado {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+/* Cargando */
+.cargando-listado {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.sin-datos-listado {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* Resumen del listado */
+.resumen-listado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+/* Instrucciones */
+.instrucciones {
+  margin-top: 20px;
+  text-align: left;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.instrucciones p {
+  margin: 10px 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 5px;
+  border-left: 3px solid #6A1452;
+}
+
+/* Responsive para tabla */
+@media (max-width: 768px) {
+  .tabla-ventas {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .cabecera-listado {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .resumen-listado {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}

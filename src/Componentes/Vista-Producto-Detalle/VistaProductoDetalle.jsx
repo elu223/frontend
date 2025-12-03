@@ -7,7 +7,7 @@ import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import './VistaProductoDetalle.css';
 import Footer from "../Footer/Footer.jsx";
 
-function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar totalItems
+function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const [match, params] = useRoute("/producto/:id");
   const [rating, setRating] = useState(0);
   const [comentario, setComentario] = useState('');
@@ -18,29 +18,8 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
 
   const producto = productos.find(p => p.id === params?.id);
 
-  // Función para manejar "Comprar ahora"
-  const handleComprarAhora = () => {
-    const productoConCantidad = {
-      ...producto,
-      cantidad: cantidad
-    };
-    setCarritoCompraRapida([productoConCantidad]);
-    setMostrarFormularioCompra(true);
-  };
-
-  // Función para calcular el total de compra rápida
-  const calcularTotalCompraRapida = () => {
-    return carritoCompraRapida.reduce((total, item) => total + (item.precio * item.cantidad), 0);
-  };
-
-  // Función para cerrar el formulario
-  const handleCerrarFormulario = () => {
-    setMostrarFormularioCompra(false);
-    setCarritoCompraRapida([]);
-  };
-
-  // Si no se encuentra el producto, mostrar mensaje de error
-  if (!producto) {
+  //validación si el producto no existe
+  if (!producto) {  
     return (
       <div className="vista-producto-detalle">
         <HeaderMenu totalItems={totalItems} />
@@ -71,23 +50,6 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
         className={index < rating ? "star filled" : "star"}
         color={index < rating ? "#ffc107" : "#e4e5e9"}
         size={20}
-      />
-    ));
-  };
-
-  const handleRatingClick = (value) => {
-    setRating(value);
-  };
-
-  const renderSelectableStars = () => {
-    return [...Array(5)].map((_, index) => (
-      <FaStar
-        key={index}
-        className="star selectable"
-        color={index < rating ? "#ffc107" : "#e4e5e9"}
-        size={24}
-        style={{ cursor: 'pointer' }}
-        onClick={() => handleRatingClick(index + 1)}
       />
     ));
   };
@@ -164,13 +126,25 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
                     <div className="botones-producto">
                       <button 
                         className="btn-anadir-carrito" 
-                        onClick={() => agregarAlCarrito({...producto, cantidad})}
+                        onClick={() => agregarAlCarrito({
+                          ...producto, 
+                          cantidad: cantidad,
+                          img: producto.imagen // ← AGREGAR ESTO PARA QUE SE VEA LA IMAGEN EN CARRITO
+                        })}
                       >
                         Añadir al carrito
                       </button>
                       <button 
                         className="btn-comprar-ahora"
-                        onClick={handleComprarAhora}
+                        onClick={() => {
+                          const productoConCantidad = {
+                            ...producto,
+                            cantidad: cantidad,
+                            img: producto.imagen // ← AGREGAR ESTO TAMBIÉN
+                          };
+                          setCarritoCompraRapida([productoConCantidad]);
+                          setMostrarFormularioCompra(true);
+                        }}
                       >
                         Comprar ahora
                       </button>
@@ -202,7 +176,16 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
                 <div className="formulario-comentario">
                   <h4>Agregar comentario:</h4>
                   <div className="rating-comentario">
-                    {renderSelectableStars()}
+                    {[...Array(5)].map((_, index) => (
+                      <FaStar
+                        key={index}
+                        className="star selectable"
+                        color={index < rating ? "#ffc107" : "#e4e5e9"}
+                        size={24}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setRating(index + 1)}
+                      />
+                    ))}
                   </div>
                   <textarea 
                     className="textarea-comentario"
@@ -251,16 +234,14 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) { // Agregar
       {mostrarFormularioCompra && (
         <FormularioCompra 
           carrito={carritoCompraRapida}
-          total={calcularTotalCompraRapida()}
-          onClose={handleCerrarFormulario}
+          total={carritoCompraRapida.reduce((total, item) => total + (item.precio * item.cantidad), 0)}
+          onClose={() => {
+            setMostrarFormularioCompra(false);
+            setCarritoCompraRapida([]);
+          }}
         />
       )}
 
-      {/* <footer className="footer">
-        <div className="container">
-          <p>&copy; 2025 TejidosMiki. Todos los derechos reservados.</p>
-        </div>
-      </footer> */}
       <Footer />
     </div>
   );

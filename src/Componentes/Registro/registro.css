@@ -10,7 +10,7 @@
 
 .registro-box {
   background-color: #FCEFB0;
-  max-width: 380px;
+  width: 23%;
   margin: auto;
   padding: 0rem 2rem 2rem 2rem;
   border-radius: 30px;
@@ -28,7 +28,7 @@
 .avatar-img {
   width: 34%;
   border-radius: 50%;
-  margin-bottom:-13px
+  margin-bottom:-15px;
 }
 .input-group {
   text-align: left;

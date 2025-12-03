@@ -9,6 +9,7 @@
 .login-box {
   margin-top: 80px;
   height: 400px;
+  width: 20%;
   background-color: #FCEFB0;
   padding: 2rem;
   border-radius: 35px;
@@ -39,6 +40,16 @@
   box-sizing: border-box;
 }
 
+.icon-eye,
+.icon-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #6A1452;
+}
 
 .login-button {
   width: 37%;

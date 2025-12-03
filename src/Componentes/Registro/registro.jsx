@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import axios from 'axios'; // Importar axios
+import axios from 'axios';
 import "./registro.css";
 import Footer from "../Footer/Footer";
 
@@ -16,7 +16,7 @@ function Registro() {
 
   const [, setLocation] = useLocation();
 
-  const handleSubmit = async (e) => {
+  const registrar = (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -33,21 +33,19 @@ function Registro() {
       return;
     }
 
-    try {
-      const response = await axios.post('/usuarios/register', {
-        nombre: nombre,
-        apellido: apellido,
-        email: email,
-        password: password,
-        telefono: "",
-        direccion: ""
-      });
-
+    axios.post('/usuarios/register', {
+      nombre: nombre,
+      apellido: apellido,
+      email: email,
+      password: password,
+      telefono: "",
+      direccion: ""
+    })
+    .then((response) => {
       const data = response.data;
       
-      console.log('Respuesta del backend:', data); // Para debugging
+      console.log('Respuesta del backend:', data);
       
-      // Guardar usuario en localStorage
       const userData = {
         token: data.token,
         name: data.usuario.nombre,
@@ -57,23 +55,18 @@ function Registro() {
       };
       
       localStorage.setItem('user', JSON.stringify(userData));
-      
-      // Disparar evento para que HeaderMenu se actualice
       window.dispatchEvent(new Event('storage'));
-            if (data.usuario.id_rol === 1) {
-        setLocation('/admin');//Va al panel admin
-      }
-      else{
-        setLocation('/');//Va al home, en caso de no ser admin
+      
+      if (data.usuario.id_rol === 1) {
+        setLocation('/admin');
+      } else {
+        setLocation('/');
       }
       
-      // Redirigir al home
-      setLocation("/");
-      
-    } catch (error) {
+      setLoading(false);
+    })
+    .catch((error) => {
       console.error('Error en el registro:', error);
-      console.log('Response data:', error.response?.data);
-      console.log('Response status:', error.response?.status);
       
       if (error.response) {
         alert(`Error: ${error.response.data}`);
@@ -82,10 +75,10 @@ function Registro() {
       } else {
         alert('Error inesperado: ' + error.message);
       }
-    } finally {
+      
       setLoading(false);
-    }
-  };
+    });
+  }
 
   return (
     <div className="registro-container">
@@ -96,7 +89,10 @@ function Registro() {
           <img src="/img/icon-user.png" alt="icono usuario" className="avatar-img" />
         </div>
 
-        <form onSubmit={handleSubmit} className="registro-form">
+        <form 
+          className="registro-form"
+          onSubmit={(e) => registrar(e)}
+        >
           <div className="input-group">
             <label>Nombre</label>
             <input

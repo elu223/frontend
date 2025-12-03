@@ -22,16 +22,18 @@ function EnviosRecientes() {
   });
 
   // Cargar envíos
-  const cargarEnvios = async () => {
-    try {
-      const data = await obtenerEnvios();
+  const cargarEnvios =  () => {
+    obtenerEnvios()
+    .then((data)=>{
       setEnvios(data);
-    } catch (error) {
+    })
+    .catch((error) =>{
       console.log("Error cargando envíos:", error);
-    } finally {
-      setCargando(false);
-    }
-  };
+    })
+    .then(() =>{
+      setCargando (false);
+    })
+  }
 
   useEffect(() => {
     cargarEnvios();
@@ -54,30 +56,38 @@ function EnviosRecientes() {
 
   const enviarFormulario = async (e) => {
     e.preventDefault();
-
-    try {
-      if (envioEditando) {
-        await actualizarEnvio(envioEditando, formData);
-      } else {
-        await crearEnvio(formData);
-      }
-
-      cargarEnvios();
-      cerrarModal();
-    } catch (error) {
-      console.log("Error guardando envío:", error);
+//editando envios
+    if (envioEditando) {
+      actualizarEnvio(envioEditando, formData)
+      .then(()=>{
+        cargarEnvios();
+        cerrarModal();
+      })
+      .catch((error)=>{
+        console.log("Error actualizando envío:", error);
+      })
+    } else {
+      crearEnvio(formData)
+      .then(() =>{
+        cargarEnvios();
+        cerrarModal();
+      })
+      .catch((error) =>{
+        console.log("Error creando envío:", error);
+      })
     }
   };
-
-  const eliminarEnvio = async (id) => {
+  //eliminar envios
+  const eliminarEnvio =  (id) => {
     if (!window.confirm("¿Seguro quieres eliminar este envío?")) return;
-
-    try {
-      await eliminarEnvioPorId(id);
+    
+    eliminarEnvioPorId(id)
+    .then(() =>{
       cargarEnvios();
-    } catch (error) {
+    })
+    .catch((error) =>{
       console.log("Error eliminando envío:", error);
-    }
+    })
   };
 
   return (

@@ -12,18 +12,18 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [, setLocation] = useLocation();
 
-  const handleSubmit = async (e) => {
+  const iniciarSesion = (e) => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const response = await axios.post('/usuarios/login', {
-        email: email, 
-        password: password 
-      });
-
+    axios.post('/usuarios/login', {
+      email: email, 
+      password: password 
+    })
+    .then((response) => {
       const data = response.data;
       
       const userData = {
@@ -44,20 +44,24 @@ function Login() {
         setLocation('/');
       }
       
-    } catch (error) {
+      setLoading(false);
+    })
+    .catch((error) => {
       console.error('Error en login:', error);
       alert('Error: ' + (error.response?.data?.error || error.message));
-    } finally {
       setLoading(false);
-    }
-  };
+    });
+  }
 
   return (
     <div className="login-container"> 
       <div className="login-box">
         <h2 className="login-title">Iniciar Sesión</h2>
         
-        <form onSubmit={handleSubmit} className="login-form">
+        <form 
+          className="login-form"
+          onSubmit={(e) => iniciarSesion(e)}
+        >
           <div className="input-group">
             <label className="input-label">Correo electrónico</label>
             <input
@@ -66,20 +70,26 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="input-field"
-              placeholder="Tu email"
             />
           </div>
 
           <div className="input-group">
             <label className="input-label">Contraseña</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input-field"
-              placeholder="Tu contraseña"
-            />
+            <div className="input-icon-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="input-field"
+              />
+              <span
+                className="icon-eye"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                👁
+              </span>
+            </div>
           </div>
 
           <button 

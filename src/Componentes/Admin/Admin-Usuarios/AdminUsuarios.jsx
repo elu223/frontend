@@ -19,14 +19,15 @@ function AdminUsuarios() {
   });
 
   // cargar usuarios
-  const obtenerUsuarios = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/usuarios");
-      setUsuarios(res.data);
-    } catch (error) {
-      console.log("Error obteniendo usuarios:", error);
-    }
-  };
+ const obtenerUsuarios =() =>{
+  axios.get("http://localhost:5000/usuarios")
+  .then((res)=>{
+    setUsuarios (res.data);
+ })
+  .catch((error)=>{
+    console.log("Error obteniendo usuarios:", error)
+  })
+}
 
   useEffect(() => {
     obtenerUsuarios();
@@ -66,35 +67,38 @@ function AdminUsuarios() {
   // ENVIAR FORMULARIO
   const enviarFormulario = async (e) => {
     e.preventDefault();
-
-    try {
-      if (usuarioEditando) {
-        await axios.put(
-          `http://localhost:5000/usuarios/${usuarioEditando}`,
-          formData
-        );
-      } else {
-        await axios.post("http://localhost:5000/usuarios", formData);
-      }
-
-      obtenerUsuarios();
-      cerrarModal();
-    } catch (error) {
-      console.log("Error guardando usuario:", error);
+    if (usuarioEditando){
+      axios.put(`http://localhost:5000/usuarios/${usuarioEditando}`, formData)
+      .then(() =>{
+        obtenerUsuarios();
+        cerrarModal();
+      })
+      .catch((error)=>{
+        console.log("Error guardando usuarios:", error);
+      })
+    } else{
+      axios.post("http://localhost:5000/usuarios", formData)
+      .then(() =>{
+        obtenerUsuarios();
+        cerrarModal();
+      })
+      .catch((error)=>{
+        console.log("Error guardando usuarios:", error)
+      })
     }
   };
 
   // eliminar usuario
   const eliminarUsuario = async (id) => {
     if (!window.confirm("¿Seguro quieres eliminar este usuario?")) return;
-
-    try {
-      await axios.delete(`http://localhost:5000/usuarios/${id}`);
-      obtenerUsuarios();
-    } catch (error) {
-      console.log("Error eliminando usuario:", error);
-    }
-  };
+    axios.delete(`http://localhost:5000/usuarios/${id}`)
+      .then(() => {
+        obtenerUsuarios();
+      })
+      .catch((error) => {
+        console.log("Error eliminando usuario:", error);
+      });
+  }
 
   // filtrar usuarios por búsqueda
   const usuariosFiltrados = usuarios.filter((u) =>
