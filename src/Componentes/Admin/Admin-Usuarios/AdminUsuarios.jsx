@@ -148,18 +148,12 @@ function AdminUsuarios() {
               <td>{u.direccion}</td>
               <td>{u.id_rol}</td>
               <td className="acciones-td">
-                <button
-                  className="btn-editar"
-                  onClick={() => abrirModalEditar(u)}
-                >
-                  <img src="./img/lapiz.png" alt="" />
+                <button className="btn-editar" onClick={() => abrirModalEditar(u)}>
+                  <img src="/img/lapiz.png" alt="Editar" />
                 </button>
 
-                <button
-                  className="btn-eliminar"
-                  onClick={() => eliminarUsuario(u.id_usuario)}
-                >
-                  <img src="./img/basura.png" alt="" />
+                <button className="btn-eliminar" onClick={() => eliminarUsuario(u.id_usuario)}>
+                  <img src="/img/basura.png" alt="Eliminar" />
                 </button>
               </td>
             </tr>
