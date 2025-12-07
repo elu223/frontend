@@ -10,6 +10,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const [sugerencias, setSugerencias] = useState([]);
   const [user, setUser] = useState(null);
   const [, setLocation] = useLocation();
+
   // Cargar usuario desde localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -18,9 +19,9 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
     }
   }, []);
 
-  // Escuchar cambios en localStorage (para cuando se haga login en otra página)
+  // Escuchar cambios en localStorage
   useEffect(() => {
-    const handleStorageChange = () => {
+    const verificarCambiosStorage = () => {
       const savedUser = localStorage.getItem('user');
       if (savedUser) {
         setUser(JSON.parse(savedUser));
@@ -29,21 +30,24 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('storage', verificarCambiosStorage);
+    return () => window.removeEventListener('storage', verificarCambiosStorage);
   }, []);
-  //Para verficar si es admin
-  const esAdmin = () =>{
+
+  // Verificar si es admin
+  const esAdmin = () => {
     if (user && user.rol === 1) {
       return true;
     }
     return false;
   }
+
   // Actualizar término local cuando searchTerm cambie
   useEffect(() => {
     setTerminoLocal(searchTerm);
   }, [searchTerm]);
 
+  // Manejar búsqueda
   const manejarBusqueda = (valor) => {
     setTerminoLocal(valor);
     
@@ -58,7 +62,8 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
     }
   };
 
-  const manejarEnvioBusqueda = () => {
+  // Enviar búsqueda
+  const enviarBusqueda = () => {
     if (terminoLocal.trim()) {
       if (sugerencias.length > 0) {
         seleccionarSugerencia(sugerencias[0]);
@@ -69,27 +74,31 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
     setMostrarSugerencias(false);
   };
 
+  // Manejar teclas
   const manejarTecla = (e) => {
     if (e.key === 'Enter') {
-      manejarEnvioBusqueda();
+      enviarBusqueda();
     } else if (e.key === 'Escape') {
       setMostrarSugerencias(false);
     }
   };
 
+  // Seleccionar sugerencia
   const seleccionarSugerencia = (producto) => {
     setTerminoLocal(producto.nombre);
     setMostrarSugerencias(false);
     setLocation(`/producto/${producto.id}`);
   };
 
+  // Cerrar sugerencias
   const cerrarSugerencias = () => {
     setTimeout(() => setMostrarSugerencias(false), 200);
   };
-//Confirmacion de cierre de sesión
-  const handleLogout = () =>{
+
+  // Cerrar sesión
+  const cerrarSesion = () => {
     const confirmar = window.confirm("¿Estás seguro que deseas cerrar sesión?");
-    if(confirmar){
+    if (confirmar) {
       localStorage.removeItem('user');
       setUser(null);
       setLocation('/');
@@ -119,9 +128,9 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
             onBlur={cerrarSugerencias}
             className="buscador-input"
           />
-          <button className="buscador-btn" onClick={manejarEnvioBusqueda}>🔍</button>
+          <button className="buscador-btn" onClick={enviarBusqueda}>🔍</button>
           
-          {/* Lista de sugerencias  */}
+          {/* Lista de sugerencias */}
           {mostrarSugerencias && (
             <div className="sugerencias-lista">
               {sugerencias.length > 0 ? (
@@ -137,7 +146,6 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
                   </div>
                 ))
               ) : (
-                //  cuando hay término de búsqueda pero NO hay sugerencias
                 <div className="sin-resultados">
                   No encontramos productos para "{terminoLocal}"
                 </div>
@@ -149,27 +157,27 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
         {/* Menú de Navegación */}
         <nav className="menu-opciones">
           {user ? (
-            // USUARIO LOGUEADO - muestra Mi Perfil y Cerrar Sesión
+            // USUARIO LOGUEADO
             <>
               <Link href="/miperfil" className="menu-opcion">
                 <span className="menu-texto">Mi perfil</span>
               </Link>
-              {/* OPCIÓN PANEL ADMIN - SOLO PARA ADMINS */}
+              
               {esAdmin() && (
                 <Link href="/admin" className="menu-opcion">
                   <span className="menu-texto">Panel Admin</span>
                 </Link>
               )}
+              
               <button 
-                onClick={handleLogout} 
+                onClick={cerrarSesion} 
                 className="menu-opcion btn-logout"
               >
                 <span className="menu-texto">Cerrar sesión</span>
               </button>
-              
             </>
           ) : (
-            // USUARIO NO LOGUEADO - muestra Crea cuenta e Ingresa
+            // USUARIO NO LOGUEADO
             <>
               <Link href="/registrarse" className="menu-opcion">
                 <span className="menu-texto">Crea tu cuenta</span>

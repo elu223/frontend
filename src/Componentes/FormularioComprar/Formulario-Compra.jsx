@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Formulario-Compra.css';
 
 function FormularioCompra({ carrito, total, onClose }) {
@@ -9,6 +10,13 @@ function FormularioCompra({ carrito, total, onClose }) {
   const [cardFecha, setCardFecha] = useState('');
   const [cardCVV, setCardCVV] = useState('');
   const [metodoPago, setMetodoPago] = useState('');
+  const [procesando, setProcesando] = useState(false);
+  const [usuarioId, setUsuarioId] = useState(null);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId') || 1;
+    setUsuarioId(userId);
+  }, []);
 
   const mediosPago = [
     { id: 'VISA', nombre: 'VISA' },
@@ -19,28 +27,84 @@ function FormularioCompra({ carrito, total, onClose }) {
 
   const aplicarVoucher = () => {
     console.log('Voucher aplicado:', voucher);
-    // aquí iría la lógica para aplicar el descuento
   };
 
   const manejarPago = (e) => {
     e.preventDefault();
+    
     if (!metodoPago) {
       alert('Por favor seleccione un método de pago');
       return;
     }
 
-    const pago = {
-      items: carrito,
-      total,
-      voucher,
-      lugarEnvio,
-      tarjeta: { cardNombre, cardNumero, cardFecha, cardCVV },
-      metodoPago,
-    };
+    if (carrito.length === 0) {
+      alert('El carrito está vacío');
+      return;
+    }
 
-    console.log('Procesar pago:', pago);
-    alert('Pago procesado con éxito ✅');
-    onClose(); // Usamos la función del padre para cerrar
+    setProcesando(true);
+
+    // Variable para guardar el ID del carrito
+    let carritoIdUsado;
+
+    // 1. Crear carrito
+    axios.post('http://localhost:5000/api/carritos', { id_usuario: usuarioId })
+      .then((responseCarrito) => {
+        carritoIdUsado = responseCarrito.data.id_carrito;
+        console.log('Carrito creado ID:', carritoIdUsado);
+        
+        // 2. Crear pago
+        const datosPago = {
+          id_carrito: carritoIdUsado,
+          monto: parseFloat(total).toFixed(2),
+          metodo: metodoPago
+        };
+
+        return axios.post('http://localhost:5000/api/pagos', datosPago);
+      })
+      .then((responsePago) => {
+        console.log('Pago creado ID:', responsePago.data.id_pago);
+        
+        // 3. Registrar productos
+        const promesasProductos = carrito.map((producto) => {
+          const datosProducto = {
+            id_carrito: carritoIdUsado,
+            id_producto: producto.id,
+            cantidad: producto.cantidad || 1,
+            precio_unitario: parseFloat(producto.precio).toFixed(2)
+          };
+          
+          return axios.post('http://localhost:5000/api/compras', datosProducto);
+        });
+
+        return Promise.all(promesasProductos);
+      })
+      .then((resultados) => {
+        console.log('Compra completada. Productos:', resultados.length);
+        
+        alert('Pago exitoso\nLa compra ha sido registrada.');
+        
+        localStorage.removeItem('carrito');
+        
+        onClose();
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+        
+        setProcesando(false);
+      })
+      .catch((error) => {
+        console.error('Error en compra:', error);
+        
+        let mensajeError = 'Error en el pago';
+        if (error.response && error.response.data && error.response.data.error) {
+          mensajeError += ': ' + error.response.data.error;
+        }
+        
+        alert(mensajeError);
+        setProcesando(false);
+      });
   };
 
   return (
@@ -54,11 +118,13 @@ function FormularioCompra({ carrito, total, onClose }) {
               placeholder="Código del vale"
               value={voucher}
               onChange={(e) => setVoucher(e.target.value)}
+              disabled={procesando}
             />
             <button
               type="button"
               className="btn-aplicar"
               onClick={aplicarVoucher}
+              disabled={procesando}
             >
               Aplicar
             </button>
@@ -71,6 +137,8 @@ function FormularioCompra({ carrito, total, onClose }) {
               placeholder="Lugar del envío"
               value={lugarEnvio}
               onChange={(e) => setLugarEnvio(e.target.value)}
+              required
+              disabled={procesando}
             />
           </div>
 
@@ -83,6 +151,7 @@ function FormularioCompra({ carrito, total, onClose }) {
                   value={medio.id}
                   checked={metodoPago === medio.id}
                   onChange={(e) => setMetodoPago(e.target.value)}
+                  disabled={procesando}
                 />
                 <span className="pago-icon">{medio.nombre}</span>
               </label>
@@ -97,6 +166,7 @@ function FormularioCompra({ carrito, total, onClose }) {
             value={cardNombre}
             onChange={(e) => setCardNombre(e.target.value)}
             required
+            disabled={procesando}
           />
 
           <label className="label">Número de tarjeta</label>
@@ -107,6 +177,7 @@ function FormularioCompra({ carrito, total, onClose }) {
             value={cardNumero}
             onChange={(e) => setCardNumero(e.target.value)}
             required
+            disabled={procesando}
           />
 
           <div className="fila-pequena">
@@ -119,6 +190,7 @@ function FormularioCompra({ carrito, total, onClose }) {
                 value={cardFecha}
                 onChange={(e) => setCardFecha(e.target.value)}
                 required
+                disabled={procesando}
               />
             </div>
 
@@ -131,21 +203,33 @@ function FormularioCompra({ carrito, total, onClose }) {
                 value={cardCVV}
                 onChange={(e) => setCardCVV(e.target.value)}
                 required
+                disabled={procesando}
               />
             </div>
           </div>
 
           <div className="resumen-pago">
-            <button type="submit" className="btn-confirmar-pago">
-              <span>${total}</span>
-              <span>Pagar</span>
+            <button 
+              type="submit" 
+              className="btn-confirmar-pago"
+              disabled={procesando}
+            >
+              {procesando ? (
+                <span>Procesando...</span>
+              ) : (
+                <>
+                  <span>${total}</span>
+                  <span>Pagar</span>
+                </>
+              )}
             </button>
           </div>
 
           <button
             type="button"
             className="btn-cancelar"
-            onClick={onClose} // Usamos la función del padre para cerrar
+            onClick={onClose}
+            disabled={procesando}
           >
             Cancelar
           </button>

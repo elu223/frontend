@@ -84,16 +84,6 @@
   border-radius: 8px;
 }
 
-/* Responsive para contenido */
-@media (max-width: 768px) {
-  .contenido-admin {
-    padding: 20px;
-  }
-  
-  .cuadricula-estadisticas {
-    grid-template-columns: 1fr;
-  }
-}
 /* Estilos para listado activo */
 .seccion-listados-activa {
   background: white;
@@ -124,29 +114,37 @@
   font-size: 1.5rem;
 }
 
+.cabecera-listado h3 {
+  color: #6A1452;
+  margin: 0;
+  font-size: 1.3rem;
+}
+
 .btn-cerrar-listado {
-  background: #dc3545;
-  color: white;
-  border: none;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #666;
   padding: 8px 15px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
 }
 
 .btn-cerrar-listado:hover {
-  background: #c82333;
+  background: #6A1452;
+  color: white;
+  border-color: #6A1452;
 }
 
 /* Tabla de ventas */
-.tabla-ventas {
+.tabla-listado {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
 }
 
-.tabla-ventas th {
+.tabla-listado th {
   background-color: #6A1452;
   color: white;
   padding: 12px 15px;
@@ -154,37 +152,43 @@
   font-weight: 600;
 }
 
-.tabla-ventas td {
+.tabla-listado td {
   padding: 10px 15px;
   border-bottom: 1px solid #eee;
 }
 
-.tabla-ventas tr:hover {
+.tabla-listado tr:hover {
   background-color: #f9f0ff;
 }
 
-/* Estados de venta */
-.estado-venta {
+/* Contenedor de tabla para responsive */
+.tabla-contenedor {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+/* Estados de pago */
+.estado-pago {
   padding: 5px 10px;
   border-radius: 15px;
   font-size: 0.8rem;
   font-weight: 500;
+  display: inline-block;
 }
 
-.estado-venta.pagado,
-.estado-venta.entregado {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.estado-venta.pendiente {
+.estado-pago.pendiente {
   background-color: #fff3cd;
   color: #856404;
 }
 
-.estado-venta.enviado {
-  background-color: #cce5ff;
-  color: #004085;
+.estado-pago.aprobado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.estado-pago.rechazado {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 /* Cargando */
@@ -213,26 +217,210 @@
   border-top: 1px solid #eee;
 }
 
-/* Instrucciones */
-.instrucciones {
+/* Contenido del listado */
+.contenido-listado {
   margin-top: 20px;
-  text-align: left;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+}
+/* Estilos para acciones */
+.acciones-td {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
 }
 
-.instrucciones p {
-  margin: 10px 0;
-  padding: 10px;
-  background: #f9f9f9;
-  border-radius: 5px;
-  border-left: 3px solid #6A1452;
+.btn-editar, .btn-eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Responsive para tabla */
+.btn-editar img{
+  width: 29px;
+  height: 29px;
+  object-fit: contain;
+}
+
+.btn-eliminar img{
+  width: 29px;
+  height: 29px;
+  object-fit: contain;
+}
+
+.btn-editar:hover {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.btn-eliminar:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Estados de pago */
+.estado-pago {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.estado-pago.pendiente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.estado-pago.aprobado {
+  background: #d4edda;
+  color: #155724;
+}
+
+.estado-pago.rechazado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Modal overlay */
+.overlay-formulario {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-formulario {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-formulario h3 {
+  color: #6A1452;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-formulario p {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+/* Input group para modal */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-weight: 500;
+}
+
+.input-group select,
+.input-group input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.select-estado {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Botones formulario */
+.botones-formulario {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn-confirmar {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.btn-confirmar:hover {
+  background: #218838;
+}
+
+.btn-cancelar {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.btn-cancelar:hover {
+  background: #5a6268;
+}
+
+/* Responsive para tabla con acciones */
 @media (max-width: 768px) {
-  .tabla-ventas {
+  .acciones-td {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .modal-formulario {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .botones-formulario {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-confirmar,
+  .btn-cancelar {
+    width: 100%;
+  }
+}
+
+/* Responsive para contenido */
+@media (max-width: 768px) {
+  .contenido-admin {
+    padding: 20px;
+  }
+  
+  .cuadricula-estadisticas {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabla-listado {
     display: block;
     overflow-x: auto;
   }
@@ -247,5 +435,14 @@
     flex-direction: column;
     gap: 10px;
     align-items: flex-start;
+  }
+  
+  .seccion-listados-activa,
+  .seccion-listados {
+    padding: 15px;
+  }
+  
+  .tarjeta-estadistica {
+    padding: 20px;
   }
 }
