@@ -143,7 +143,7 @@
   background: #b50e6a;
 }
 
-/* COLUMNA DERECHA - CONTENIDO PRINCIPAL */
+/* columna derecha */
 .columna-derecha {
   display: flex;
   flex-direction: column;

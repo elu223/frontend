@@ -1,14 +1,15 @@
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import {productos}  from '../../data/productos.js';
 import './Header-Menu.css';
+import axios from 'axios';
 
 function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const [terminoLocal, setTerminoLocal] = useState(searchTerm);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [sugerencias, setSugerencias] = useState([]);
   const [user, setUser] = useState(null);
+  const [productos, setProductos] = useState([]);
   const [, setLocation] = useLocation();
 
   // Cargar usuario desde localStorage
@@ -17,7 +18,20 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+    
+    // Cargar productos desde API para la búsqueda
+    cargarProductos();
   }, []);
+
+  const cargarProductos = () => {
+    axios.get('http://localhost:5000/api/productos')
+      .then((response) => {
+        setProductos(response.data);
+      })
+      .catch((error) => {
+        console.error('Error al cargar productos para búsqueda:', error);
+      });
+  };
 
   // Escuchar cambios en localStorage
   useEffect(() => {
@@ -51,7 +65,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const manejarBusqueda = (valor) => {
     setTerminoLocal(valor);
     
-    if (valor.length > 0) {
+    if (valor.length > 0 && productos.length > 0) {
       const sugerenciasFiltradas = productos.filter(producto =>
         producto.nombre.toLowerCase().includes(valor.toLowerCase())
       ).slice(0, 5);
@@ -68,7 +82,17 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
       if (sugerencias.length > 0) {
         seleccionarSugerencia(sugerencias[0]);
       } else {
-        setLocation(`/buscar/${terminoLocal}`);
+        // Buscar en todos los productos si no hay sugerencias visibles
+        const productoEncontrado = productos.find(producto =>
+          producto.nombre.toLowerCase().includes(terminoLocal.toLowerCase())
+        );
+        
+        if (productoEncontrado) {
+          setLocation(`/producto/${productoEncontrado.id_producto}`);
+        } else {
+          // Si no encuentra nada, redirigir a página de búsqueda
+          setLocation(`/buscar?search=${terminoLocal}`);
+        }
       }
     }
     setMostrarSugerencias(false);
@@ -87,7 +111,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const seleccionarSugerencia = (producto) => {
     setTerminoLocal(producto.nombre);
     setMostrarSugerencias(false);
-    setLocation(`/producto/${producto.id}`);
+    setLocation(`/producto/${producto.id_producto}`);
   };
 
   // Cerrar sugerencias
@@ -124,7 +148,11 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
             value={terminoLocal}
             onChange={(e) => manejarBusqueda(e.target.value)}
             onKeyDown={manejarTecla}
-            onFocus={() => terminoLocal.length > 0 && setMostrarSugerencias(true)}
+            onFocus={() => {
+              if (terminoLocal.length > 0 && productos.length > 0) {
+                setMostrarSugerencias(true);
+              }
+            }}
             onBlur={cerrarSugerencias}
             className="buscador-input"
           />
@@ -136,20 +164,23 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
               {sugerencias.length > 0 ? (
                 sugerencias.map((producto) => (
                   <div 
-                    key={producto.id} 
+                    key={producto.id_producto} 
                     className="sugerencia-item"
                     onClick={() => seleccionarSugerencia(producto)}
                   >
                     <div className="sugerencia-info">
                       <div className="sugerencia-nombre">{producto.nombre}</div>
+                      {producto.precio && (
+                        <div className="sugerencia-precio">${parseInt(producto.precio).toLocaleString()}</div>
+                      )}
                     </div>
                   </div>
                 ))
-              ) : (
+              ) : terminoLocal.length > 0 ? (
                 <div className="sin-resultados">
                   No encontramos productos para "{terminoLocal}"
                 </div>
-              )}
+              ) : null}
             </div>
           )}
         </div>

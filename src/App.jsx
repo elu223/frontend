@@ -50,22 +50,6 @@ function App() {
 
   const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
 
-  // Función para renderizar contenido del admin
-  const renderContenidoAdmin = () => {
-    if (seccionAdminActiva === 'productos') {
-      return <ProductosAdmin />;
-    }
-    if (seccionAdminActiva === 'usuarios') {
-      return <AdminUsuarios/>;
-    }
-    if (seccionAdminActiva === 'compras') {
-      return <ComprasAdmin />;
-    }
-    if (seccionAdminActiva === 'envios') {
-      return <EnviosPendiente />;
-    }
-  };
-
   return (
     <div className="App">
       <Switch>
@@ -92,7 +76,15 @@ function App() {
         </Route>
         <Route path="/registrarse">
           <Registro />
-       </Route>       
+       </Route>
+       
+       {/* Añadir esta ruta para búsqueda */}
+       <Route path="/buscar">
+         <VistaProductos 
+           agregarAlCarrito={agregarAlCarrito} 
+           totalItems={totalItems}
+         />
+       </Route>
 
         {/* Rutas de admin */}
          <Route path="/admin">
@@ -125,7 +117,6 @@ function App() {
         </Route>
       </Switch>
     </div>
-
   );
 }
 

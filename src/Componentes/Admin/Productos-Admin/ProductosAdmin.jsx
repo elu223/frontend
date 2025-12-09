@@ -15,9 +15,10 @@ function ProductosAdmin() {
     nombre: '',
     descripcion: '',
     precio: '',
-    stock: '',
-    imagen_url: ''
+    stock: ''
   });
+  const [imagen, setImagen] = useState(null);
+  const API_URL = 'http://localhost:5000';
 
   useEffect(() => {
     cargarProductos();
@@ -37,7 +38,6 @@ function ProductosAdmin() {
       });
   };
 
-  // filtro de búsqueda
   const productosFiltrados = productos.filter((producto) =>
     producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -48,9 +48,9 @@ function ProductosAdmin() {
       nombre: '',
       descripcion: '',
       precio: '',
-      stock: '',
-      imagen_url: ''
+      stock: ''
     });
+    setImagen(null);
     setMostrarModal(true);
   };
 
@@ -60,9 +60,9 @@ function ProductosAdmin() {
       nombre: producto.nombre,
       descripcion: producto.descripcion || '',
       precio: producto.precio,
-      stock: producto.stock,
-      imagen_url: producto.imagen_url || ''
+      stock: producto.stock
     });
+    setImagen(null);
     setMostrarModal(true);
   };
 
@@ -78,39 +78,52 @@ function ProductosAdmin() {
     });
   };
 
+  const manejarArchivo = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImagen(e.target.files[0]);
+    }
+  };
+
   const enviarFormulario = (e) => {
     e.preventDefault();
     
-    const datos = {
-      nombre: formData.nombre,
-      descripcion: formData.descripcion,
-      precio: parseInt(formData.precio),
-      stock: parseInt(formData.stock),
-      imagen_url: formData.imagen_url
-    };
+    const datos = new FormData();
+    datos.append('nombre', formData.nombre);
+    datos.append('descripcion', formData.descripcion);
+    datos.append('precio', formData.precio);
+    datos.append('stock', formData.stock);
+    
+    if (imagen) {
+      datos.append('imagen', imagen);
+    }
 
     if (productoEditando) {
       axios.put(`/api/productos/${productoEditando.id_producto}`, datos)
-        .then(() => {
-          alert('Producto actualizado correctamente');
-          cerrarModal();
-          cargarProductos();
-        })
-        .catch((error) => {
-          console.error('Error al actualizar producto:', error);
-          alert('Error al actualizar el producto');
-        });
+      .then(() => {
+        alert('Producto actualizado correctamente');
+        cerrarModal();
+        cargarProductos();
+      })
+      .catch((error) => {
+        console.error('Error al actualizar producto:', error);
+        alert('Error al actualizar el producto');
+      });
     } else {
+      if (!imagen) {
+        alert('Debe seleccionar una imagen para el producto');
+        return;
+      }
+      
       axios.post('/api/productos', datos)
-        .then(() => {
-          alert('Producto agregado correctamente');
-          cerrarModal();
-          cargarProductos();
-        })
-        .catch((error) => {
-          console.error('Error al agregar producto:', error);
-          alert('Error al agregar el producto');
-        });
+      .then(() => {
+        alert('Producto agregado correctamente');
+        cerrarModal();
+        cargarProductos();
+      })
+      .catch((error) => {
+        console.error('Error al agregar producto:', error);
+        alert('Error al agregar el producto');
+      });
     }
   };
 
@@ -155,12 +168,10 @@ function ProductosAdmin() {
 
   return (
     <div className="contenido-admin">
-      {/* título solo */}
       <div className="header-productos">
         <h1 className="titulo-principal">Productos</h1>
       </div>
 
-      {/* buscador y botón juntos */}
       <div className="acciones-superiores">
         <input
           type="text"
@@ -181,6 +192,7 @@ function ProductosAdmin() {
             <tr>
               <th>ID</th>
               <th>Nombre</th>
+              <th>Imagen</th>
               <th>Precio</th>
               <th>Stock</th>
               <th>Estado</th>
@@ -192,6 +204,20 @@ function ProductosAdmin() {
               <tr key={producto.id_producto} className={Number(producto.stock) === 0 ? 'agotado' : ''}>
                 <td>{producto.id_producto}</td>
                 <td className="nombre-producto">{producto.nombre}</td>
+                <td className="imagen-producto">
+                  {producto.imagen_url ? (
+                    <img 
+                      src={`http://localhost:5000${producto.imagen_url}`} 
+                      alt={producto.nombre}
+                      className="imagen-miniatura"
+                      onError={(e) => {
+                        e.target.src = '/img/default.jpg';
+                      }}
+                    />
+                  ) : (
+                    <div className="sin-imagen">Sin imagen</div>
+                  )}
+                </td>
                 <td className="precio">{formatearPrecio(producto.precio)}</td>
                 <td className={`cantidad ${Number(producto.stock) === 0 ? 'stock-cero' : ''}`}>
                   {Number(producto.stock) % 1 === 0 ? 
@@ -296,14 +322,14 @@ function ProductosAdmin() {
               </div>
               
               <div className="input-group">
-                <label>URL de Imagen:</label>
+                <label>Imagen del Producto:</label>
                 <input
-                  type="text"
-                  name="imagen_url"
-                  value={formData.imagen_url}
-                  onChange={manejarCambio}
-                  placeholder="img/nombre-imagen.jpg"
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={manejarArchivo}
+                  required={!productoEditando}
                 />
+                <small>Solo se permiten imágenes JPG, JPEG, PNG</small>
               </div>
               
               <div className="botones-formulario">

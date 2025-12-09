@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
 import HeaderMenu from "../Header/Header-Menu.jsx";
-import { productos } from '../../data/productos';
 import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import './VistaProductoDetalle.css';
 import Footer from "../Footer/Footer.jsx";
+import axios from 'axios';
 
 function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const [match, params] = useRoute("/producto/:id");
@@ -15,10 +15,92 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const [comentariosLocales, setComentariosLocales] = useState([]);
   const [mostrarFormularioCompra, setMostrarFormularioCompra] = useState(false);
   const [carritoCompraRapida, setCarritoCompraRapida] = useState([]);
+  const [producto, setProducto] = useState(null);
+  const [productosRelacionados, setProductosRelacionados] = useState([]);
+  const [cargando, setCargando] = useState(true);
 
-  const producto = productos.find(p => p.id === params?.id);
+  // Obtener producto desde la API
+  useEffect(() => {
+    if (params?.id) {
+      cargarProducto();
+    }
+  }, [params?.id]);
 
-  //validación si el producto no existe
+  const cargarProducto = () => {
+    setCargando(true);
+    
+    // Primero obtener el producto específico
+    axios.get(`http://localhost:5000/api/productos/${params.id}`)
+      .then((response) => {
+        setProducto(response.data);
+        
+        // Luego obtener todos los productos para mostrar relacionados
+        axios.get('http://localhost:5000/api/productos')
+          .then((responseAll) => {
+            // Filtrar productos relacionados (excluyendo el actual)
+            const relacionados = responseAll.data
+              .filter(p => p.id_producto !== response.data.id_producto)
+              .slice(0, 6);
+            setProductosRelacionados(relacionados);
+            setCargando(false);
+          })
+          .catch((error) => {
+            console.error('Error al cargar productos relacionados:', error);
+            setCargando(false);
+          });
+      })
+      .catch((error) => {
+        console.error('Error al cargar producto:', error);
+        setCargando(false);
+      });
+  };
+
+  const renderStars = (rating) => {
+    return [...Array(5)].map((_, index) => (
+      <FaStar
+        key={index}
+        className={index < rating ? "star filled" : "star"}
+        color={index < rating ? "#ffc107" : "#e4e5e9"}
+        size={20}
+      />
+    ));
+  };
+
+  const comentarios = [
+    {
+      usuario: "AnaMaria87",
+      texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
+      puntuacion: 5,
+    },
+    { 
+      usuario: "Juanito124", 
+      texto: "No fue lo que esperaba. creí que era mas grande", 
+      puntuacion: 5,
+    },
+    { 
+      usuario: "User0001", 
+      texto: "Me en cantaron los colores :3", 
+      puntuacion: 5,
+    }
+  ];
+
+  // Si está cargando
+  if (cargando) {
+    return (
+      <div className="vista-producto-detalle">
+        <HeaderMenu totalItems={totalItems} />
+        <main className="main-content">
+          <div className="container">
+            <div style={{ textAlign: 'center', padding: '4rem' }}>
+              <div className="cargando-detalle">Cargando producto...</div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Si el producto no existe
   if (!producto) {  
     return (
       <div className="vista-producto-detalle">
@@ -38,40 +120,6 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
     );
   }
 
-  // Productos relacionados (excluyendo el actual)
-  const productosRelacionados = productos
-    .filter(p => p.id !== producto.id)
-    .slice(0, 6);
-
-  const renderStars = (rating) => {
-    return [...Array(5)].map((_, index) => (
-      <FaStar
-        key={index}
-        className={index < rating ? "star filled" : "star"}
-        color={index < rating ? "#ffc107" : "#e4e5e9"}
-        size={20}
-      />
-    ));
-  };
-
-  const comentarios = [
-    { 
-      usuario: "TuchakalitalwU", 
-      texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "Juanito124_owo", 
-      texto: "No fue lo que esperaba. creí que era mas grande", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "User0001", 
-      texto: "Me en cantaron los colores :3", 
-      puntuacion: 5,
-    }
-  ];
-
   return (
     <div className="vista-producto-detalle">
       <HeaderMenu totalItems={totalItems} />
@@ -86,12 +134,12 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                 <h3>Productos Relacionados</h3>
                 <div className="grid-productos">
                   {productosRelacionados.map(prod => (
-                    <div key={prod.id} className="producto-miniatura">
-                      <Link href={`/producto/${prod.id}`}>
-                        <img src={prod.imagen} alt={prod.nombre} className="imagen-miniatura" />
+                    <div key={prod.id_producto} className="producto-miniatura">
+                      <Link href={`/producto/${prod.id_producto}`}>
+                        <img src={`http://localhost:5000${prod.imagen_url}`} alt={prod.nombre} className="imagen-miniatura" />
                       </Link>
-                      <div className="precio-miniatura">${prod.precio.toLocaleString()}</div>
-                      <Link href={`/producto/${prod.id}`}>
+                      <div className="precio-miniatura">${parseInt(prod.precio).toLocaleString()}</div>
+                      <Link href={`/producto/${prod.id_producto}`}>
                         <button className="btn-miniatura">Ver Detalles</button>
                       </Link>
                     </div>
@@ -107,7 +155,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                 
                 {/* Imagen Principal */}
                 <div className="contenedor-imagen-principal">
-                  <img src={producto.imagen} alt={producto.nombre} className="imagen-principal" />
+                  <img src={`http://localhost:5000${producto.imagen_url}`} alt={producto.nombre} className="imagen-principal" />
                 </div>
                 
                 <div className="contenedor-derecho">
@@ -117,19 +165,20 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                     <h1 className="titulo-producto">{producto.nombre}</h1>
                     
                     <div className="rating-producto">
-                      <span className="estrellas">{renderStars(producto.rating || 0)}</span>
+                      <span className="estrellas">{renderStars(4.5)}</span>
                       <span>({producto.reviews || 0} reseñas)</span>
                     </div>
                     
-                    <div className="precio-producto">${producto.precio.toLocaleString()}</div>
-
+                    <div className="precio-producto">${parseInt(producto.precio).toLocaleString()}</div>
+                      
                     <div className="botones-producto">
                       <button 
                         className="btn-anadir-carrito" 
                         onClick={() => agregarAlCarrito({
                           ...producto, 
+                          id: producto.id_producto,
                           cantidad: cantidad,
-                          img: producto.imagen // ← AGREGAR ESTO PARA QUE SE VEA LA IMAGEN EN CARRITO
+                          img: producto.imagen_url
                         })}
                       >
                         Añadir al carrito
@@ -139,8 +188,9 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                         onClick={() => {
                           const productoConCantidad = {
                             ...producto,
+                            id: producto.id_producto,
                             cantidad: cantidad,
-                            img: producto.imagen // ← AGREGAR ESTO TAMBIÉN
+                            img: producto.imagen_url
                           };
                           setCarritoCompraRapida([productoConCantidad]);
                           setMostrarFormularioCompra(true);
@@ -160,9 +210,12 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                   <div className="info-producto-detalle">
                     <h3>Características del Producto</h3>
                     <ul>
-                      {(producto.caracteristicas || []).map((caracteristica, index) => (
-                        <li key={index}>{caracteristica}</li>
-                      ))}
+                      {producto.descripcion && (
+                        <li>{producto.descripcion}</li>
+                      )}
+                      <li>Producto de alta calidad</li>
+                      <li>Materiales premium</li>
+                      <li>Hecho a mano</li>
                     </ul>
                   </div>
 
@@ -248,3 +301,4 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
 }
 
 export default VistaProductoDetalle;
+
