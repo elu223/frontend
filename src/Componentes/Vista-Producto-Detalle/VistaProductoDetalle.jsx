@@ -6,6 +6,8 @@ import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import './VistaProductoDetalle.css';
 import Footer from "../Footer/Footer.jsx";
 import axios from 'axios';
+import { useAuth } from '../../auth/AuthProvider';
+import { useLocation } from 'wouter';
 
 function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const [match, params] = useRoute("/producto/:id");
@@ -18,6 +20,8 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const [producto, setProducto] = useState(null);
   const [productosRelacionados, setProductosRelacionados] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
 
   // Obtener producto desde la API
   useEffect(() => {
@@ -174,18 +178,30 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                     <div className="botones-producto">
                       <button 
                         className="btn-anadir-carrito" 
-                        onClick={() => agregarAlCarrito({
-                          ...producto, 
-                          id: producto.id_producto,
-                          cantidad: cantidad,
-                          img: producto.imagen_url
-                        })}
+                        onClick={() => {
+                          if (!user) {
+                            setLocation('/iniciar-sesion');
+                            return;
+                          }
+
+                          agregarAlCarrito({
+                            ...producto, 
+                            id: producto.id_producto,
+                            cantidad: cantidad,
+                            img: producto.imagen_url
+                          });
+                        }}
                       >
                         Añadir al carrito
                       </button>
                       <button 
                         className="btn-comprar-ahora"
                         onClick={() => {
+                          if (!user) {
+                            setLocation('/iniciar-sesion');
+                            return;
+                          }
+
                           const productoConCantidad = {
                             ...producto,
                             id: producto.id_producto,
@@ -250,9 +266,14 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                   <button 
                     className="btn-enviar-comentario"
                     onClick={() => {
+                      if (!user) {
+                        setLocation('/iniciar-sesion');
+                        return;
+                      }
+
                       if (comentario.trim() && rating > 0) {
                         const nuevoComentario = {
-                          usuario: "Usuario Actual",
+                          usuario: user.nombre || "Usuario Actual",
                           texto: comentario,
                           puntuacion: rating
                         };

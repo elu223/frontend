@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'wouter';
+import { AuthProvider } from './auth/AuthProvider';
+import ProtectedRoute from './components/ProtectedRoute';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 import VistaProductoDetalle from './Componentes/Vista-Producto-Detalle/VistaProductoDetalle';
@@ -51,8 +53,9 @@ function App() {
   const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
 
   return (
-    <div className="App">
-      <Switch>
+    <AuthProvider>
+      <div className="App">
+        <Switch>
         <Route path="/">
           <VistaProductos 
             agregarAlCarrito={agregarAlCarrito} 
@@ -86,37 +89,41 @@ function App() {
          />
        </Route>
 
-        {/* Rutas de admin */}
-         <Route path="/admin">
+        {/* Rutas de admin protegidas */}
+        <ProtectedRoute path="/admin" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <ProductosAdmin />
           </div>
-        </Route>
-        
-        {/* Otras rutas de admin */}        
-        <Route path="/admin/usuarios">
+        </ProtectedRoute>
+
+        <ProtectedRoute path="/admin/usuarios" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <AdminUsuarios />
           </div>
-        </Route>
-        
-        <Route path="/admin/compras">
+        </ProtectedRoute>
+
+        <ProtectedRoute path="/admin/compras" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <ComprasAdmin />
           </div>
-        </Route>
-        
-        <Route path="/admin/envios">
+        </ProtectedRoute>
+
+        <ProtectedRoute path="/admin/envios" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <EnviosPendiente />
           </div>
+        </ProtectedRoute>
+
+        <Route path="/forbidden">
+          <div>Acceso no autorizado. No tienes permisos para ver esta página.</div>
         </Route>
       </Switch>
-    </div>
+      </div>
+    </AuthProvider>
   );
 }
 

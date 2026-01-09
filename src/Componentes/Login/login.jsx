@@ -4,6 +4,7 @@ import { useLocation } from 'wouter';
 import axios from 'axios';
 import './Login.css'; 
 import Footer from '../Footer/Footer.jsx';
+import { useAuth } from '../../auth/AuthProvider';
 
 // Configuración simple de axios
 axios.defaults.baseURL = 'http://localhost:5000';
@@ -14,6 +15,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [, setLocation] = useLocation();
+  const { loginWithToken } = useAuth();
 
   const iniciarSesion = (e) => {
     e.preventDefault();
@@ -25,25 +27,29 @@ function Login() {
     })
     .then((response) => {
       const data = response.data;
-      
-      const userData = {
-        token: data.token,
-        name: data.usuario.nombre,   
-        apellido: data.usuario.apellido, 
-        email: data.usuario.email, 
-        rol: data.usuario.id_rol   
+      const { token, usuario } = data;
+      const userPayload = {
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        email: usuario.email,
+        id_rol: usuario.id_rol,
+        id: usuario.id_usuario ?? usuario.id,
       };
-      
-      localStorage.setItem('user', JSON.stringify(userData));
-      window.dispatchEvent(new Event('storage'));
-      
+
+      // usar el contexto de auth para normalizar y guardar
+      if (typeof loginWithToken === 'function') {
+        loginWithToken({ token, user: userPayload });
+      } else {
+        localStorage.setItem('user', JSON.stringify({ ...userPayload, token }));
+      }
+
       // Redirigir según el rol
-      if (data.usuario.id_rol === 1) {
+      if (usuario.id_rol === 1) {
         setLocation('/admin');
       } else {
         setLocation('/');
       }
-      
+
       setLoading(false);
     })
     .catch((error) => {

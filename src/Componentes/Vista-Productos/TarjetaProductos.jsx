@@ -1,8 +1,10 @@
 import { useLocation } from "wouter";
 import './TarjetaProductos.css';
+import { useAuth } from '../../auth/AuthProvider';
 
 function TarjetaProducto({ id, nombre, precio, imagen, descripcion, agregarAlCarrito }) {
   const [location, setLocation] = useLocation();
+  const { user } = useAuth();
 
   const producto = { 
     id, 
@@ -16,6 +18,12 @@ function TarjetaProducto({ id, nombre, precio, imagen, descripcion, agregarAlCar
 
   const handleAgregarYRedirigir = (e) => {
     e.stopPropagation();
+    // verificar autenticación
+    if (!user) {
+      setLocation('/iniciar-sesion');
+      return;
+    }
+
     agregarAlCarrito(producto);
     setLocation("/carrito");
   };
