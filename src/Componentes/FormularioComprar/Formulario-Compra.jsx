@@ -82,15 +82,30 @@ function FormularioCompra({ carrito, total, onClose }) {
       .then((resultados) => {
         console.log('Compra completada. Productos:', resultados.length);
         
+        // IMPORTANTE: Ahora registrar la venta para actualizar stock
+        // Tomar el primer ID de compra_productos para la venta
+        const primeraCompraId = resultados[0].data.id_compra_productos;
+        
+        const datosVenta = {
+          id_compra_productos: primeraCompraId,
+          id_usuario: usuarioId
+        };
+        
+        // Llamar a /api/ventas que actualiza el stock
+        return axios.post('http://localhost:5000/api/ventas', datosVenta);
+      })
+      .then((responseVenta) => {
+        console.log('Venta registrada:', responseVenta.data);
+        
         alert('Pago exitoso\nLa compra ha sido registrada.');
         
-        localStorage.removeItem('carrito');
-        
+        // Cerrar formulario
         onClose();
         
+        // Recargar la página después de 1 segundo para ver cambios
         setTimeout(() => {
           window.location.reload();
-        }, 1500);
+        }, 1000);
         
         setProcesando(false);
       })
@@ -99,7 +114,7 @@ function FormularioCompra({ carrito, total, onClose }) {
         
         let mensajeError = 'Error en el pago';
         if (error.response && error.response.data && error.response.data.error) {
-          mensajeError += ': ' + error.response.data.error;
+          mensajeError = error.response.data.error;
         }
         
         alert(mensajeError);

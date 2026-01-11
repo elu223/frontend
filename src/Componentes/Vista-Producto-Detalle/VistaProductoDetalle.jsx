@@ -66,6 +66,111 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
     ));
   };
 
+  // Manejo de añadir al carrito con validación de stock
+  const handleAñadirCarrito = () => {
+    const stockActual = producto?.stock || 0;
+    const cantidadNumero = Number(cantidad) || 1;
+    
+    // Primera validación básica
+    if (stockActual <= 0) {
+      alert('No hay stock disponible');
+      return; 
+    }
+    
+    if (cantidadNumero <= 0) {
+      alert('La cantidad debe ser mayor a 0');
+      return;
+    }
+    
+    if (cantidadNumero > stockActual) {
+      alert(`Solo hay ${stockActual} unidad(es) disponibles`);
+      return;
+    }
+    
+    // Para verificar stock real con backend
+    axios.get(`http://localhost:5000/api/productos/${producto.id_producto}`)
+      .then((response) => {
+        const stockVerificado = response.data.stock;
+        
+        // Validación FINAL con stock actualizado
+        if (cantidadNumero > stockVerificado) {
+          alert(`Stock actualizado: solo quedan ${stockVerificado} unidad(es) disponibles`);
+          setCantidad(Math.min(cantidadNumero, stockVerificado));
+          return;
+        }
+        
+        // Solo si pasa todas las validaciones, añadir al carrito
+        agregarAlCarrito({
+          ...producto,
+          id: producto.id_producto,
+          cantidad: cantidadNumero,
+          img: `http://localhost:5000${producto.imagen_url}`
+        });
+        
+        // Mostrar confirmación
+        alert(`${cantidadNumero} unidad(es) de "${producto.nombre}" añadidas al carrito`);
+        
+        // Actualizar stock localmente
+        const nuevoStockLocal = stockVerificado - cantidadNumero;
+        setProducto({
+          ...producto,
+          stock: nuevoStockLocal
+        });
+      })
+      .catch((error) => {
+        console.error('Error al verificar stock:', error);
+        alert('Error al verificar stock disponible');
+      });
+  };
+
+  // Manejo de compra rápida
+  const handleComprarAhora = () => {
+    const stockActual = producto?.stock || 0;
+    const cantidadNumero = Number(cantidad) || 1;
+    
+    // Validación básica
+    if (stockActual <= 0) {
+      alert('No hay stock disponible');
+      return;
+    }
+    
+    if (cantidadNumero <= 0) {
+      alert('La cantidad debe ser mayor a 0');
+      return;
+    }
+    
+    if (cantidadNumero > stockActual) {
+      alert(`Solo hay ${stockActual} unidad(es) disponibles`);
+      return;
+    }
+    
+    // Verificar stock real con backend
+    axios.get(`http://localhost:5000/api/productos/${producto.id_producto}`)
+      .then((response) => {
+        const stockVerificado = response.data.stock;
+        
+        if (cantidadNumero > stockVerificado) {
+          alert(`Stock actualizado: solo quedan ${stockVerificado} unidad(es) disponibles`);
+          setCantidad(Math.min(cantidadNumero, stockVerificado));
+          return;
+        }
+        
+        // Solo si hay stock suficiente, proceder
+        const productoConCantidad = {
+          ...producto,
+          id: producto.id_producto,
+          cantidad: cantidadNumero,
+          img: `http://localhost:5000${producto.imagen_url}`
+        };
+        setCarritoCompraRapida([productoConCantidad]);
+        setMostrarFormularioCompra(true);
+      })
+      .catch((error) => {
+        console.error('Error al verificar stock:', error);
+        alert('Error al verificar stock disponible');
+      });
+  };
+
   const comentarios = [
     {
       usuario: "AnaMaria87",
@@ -172,32 +277,59 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                     <div className="precio-producto">${parseInt(producto.precio).toLocaleString()}</div>
                       
                     <div className="botones-producto">
-                      <button 
-                        className="btn-anadir-carrito" 
-                        onClick={() => agregarAlCarrito({
-                          ...producto, 
-                          id: producto.id_producto,
-                          cantidad: cantidad,
-                          img: producto.imagen_url
-                        })}
-                      >
-                        Añadir al carrito
-                      </button>
-                      <button 
-                        className="btn-comprar-ahora"
-                        onClick={() => {
-                          const productoConCantidad = {
-                            ...producto,
-                            id: producto.id_producto,
-                            cantidad: cantidad,
-                            img: producto.imagen_url
-                          };
-                          setCarritoCompraRapida([productoConCantidad]);
-                          setMostrarFormularioCompra(true);
-                        }}
-                      >
-                        Comprar ahora
-                      </button>
+                      <div className="selector-cantidad-detalle" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          Cantidad:
+                          <input
+                            type="number"
+                            min="1"
+                            max={producto.stock || 1}
+                            value={cantidad}
+                            onChange={(e) => {
+                              const val = Number(e.target.value) || 1;
+                              const limite = producto.stock || 0;
+                              
+                              // Si el usuario escribe más del stock
+                              if (val > limite && limite > 0) {
+                                alert(`Solo hay ${limite} disponibles`);
+                                setCantidad(limite);
+                              } 
+                              // Si escribe menos de 1
+                              else if (val < 1) {
+                                setCantidad(1);
+                              }
+                              // Si es válido
+                              else {
+                                setCantidad(val);
+                              }
+                            }}
+                            className="select-cantidad"
+                            style={{ width: '80px' }}
+                          />
+                        </label>
+
+                        <div style={{ fontWeight: 600 }}>
+                          Stock: {producto.stock || 0}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                        <button
+                          className="btn-anadir-carrito"
+                          onClick={handleAñadirCarrito}
+                          disabled={producto.stock === 0 || cantidad > (producto.stock || 0)}
+                        >
+                          Añadir al carrito
+                        </button>
+
+                        <button
+                          className="btn-comprar-ahora"
+                          onClick={handleComprarAhora}
+                          disabled={producto.stock === 0 || cantidad > (producto.stock || 0)}
+                        >
+                          Comprar ahora
+                        </button>
+                      </div>
                     </div>
 
                     <div className="stock-cantidad-detalle">
@@ -301,4 +433,3 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
 }
 
 export default VistaProductoDetalle;
-

@@ -209,7 +209,7 @@ function ProductosAdmin() {
                     <img 
                       src={`http://localhost:5000${producto.imagen_url}`} 
                       alt={producto.nombre}
-                      className="imagen-miniatura"
+                      className="imagen-miniatura admin-imagen-miniatura"
                       onError={(e) => {
                         e.target.src = '/img/default.jpg';
                       }}
@@ -267,7 +267,7 @@ function ProductosAdmin() {
         </div>
       </div>
 
-      {/* Modal para agregar/editar productos */}
+      {/* modal agregar editar productos */}
       {mostrarModal && (
         <div className="overlay-formulario">
           <div className="modal-formulario">

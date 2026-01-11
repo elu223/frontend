@@ -169,7 +169,7 @@ function Registro() {
           <div className="button-row">
             <button 
               type="submit" 
-              className="btn-confirmar"
+              className="confirmar-btn"
               disabled={loading}
             >
               {loading ? "Registrando..." : "Confirmar"}

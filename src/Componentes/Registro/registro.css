@@ -67,7 +67,6 @@
   color: #6A1452;
 }
 
-/* BOTONES IGUALES A LA IMAGEN */
 .button-row {
   margin-top: 2rem;
   display: flex;
@@ -75,12 +74,12 @@
   gap: 1rem;
 }
 
-.btn-confirmar,
+.confirmar-btn,
 .btn-login {
   background-color: #6A1452;
   color: white;
   padding: 0.7rem 1.5rem;
-  border-radius: 30px;
+  border-radius: 50px;
   text-decoration: none;
   border: none;
   font-size: 1rem;
