@@ -191,6 +191,9 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
             // USUARIO LOGUEADO
             <>
               <Link href="/miperfil" className="menu-opcion">
+                <span className="menu-texto">Mis compras</span>
+              </Link>
+              <Link href="/miperfil" className="menu-opcion">
                 <span className="menu-texto">Mi perfil</span>
               </Link>
               

@@ -18,16 +18,15 @@ function AdminUsuarios() {
     id_rol: ""
   });
 
-  // cargar usuarios
- const obtenerUsuarios =() =>{
-  axios.get("http://localhost:5000/usuarios")
-  .then((res)=>{
-    setUsuarios (res.data);
- })
-  .catch((error)=>{
-    console.log("Error obteniendo usuarios:", error)
-  })
-}
+  // CARGAR USUARIOS
+  const obtenerUsuarios = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/usuarios");
+      setUsuarios(res.data);
+    } catch (error) {
+      console.log("Error obteniendo usuarios:", error);
+    }
+  };
 
   useEffect(() => {
     obtenerUsuarios();
@@ -40,7 +39,7 @@ function AdminUsuarios() {
     });
   };
 
-  // abrir modal nuevo
+  // ABRIR MODAL NUEVO
   const abrirModalNuevo = () => {
     setUsuarioEditando(null);
     setFormData({
@@ -67,40 +66,37 @@ function AdminUsuarios() {
   // ENVIAR FORMULARIO
   const enviarFormulario = async (e) => {
     e.preventDefault();
-    if (usuarioEditando){
-      axios.put(`http://localhost:5000/usuarios/${usuarioEditando}`, formData)
-      .then(() =>{
-        obtenerUsuarios();
-        cerrarModal();
-      })
-      .catch((error)=>{
-        console.log("Error guardando usuarios:", error);
-      })
-    } else{
-      axios.post("http://localhost:5000/usuarios", formData)
-      .then(() =>{
-        obtenerUsuarios();
-        cerrarModal();
-      })
-      .catch((error)=>{
-        console.log("Error guardando usuarios:", error)
-      })
+
+    try {
+      if (usuarioEditando) {
+        await axios.put(
+          `http://localhost:5000/usuarios/${usuarioEditando}`,
+          formData
+        );
+      } else {
+        await axios.post("http://localhost:5000/usuarios", formData);
+      }
+
+      obtenerUsuarios();
+      cerrarModal();
+    } catch (error) {
+      console.log("Error guardando usuario:", error);
     }
   };
 
-  // eliminar usuario
+  // ELIMINAR
   const eliminarUsuario = async (id) => {
     if (!window.confirm("¿Seguro quieres eliminar este usuario?")) return;
-    axios.delete(`http://localhost:5000/usuarios/${id}`)
-      .then(() => {
-        obtenerUsuarios();
-      })
-      .catch((error) => {
-        console.log("Error eliminando usuario:", error);
-      });
-  }
 
-  // filtrar usuarios por búsqueda
+    try {
+      await axios.delete(`http://localhost:5000/usuarios/${id}`);
+      obtenerUsuarios();
+    } catch (error) {
+      console.log("Error eliminando usuario:", error);
+    }
+  };
+
+  // FILTRO
   const usuariosFiltrados = usuarios.filter((u) =>
     (u.nombre + " " + u.apellido).toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -148,12 +144,18 @@ function AdminUsuarios() {
               <td>{u.direccion}</td>
               <td>{u.id_rol}</td>
               <td className="acciones-td">
-                <button className="btn-editar" onClick={() => abrirModalEditar(u)}>
-                  <img src="/img/lapiz.png" alt="Editar" />
+                <button
+                  className="btn-editar"
+                  onClick={() => abrirModalEditar(u)}
+                >
+                  <img src="./img/lapiz.png" alt="" />
                 </button>
 
-                <button className="btn-eliminar" onClick={() => eliminarUsuario(u.id_usuario)}>
-                  <img src="/img/basura.png" alt="Eliminar" />
+                <button
+                  className="btn-eliminar"
+                  onClick={() => eliminarUsuario(u.id_usuario)}
+                >
+                  <img src="./img/basura.png" alt="" />
                 </button>
               </td>
             </tr>
@@ -161,7 +163,7 @@ function AdminUsuarios() {
         </tbody>
       </table>
 
-      {/* modal */}
+      {/* MODAL */}
       {mostrarModal && (
         <div className="overlay-formulario">
           <div className="modal-formulario">

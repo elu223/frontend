@@ -9,6 +9,7 @@ import MiPerfil from './Componentes/MiPerfil/Mi-Perfil';
 import Login from './Componentes/Login/login';
 import Registro from './Componentes/Registro/registro';
 import AdminPanel from './Componentes/Admin/AdminPanel';
+import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import ComprasAdmin from './Componentes/Admin/Compras-Admin/ComprasAdmin'; 
 import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import EnviosPendiente from './Componentes/Admin/Admin-Envios-Pendientes/EnvioPendiente';
@@ -51,6 +52,23 @@ function App() {
   };
 
   const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
+
+  // Función para renderizar contenido del admin
+  const renderContenidoAdmin = () => {
+    if (seccionAdminActiva === 'productos') {
+      return <ProductosAdmin />;
+    }
+    if (seccionAdminActiva === 'usuarios') {
+      return <AdminUsuarios/>
+    }
+    if (seccionAdminActiva === 'compras') {
+      return <ComprasAdmin />;
+    }
+    if (seccionAdminActiva === 'envios') {
+      return <EnviosPendiente />;
+    }
+    return <div>Contenido de productos...</div>;
+  };
 
   return (
     <AuthProvider>
