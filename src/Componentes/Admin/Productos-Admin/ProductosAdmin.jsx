@@ -15,7 +15,7 @@ function ProductosAdmin() {
     nombre: '',
     descripcion: '',
     precio: '',
-    stock: ''
+    stock: 0
   });
   const [imagen, setImagen] = useState(null);
   const API_URL = 'http://localhost:5000';
@@ -48,7 +48,7 @@ function ProductosAdmin() {
       nombre: '',
       descripcion: '',
       precio: '',
-      stock: ''
+      stock: 0
     });
     setImagen(null);
     setMostrarModal(true);
@@ -317,7 +317,7 @@ function ProductosAdmin() {
                   onChange={manejarCambio}
                   required
                   min="0"
-                  step="0.001"
+                  step="1"
                 />
               </div>
               

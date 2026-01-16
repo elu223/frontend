@@ -10,7 +10,7 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
   const [productosMostrados, setProductosMostrados] = useState([]);
   const [cargando, setCargando] = useState(true);
   
-  // Obtener productos desde la API
+  // obtener productos desde la api
   useEffect(() => {
     cargarProductos();
   }, []);
@@ -22,7 +22,7 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
         setProductosMostrados(response.data);
         setCargando(false);
         
-        // Leer parámetro de búsqueda de la URL
+        // leer parámetro de búsqueda de la url
         const urlParams = new URLSearchParams(window.location.search);
         const searchParam = urlParams.get('search');
         if (searchParam) {
@@ -42,10 +42,10 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
   const ejecutarBusqueda = (termino) => {
     setTerminoBusqueda(termino);
     if (termino.trim() === '') {
-      // Recargar todos los productos
+      // recargar todos los productos
       cargarProductos();
     } else {
-      // Filtrar productos
+      // filtrar productos
       const filtrados = productosMostrados.filter(producto =>
         producto.nombre.toLowerCase().includes(termino.toLowerCase())
       );

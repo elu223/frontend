@@ -19,7 +19,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const [productosRelacionados, setProductosRelacionados] = useState([]);
   const [cargando, setCargando] = useState(true);
 
-  // Obtener producto desde la API
+  // obtener producto desde la api
   useEffect(() => {
     if (params?.id) {
       cargarProducto();
@@ -29,15 +29,15 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const cargarProducto = () => {
     setCargando(true);
     
-    // Primero obtener el producto específico
+    // obtener producto específico
     axios.get(`http://localhost:5000/api/productos/${params.id}`)
       .then((response) => {
         setProducto(response.data);
         
-        // Luego obtener todos los productos para mostrar relacionados
+        // obtener productos relacionados
         axios.get('http://localhost:5000/api/productos')
           .then((responseAll) => {
-            // Filtrar productos relacionados (excluyendo el actual)
+            // filtrar relacionados (excluir actual)
             const relacionados = responseAll.data
               .filter(p => p.id_producto !== response.data.id_producto)
               .slice(0, 6);
@@ -66,12 +66,12 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
     ));
   };
 
-  // Manejo de añadir al carrito con validación de stock
+  // añadir al carrito: valida stock, no actualiza bd
   const handleAñadirCarrito = () => {
     const stockActual = producto?.stock || 0;
     const cantidadNumero = Number(cantidad) || 1;
     
-    // Primera validación básica
+    // validaciones básicas
     if (stockActual <= 0) {
       alert('No hay stock disponible');
       return; 
@@ -87,19 +87,20 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
       return;
     }
     
-    // Para verificar stock real con backend
+    // verificar stock en backend
     axios.get(`http://localhost:5000/api/productos/${producto.id_producto}`)
       .then((response) => {
         const stockVerificado = response.data.stock;
         
-        // Validación FINAL con stock actualizado
+        // validar con stock actualizado
         if (cantidadNumero > stockVerificado) {
           alert(`Stock actualizado: solo quedan ${stockVerificado} unidad(es) disponibles`);
           setCantidad(Math.min(cantidadNumero, stockVerificado));
           return;
         }
         
-        // Solo si pasa todas las validaciones, añadir al carrito
+        // añadir solo al carrito local
+        // no actualizar bd aquí
         agregarAlCarrito({
           ...producto,
           id: producto.id_producto,
@@ -107,15 +108,8 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
           img: `http://localhost:5000${producto.imagen_url}`
         });
         
-        // Mostrar confirmación
+        // mostrar confirmación
         alert(`${cantidadNumero} unidad(es) de "${producto.nombre}" añadidas al carrito`);
-        
-        // Actualizar stock localmente
-        const nuevoStockLocal = stockVerificado - cantidadNumero;
-        setProducto({
-          ...producto,
-          stock: nuevoStockLocal
-        });
       })
       .catch((error) => {
         console.error('Error al verificar stock:', error);
@@ -123,12 +117,12 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
       });
   };
 
-  // Manejo de compra rápida
+  // compra rápida
   const handleComprarAhora = () => {
     const stockActual = producto?.stock || 0;
     const cantidadNumero = Number(cantidad) || 1;
     
-    // Validación básica
+    // validación básica
     if (stockActual <= 0) {
       alert('No hay stock disponible');
       return;
@@ -144,7 +138,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
       return;
     }
     
-    // Verificar stock real con backend
+    // verificar stock en backend
     axios.get(`http://localhost:5000/api/productos/${producto.id_producto}`)
       .then((response) => {
         const stockVerificado = response.data.stock;
@@ -155,7 +149,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
           return;
         }
         
-        // Solo si hay stock suficiente, proceder
+        // proceder si hay stock suficiente
         const productoConCantidad = {
           ...producto,
           id: producto.id_producto,
@@ -189,7 +183,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
     }
   ];
 
-  // Si está cargando
+  // si está cargando
   if (cargando) {
     return (
       <div className="vista-producto-detalle">
@@ -205,7 +199,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
     );
   }
 
-  // Si el producto no existe
+  // si el producto no existe
   if (!producto) {  
     return (
       <div className="vista-producto-detalle">
@@ -289,16 +283,16 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                               const val = Number(e.target.value) || 1;
                               const limite = producto.stock || 0;
                               
-                              // Si el usuario escribe más del stock
+                              // si el usuario escribe más que el stock
                               if (val > limite && limite > 0) {
                                 alert(`Solo hay ${limite} disponibles`);
                                 setCantidad(limite);
                               } 
-                              // Si escribe menos de 1
+                              // si escribe menos de 1
                               else if (val < 1) {
                                 setCantidad(1);
                               }
-                              // Si es válido
+                              // si es válido
                               else {
                                 setCantidad(val);
                               }
