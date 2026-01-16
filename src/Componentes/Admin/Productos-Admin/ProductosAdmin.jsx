@@ -128,16 +128,20 @@ function ProductosAdmin() {
   };
 
   const eliminarProducto = (id) => {
+    // Solicitar confirmación al usuario antes de eliminar
     if (!window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
       return;
     }
 
+    // Realizar solicitud DELETE al servidor con el ID del producto
     axios.delete(`/api/productos/${id}`)
       .then(() => {
+        // Si la eliminación es exitosa, recargar la lista de productos
         cargarProductos();
         alert('Producto eliminado correctamente');
       })
       .catch((error) => {
+        // Si hay error, mostrar en consola para debugging
         console.error('Error al eliminar producto:', error);
         alert('Error al eliminar el producto');
       });

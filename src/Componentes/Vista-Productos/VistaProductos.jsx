@@ -19,9 +19,9 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
     setCargando(true);
     axios.get('http://localhost:5000/api/productos')
       .then((response) => {
-        setProductosMostrados(response.data);
+        setProductosMostrados(response.data);// Guardar en state
         setCargando(false);
-        
+        console.log(response.data); //Verificar en consola
         // leer parámetro de búsqueda de la url
         const urlParams = new URLSearchParams(window.location.search);
         const searchParam = urlParams.get('search');
