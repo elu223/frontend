@@ -128,7 +128,7 @@ function ProductosAdmin() {
   };
 
   const eliminarProducto = (id) => {
-    // Solicitar confirmación al usuario antes de eliminar
+    // solicita confirmación antes de eliminar
     if (!window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
       return;
     }
