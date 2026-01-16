@@ -13,7 +13,6 @@ import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import ComprasAdmin from './Componentes/Admin/Compras-Admin/ComprasAdmin'; 
 import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import EnviosPendiente from './Componentes/Admin/Admin-Envios-Pendientes/EnvioPendiente';
-import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import './App.css';
 
 function App() {
