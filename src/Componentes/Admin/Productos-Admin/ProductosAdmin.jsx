@@ -141,7 +141,7 @@ function ProductosAdmin() {
         alert('Producto eliminado correctamente');
       })
       .catch((error) => {
-        // Si hay error, mostrar en consola para debugging
+        // Si hay error, mostrar en consola 
         console.error('Error al eliminar producto:', error);
         alert('Error al eliminar el producto');
       });
