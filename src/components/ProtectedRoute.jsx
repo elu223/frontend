@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, useLocation } from 'wouter';
 import { useAuth } from '../auth/AuthProvider';
 
 const ProtectedContent = ({ children, allowedRoles }) => {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const [redirected, setRedirected] = React.useState(false);
+
+  useEffect(() => {
+    if (!user && !redirected) {
+      // No autenticado -> ir a login
+      setRedirected(true);
+      setLocation('/iniciar-sesion');
+    }
+  }, [user, redirected, setLocation]);
 
   if (!user) {
-    // No autenticado -> ir a login
-    setLocation('/iniciar-sesion');
     return null;
   }
 

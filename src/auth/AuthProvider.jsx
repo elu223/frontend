@@ -10,6 +10,11 @@ const normalizeUser = (raw) => {
 
   const u = { ...raw };
 
+  // Asegurar que id_usuario está presente
+  if (!u.id_usuario && u.id) {
+    u.id_usuario = u.id;
+  }
+
   // distintos lugares usan `id_rol` o `rol` o `role`
   const idRol = raw.id_rol ?? raw.rol ?? raw.role;
   if (idRol !== undefined) {
@@ -25,6 +30,7 @@ const normalizeUser = (raw) => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = () => {
@@ -40,6 +46,7 @@ export const AuthProvider = ({ children }) => {
           setUser(null);
         }
       }
+      setLoading(false);
     };
 
     load();
@@ -55,14 +62,19 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const loginWithToken = ({ token, user: userData }) => {
+    console.log('loginWithToken ejecutado con:', { token: !!token, userData });
     const u = normalizeUser({ ...userData, token });
+    console.log('Usuario normalizado:', u);
     setUser(u);
     // guardar en los dos formatos para compatibilidad
     try {
       localStorage.setItem('auth_user', JSON.stringify(u));
       localStorage.setItem('user', JSON.stringify(u));
       localStorage.setItem('token', token);
-    } catch {}
+      console.log('Sesión guardada correctamente');
+    } catch (e) {
+      console.error('Error guardando sesión:', e);
+    }
   };
 
   const logout = () => {
@@ -71,6 +83,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
   };
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
 
   return (
     <AuthContext.Provider value={{ user, loginWithToken, logout }}>

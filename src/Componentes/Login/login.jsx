@@ -33,7 +33,7 @@ function Login() {
         apellido: usuario.apellido,
         email: usuario.email,
         id_rol: usuario.id_rol,
-        id: usuario.id_usuario ?? usuario.id,
+        id_usuario: usuario.id_usuario,
       };
 
       // usar el contexto de auth para normalizar y guardar

@@ -88,15 +88,17 @@ function App() {
             totalItems={totalItems}
           />
         </Route>
-        <Route path="/miperfil">
-          <MiPerfil />
-        </Route>
         <Route path="/iniciar-sesion">
           <Login />
         </Route>
         <Route path="/registrarse">
           <Registro />
        </Route>
+       
+       {/* Ruta de perfil protegida */}
+       <ProtectedRoute path="/miperfil">
+          <MiPerfil />
+       </ProtectedRoute>
        
        {/* Añadir esta ruta para búsqueda */}
        <Route path="/buscar">
