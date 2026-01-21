@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'wouter';
+import { AuthProvider } from './auth/AuthProvider';
+import ProtectedRoute from './components/ProtectedRoute';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 import VistaProductoDetalle from './Componentes/Vista-Producto-Detalle/VistaProductoDetalle';
@@ -7,10 +9,10 @@ import MiPerfil from './Componentes/MiPerfil/Mi-Perfil';
 import Login from './Componentes/Login/login';
 import Registro from './Componentes/Registro/registro';
 import AdminPanel from './Componentes/Admin/AdminPanel';
+import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import ComprasAdmin from './Componentes/Admin/Compras-Admin/ComprasAdmin'; 
 import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import EnviosPendiente from './Componentes/Admin/Admin-Envios-Pendientes/EnvioPendiente';
-import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import './App.css';
 
 function App() {
@@ -50,9 +52,27 @@ function App() {
 
   const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
 
+  // Función para renderizar contenido del admin
+  const renderContenidoAdmin = () => {
+    if (seccionAdminActiva === 'productos') {
+      return <ProductosAdmin />;
+    }
+    if (seccionAdminActiva === 'usuarios') {
+      return <AdminUsuarios/>
+    }
+    if (seccionAdminActiva === 'compras') {
+      return <ComprasAdmin />;
+    }
+    if (seccionAdminActiva === 'envios') {
+      return <EnviosPendiente />;
+    }
+    return <div>Contenido de productos...</div>;
+  };
+
   return (
-    <div className="App">
-      <Switch>
+    <AuthProvider>
+      <div className="App">
+        <Switch>
         <Route path="/">
           <VistaProductos 
             agregarAlCarrito={agregarAlCarrito} 
@@ -68,15 +88,17 @@ function App() {
             totalItems={totalItems}
           />
         </Route>
-        <Route path="/miperfil">
-          <MiPerfil />
-        </Route>
         <Route path="/iniciar-sesion">
           <Login />
         </Route>
         <Route path="/registrarse">
           <Registro />
        </Route>
+       
+       {/* Ruta de perfil protegida */}
+       <ProtectedRoute path="/miperfil">
+          <MiPerfil />
+       </ProtectedRoute>
        
        {/* Añadir esta ruta para búsqueda */}
        <Route path="/buscar">
@@ -86,37 +108,41 @@ function App() {
          />
        </Route>
 
-        {/* Rutas de admin */}
-         <Route path="/admin">
+        {/* Rutas de admin protegidas */}
+        <ProtectedRoute path="/admin" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <ProductosAdmin />
           </div>
-        </Route>
-        
-        {/* Otras rutas de admin */}        
-        <Route path="/admin/usuarios">
+        </ProtectedRoute>
+
+        <ProtectedRoute path="/admin/usuarios" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <AdminUsuarios />
           </div>
-        </Route>
-        
-        <Route path="/admin/compras">
+        </ProtectedRoute>
+
+        <ProtectedRoute path="/admin/compras" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <ComprasAdmin />
           </div>
-        </Route>
-        
-        <Route path="/admin/envios">
+        </ProtectedRoute>
+
+        <ProtectedRoute path="/admin/envios" allowedRoles={["admin"]}>
           <div className="contenedor-admin">
             <AdminPanel />
             <EnviosPendiente />
           </div>
+        </ProtectedRoute>
+
+        <Route path="/forbidden">
+          <div>Acceso no autorizado. No tienes permisos para ver esta página.</div>
         </Route>
       </Switch>
-    </div>
+      </div>
+    </AuthProvider>
   );
 }
 

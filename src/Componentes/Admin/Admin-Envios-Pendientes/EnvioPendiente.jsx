@@ -22,18 +22,16 @@ function EnviosRecientes() {
   });
 
   // Cargar envíos
-  const cargarEnvios =  () => {
-    obtenerEnvios()
-    .then((data)=>{
+  const cargarEnvios = async () => {
+    try {
+      const data = await obtenerEnvios();
       setEnvios(data);
-    })
-    .catch((error) =>{
+    } catch (error) {
       console.log("Error cargando envíos:", error);
-    })
-    .then(() =>{
-      setCargando (false);
-    })
-  }
+    } finally {
+      setCargando(false);
+    }
+  };
 
   useEffect(() => {
     cargarEnvios();
@@ -56,38 +54,30 @@ function EnviosRecientes() {
 
   const enviarFormulario = async (e) => {
     e.preventDefault();
-//editando envios
-    if (envioEditando) {
-      actualizarEnvio(envioEditando, formData)
-      .then(()=>{
-        cargarEnvios();
-        cerrarModal();
-      })
-      .catch((error)=>{
-        console.log("Error actualizando envío:", error);
-      })
-    } else {
-      crearEnvio(formData)
-      .then(() =>{
-        cargarEnvios();
-        cerrarModal();
-      })
-      .catch((error) =>{
-        console.log("Error creando envío:", error);
-      })
+
+    try {
+      if (envioEditando) {
+        await actualizarEnvio(envioEditando, formData);
+      } else {
+        await crearEnvio(formData);
+      }
+
+      cargarEnvios();
+      cerrarModal();
+    } catch (error) {
+      console.log("Error guardando envío:", error);
     }
   };
-  //eliminar envios
-  const eliminarEnvio =  (id) => {
+
+  const eliminarEnvio = async (id) => {
     if (!window.confirm("¿Seguro quieres eliminar este envío?")) return;
-    
-    eliminarEnvioPorId(id)
-    .then(() =>{
+
+    try {
+      await eliminarEnvioPorId(id);
       cargarEnvios();
-    })
-    .catch((error) =>{
+    } catch (error) {
       console.log("Error eliminando envío:", error);
-    })
+    }
   };
 
   return (
@@ -125,12 +115,8 @@ function EnviosRecientes() {
                 <td>{e.fecha}</td>
 
                 <td>
-                  <button className="btn-editar" onClick={() => abrirModalEditar(e)}>
-                     <img src='/img/lapiz.png' alt="Editar" />
-                  </button>
-                  <button className="btn-eliminar" onClick={() => eliminarEnvio(e.id_envio)}>
-                    <img src='/img/basura.png' alt="Eliminar" />
-                  </button>
+                  <button onClick={() => abrirModalEditar(e)}>Editar</button>
+                  <button onClick={() => eliminarEnvio(e.id_envio)}>Eliminar</button>
                 </td>
               </tr>
             ))}

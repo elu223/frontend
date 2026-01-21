@@ -1,32 +1,40 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
+import { useAuth } from "../../auth/AuthProvider";
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import Footer from "../Footer/Footer.jsx";
 import "./Mi-Perfil.css";
 
 function MiPerfil() {
-  // estado inicial cargando desde localStorage
+  const { user } = useAuth();
+  
   const [usuario, setUsuario] = useState({
+    id_usuario: "",
     nombre: "",
+    apellido: "",
     email: "",
+    telefono: "",
     direccion: "",
     avatar: "./img/1.png",
   });
 
   const [modoEdicion, setModoEdicion] = useState(false);
 
-  // cargar datos desde localStorage cuando el componente se monta
+  // Cargar datos del usuario desde el contexto de autenticación
   useEffect(() => {
-    const usuarioGuardado = localStorage.getItem('miPerfilUsuario');
-    if (usuarioGuardado) {
-      setUsuario(JSON.parse(usuarioGuardado));
+    if (user) {
+      console.log('User desde contexto:', user);
+      setUsuario({
+        id_usuario: user.id_usuario,
+        nombre: user.nombre || "",
+        apellido: user.apellido || "",
+        email: user.email || "",
+        telefono: user.telefono || "",
+        direccion: user.direccion || "",
+        avatar: user.avatar || "./img/1.png"
+      });
     }
-  }, []);
-
-  // guardar datos en localStorage cada vez que el usuario cambie
-  useEffect(() => {
-    localStorage.setItem('miPerfilUsuario', JSON.stringify(usuario));
-  }, [usuario]);
+  }, [user]);
 
   const comentariosPorUsuario = {
     "": [],
@@ -52,13 +60,13 @@ function MiPerfil() {
     setUsuario(nuevoUsuario);
   };
 
-  const manejarSubmit = (e) => {
+  const manejarSubmit = async (e) => {
     e.preventDefault();
     console.log("Información del usuario actualizada:", usuario);
-    
     alert("Perfil actualizado correctamente");
     setModoEdicion(false);
   };
+
   return (
     <div className="mi-perfil-contenedor">
       <HeaderMenu />
@@ -72,8 +80,9 @@ function MiPerfil() {
 
         <div className="perfil-usuario">
           <img src={usuario.avatar} alt="Avatar del usuario" className="avatar-imagen" />
-          <h3>{usuario.nombre || "Sin nombre"}</h3>
+          <h3>{usuario.nombre || "Sin nombre"} {usuario.apellido || ""}</h3>
           <p>{usuario.email || "Sin email"}</p>
+          <p>{usuario.telefono || "Sin teléfono"}</p>
           <p>{usuario.direccion || "Sin dirección"}</p>
 
           <button className="editar-perfil-btn" onClick={() => setModoEdicion(!modoEdicion)}>
@@ -95,6 +104,17 @@ function MiPerfil() {
             </label>
 
             <label>
+              Apellido:
+              <input 
+                type="text" 
+                name="apellido" 
+                value={usuario.apellido} 
+                onChange={manejarCambio} 
+                placeholder="Ingresa tu apellido"
+              />
+            </label>
+
+            <label>
               Email:
               <input 
                 type="email" 
@@ -102,6 +122,17 @@ function MiPerfil() {
                 value={usuario.email} 
                 onChange={manejarCambio} 
                 placeholder="Ingresa tu email"
+              />
+            </label>
+
+            <label>
+              Teléfono:
+              <input 
+                type="text" 
+                name="telefono" 
+                value={usuario.telefono} 
+                onChange={manejarCambio} 
+                placeholder="Ingresa tu teléfono"
               />
             </label>
 

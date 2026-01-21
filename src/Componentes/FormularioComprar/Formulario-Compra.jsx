@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Formulario-Compra.css';
+import { useAuth } from '../../auth/AuthProvider';
+import { useLocation } from 'wouter';
 
 function FormularioCompra({ carrito, total, onClose }) {
   const [voucher, setVoucher] = useState('');
@@ -12,9 +14,17 @@ function FormularioCompra({ carrito, total, onClose }) {
   const [metodoPago, setMetodoPago] = useState('');
   const [procesando, setProcesando] = useState(false);
   const [usuarioId, setUsuarioId] = useState(null);
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId') || 1;
+    if (!user) {
+      // si no está autenticado redirigir al login
+      setLocation('/iniciar-sesion');
+      return;
+    }
+
+    const userId = user.id ?? user.id_usuario ?? localStorage.getItem('userId');
     setUsuarioId(userId);
   }, []);
 

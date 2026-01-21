@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'wouter';
 import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
+import { useAuth } from '../../auth/AuthProvider';
+import { useLocation } from 'wouter';
 import './VistaCarrito.css';
 import Footer from '../Footer/Footer.jsx';
 
 function VistaCarrito({ carrito, setCarrito }) {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
 
   const eliminarItem = (id) => {
     setCarrito(carrito.filter(item => item.id !== id));
@@ -94,7 +98,13 @@ function VistaCarrito({ carrito, setCarrito }) {
           {carrito.length > 0 && (
             <button
               className="Boton-Comprar"
-              onClick={() => setMostrarFormulario(true)}
+              onClick={() => {
+                if (!user) {
+                  setLocation('/iniciar-sesion');
+                  return;
+                }
+                setMostrarFormulario(true);
+              }}
             >
               Comprar
             </button>
