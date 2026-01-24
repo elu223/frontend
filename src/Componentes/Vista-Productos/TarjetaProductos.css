@@ -23,13 +23,13 @@
     background-color: #f8f9fa; /* Fondo por si la imagen no carga */
 }
 
-.imagen-producto img {
+.tarjeta-producto .imagen-producto img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: transform 0.3s ease;;
+    transition: transform 0.3s ease;
 }
 
 .tarjeta-producto:hover .imagen-producto img {

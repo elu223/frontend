@@ -15,7 +15,7 @@ function ProductosAdmin() {
     nombre: '',
     descripcion: '',
     precio: '',
-    stock: ''
+    stock: 0
   });
   const [imagen, setImagen] = useState(null);
   const API_URL = 'http://localhost:5000';
@@ -48,7 +48,7 @@ function ProductosAdmin() {
       nombre: '',
       descripcion: '',
       precio: '',
-      stock: ''
+      stock: 0
     });
     setImagen(null);
     setMostrarModal(true);
@@ -128,16 +128,20 @@ function ProductosAdmin() {
   };
 
   const eliminarProducto = (id) => {
+    // solicita confirmación antes de eliminar
     if (!window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
       return;
     }
 
+    // Realizar solicitud DELETE al servidor con el ID del producto
     axios.delete(`/api/productos/${id}`)
       .then(() => {
+        // Si la eliminación es exitosa, recargar la lista de productos
         cargarProductos();
         alert('Producto eliminado correctamente');
       })
       .catch((error) => {
+        // Si hay error, mostrar en consola 
         console.error('Error al eliminar producto:', error);
         alert('Error al eliminar el producto');
       });
@@ -209,7 +213,7 @@ function ProductosAdmin() {
                     <img 
                       src={`http://localhost:5000${producto.imagen_url}`} 
                       alt={producto.nombre}
-                      className="imagen-miniatura"
+                      className="imagen-miniatura admin-imagen-miniatura"
                       onError={(e) => {
                         e.target.src = '/img/default.jpg';
                       }}
@@ -267,7 +271,7 @@ function ProductosAdmin() {
         </div>
       </div>
 
-      {/* Modal para agregar/editar productos */}
+      {/* modal agregar editar productos */}
       {mostrarModal && (
         <div className="overlay-formulario">
           <div className="modal-formulario">
@@ -317,7 +321,7 @@ function ProductosAdmin() {
                   onChange={manejarCambio}
                   required
                   min="0"
-                  step="0.001"
+                  step="1"
                 />
               </div>
               
