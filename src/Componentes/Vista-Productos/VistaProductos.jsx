@@ -1,32 +1,11 @@
-import { Link } from 'wouter';
-import { useState } from 'react';
-import TarjetaProducto from './TarjetaProductos';
+import { useState, useEffect } from "react";
+import TarjetaProducto from './TarjetaProductos.jsx';
+import HeaderMenu from "../Header/Header-Menu.jsx";
 import './VistaProductos.css';
 
-
-function VistaProductos() {
+function VistaProductos({ agregarAlCarrito, totalItems = 0 }) { 
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const productos = [
-<<<<<<< HEAD
-    { id: 1, nombre: 'Producto 1', precio: 10.99, imagen: 'ruta/a/imagen1.jpg' },
-    { id: 2, nombre: 'Producto 2', precio: 15.49, imagen: 'ruta/a/imagen2.jpg' },
-    { id: 3, nombre: 'Producto 3', precio: 7.99, imagen: 'ruta/a/imagen3.jpg' },
-    
-  ];    
-    return (
-    <div className="vista-productos">
-      <h1>Productos Disponibles</h1>
-      <div className="lista-productos"> 
-        {productos.map((producto) => (
-          <ProductCard  
-            key={producto.id}
-            nombre={producto.nombre}
-            precio={producto.precio}
-            imagen={producto.imagen}
-          />
-        ))}
-        </div> 
-=======
     {
       id: '1',
       nombre: 'Smartphone Samsung',
@@ -69,65 +48,48 @@ function VistaProductos() {
 
   return (
     <div className="vista-productos">
-      {/* Header */}
-      <header className="header-ecommerce">
-        <div className="container">
-          <div className="logo-container">
-            <Link href="/" className="logo-link">
-              <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-              <h1 className="logo-texto">TejidosMiki</h1>
-            </Link>
-          </div>
+      <HeaderMenu 
+        onSearch={ejecutarBusqueda} 
+        searchTerm={terminoBusqueda} 
+        totalItems={totalItems} 
+      />
 
-          {/* Buscador */}
-          <div className="buscador-container">
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={terminoBusqueda}
-              onChange={(e) => setTerminoBusqueda(e.target.value)}
-              className="buscador-input"
-            />
-            <button className="buscador-btn">🔍</button>
-          </div>
-
-          {/*
-          <nav className="navegacion">
-            <Link href="/registrarse" className="nav-link">Registrarse</Link>
-            <Link href="/iniciar-sesion" className="nav-link">Iniciar sesión</Link>
-            <Link href="/ver-compras" className="nav-link">Ver compras</Link>
-          </nav>
-          */}
-        </div>
-      </header>
-
-      {/* Productos */}
       <main className="main-content">
         <div className="container">
           {terminoBusqueda && (
             <div className="resultados-busqueda">
               <p>
-                {productosFiltrados.length > 0
-                  ? `Se encontraron ${productosFiltrados.length} productos para "${terminoBusqueda}"`
-                  : `No se encontraron productos para "${terminoBusqueda}"`
+                {productosMostrados.length > 0
+                  ? `Se encontraron ${productosMostrados.length} productos para "${terminoBusqueda}"`
+                  : `No se encontraron productos para "${terminoBusqueda}".`
                 }
               </p>
+              {productosMostrados.length === 0 && (
+                <button 
+                  className="btn-ver-todos"
+                  onClick={() => {
+                    setTerminoBusqueda('');
+                    cargarProductos();
+                  }}
+                >
+                  Ver todos los productos
+                </button>
+              )}
             </div>
           )}
 
-          {/* contenedor con los productos */}
           <div className="contenedor-productos">
             <div className="lista-productos-horizontal">
-              {(terminoBusqueda ? productosFiltrados : productos).map((producto) => (
-                <Link key={producto.id} href={`/producto/${producto.id}`}>
-                  <TarjetaProducto
-                    id={producto.id}
-                    nombre={producto.nombre}
-                    precio={producto.precio}
-                    imagen={producto.imagen}
-                    descripcion={producto.descripcion}
-                  />
-                </Link>
+              {productosMostrados.map((producto) => (
+                <TarjetaProducto
+                  key={producto.id_producto}
+                  id={producto.id_producto}
+                  nombre={producto.nombre}
+                  precio={producto.precio}
+                  imagen={`http://localhost:5000${producto.imagen_url}`}
+                  descripcion={producto.descripcion}
+                  agregarAlCarrito={agregarAlCarrito}
+                />
               ))}
             </div>
           </div>
@@ -140,9 +102,9 @@ function VistaProductos() {
           <p>&copy; 2024 TejidosMiki. Todos los derechos reservados.</p>
         </div>
       </footer>
->>>>>>> develop_nenen
     </div>
   );
 }
 
 export default VistaProductos;
+

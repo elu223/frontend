@@ -1,82 +1,127 @@
-import React, {useState}  from 'react';
-
+import React, { useState } from 'react';
+import { Link } from 'wouter';
+import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
+import { useAuth } from '../../auth/AuthProvider';
+import { useLocation } from 'wouter';
 import './VistaCarrito.css';
+import Footer from '../Footer/Footer.jsx';
 
-function VistaCarrito() {
-    const [items, setItems] = useState([
-        { id: 1, nombre: 'Producto 1', precio: 10.0, cantidad: 2 },
-        { id: 2, nombre: 'Producto 2', precio: 15.0, cantidad: 1 },
-        { id: 3, nombre: 'Producto 3', precio: 15.0, cantidad: 1 },
-        { id: 4, nombre: 'Producto 4', precio: 15.0, cantidad: 1 },
-    
-    ]);
+function VistaCarrito({ carrito, setCarrito }) {
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
 
-    const eliminarItem = (id) => {
-        setItems(items.filter(item => item.id !== id));
-    }
+  const eliminarItem = (id) => {
+    setCarrito(carrito.filter(item => item.id !== id));
+  };
 
-    const actualizarCantidad = (id, cantidad) => {
-        setItems(items.map(item => item.id === id ? { ...item, cantidad } : item));
-    }
+  const actualizarCantidad = (id, cantidad) => {
+    setCarrito(carrito.map(item =>
+      item.id === id ? { ...item, cantidad } : item
+    ));
+  };
 
-    const incrementarCantidad = (id) => {
-        setItems(items.map(item => 
-            item.id === id 
-            ? { ...item, cantidad: item.cantidad + 1 } 
-            : item
-        ));
-    };
+  const incrementarCantidad = (id) => {
+    setCarrito(carrito.map(item =>
+      item.id === id
+        ? { ...item, cantidad: item.cantidad + 1 }
+        : item
+    ));
+  };
 
-    const disminuirCantidad = (id) => {
-        setItems(items.map(item => 
-            item.id === id 
-            ? { ...item, cantidad: Math.max(1, item.cantidad - 1) } 
-            : item
-        ));
-    };
+  const disminuirCantidad = (id) => {
+    setCarrito(carrito.map(item =>
+      item.id === id
+        ? { ...item, cantidad: Math.max(1, item.cantidad - 1) }
+        : item
+    ));
+  };
 
-    const total = items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+  const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
-    return (
-        <div className='Carrito-container'>
-            <h2 className='tituloCarrito'>
-                {/* https://cdn-icons-png.flaticon.com/512/263/263142.png  imagen de carrito logo*/}
-                <img src="./" alt="" />
-                Carrito de compra</h2>
-
-            <div className='itemsLista'>
-                {items.map(item => (
-                    <div key={item.id} className='Carrito-item'>
-                        <h3>{item.nombre}</h3>
-                        <div className='Precio-producto'>
-                            <p>Precio</p>
-                        <h3>${item.precio}</h3>
-                        </div>
-                        <div className='Cantidad-producto'>
-                            <p>Cantidad</p>
-                            <button className='Aumentar-cantidad' onClick={() => incrementarCantidad(item.id)}>+</button>
-                         <input className='cantidad-input'
-                            type="number"   
-                            value={item.cantidad}
-                            min="1"
-                            onChange={(e) => {
-                                const value = parseInt(e.target.value) || 1;
-                                actualizarCantidad(item.id, Math.max(1, value));
-                            }}
-                         />
-                            <button className='Disminuir-cantidad' onClick={() => disminuirCantidad(item.id)}>-</button>
-                        </div>
-                        <button className='Boton-Eliminar Quitar' onClick={() => eliminarItem(item.id)}>Quitar</button>
-                    </div>
-                ))}
-            </div>
-            <div className='Carrito-total'>
-                <h3>Total de compra 
-                    <p>${total}</p>
-                </h3>
-                <button className='Boton-Comprar'>Comprar</button>
-            </div>
+  return (
+    <div className="Carrito-container">
+      <header className="header-ecommerce">
+        <div className="container">
+          <div className="logo-container">
+            <Link href="/" className="logo-link">
+              <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
+              <h1 className="logo-texto">TejidosMiki</h1>
+            </Link>
+          </div>
         </div>
-    );
+      </header>
+
+      <h2 className="tituloCarrito">Carrito de Compras</h2>
+
+      <div className="carrito">
+        <div className="itemsLista">
+          {carrito.length === 0 ? (
+            <p className="carrito-vacio">Tu carrito está vacío 🛒</p>
+          ) : (
+            carrito.map(item => (
+              <div key={item.id} className="Carrito-item">
+                 <img src={item.img} alt={item.nombre} className="carrito-img" />
+                <h3>{item.nombre}</h3>
+                <div className="Precio-producto">
+                  <p>Precio</p>
+                  <h3>${item.precio}</h3>
+                </div>
+
+                <div className="Cantidad-producto">
+                  <p>Cantidad</p>
+                  <button className="Aumentar-cantidad" onClick={() => incrementarCantidad(item.id)}>+</button>
+
+                  <input
+                    className="cantidad-input"
+                    type="number"
+                    value={item.cantidad}
+                    min="1"
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value) || 1;
+                      actualizarCantidad(item.id, Math.max(1, value));
+                    }}
+                  />
+
+                  <button className="Disminuir-cantidad" onClick={() => disminuirCantidad(item.id)}>-</button>
+                </div>
+
+                <button className="Boton-Eliminar Quitar" onClick={() => eliminarItem(item.id)}>Quitar</button>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="Carrito-total">
+          <h3>Total de compra <p>${total}</p></h3>
+
+          {carrito.length > 0 && (
+            <button
+              className="Boton-Comprar"
+              onClick={() => {
+                if (!user) {
+                  setLocation('/iniciar-sesion');
+                  return;
+                }
+                setMostrarFormulario(true);
+              }}
+            >
+              Comprar
+            </button>
+          )}
+        </div>
+
+        {mostrarFormulario && (
+          <FormularioCompra
+            carrito={carrito}
+            total={total}
+            onClose={() => setMostrarFormulario(false)}
+          />
+        )}
+      </div>
+      <Footer />
+    </div>
+  );
 }
+
 export default VistaCarrito;

@@ -1,0 +1,93 @@
+.registro-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #6A1452;
+
+}
+
+.registro-box {
+  background-color: #FCEFB0;
+  width: 23%;
+  margin: auto;
+  padding: 0rem 2rem 2rem 2rem;
+  border-radius: 30px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.registro-title {
+  font-size: 1.8rem;
+  color: #6A1452;
+  margin-bottom: -1rem;
+  font-weight: bold;
+}/* titulo DE AVATAR */
+
+.avatar-img {
+  width: 34%;
+  border-radius: 50%;
+  margin-bottom:-15px;
+}
+.input-group {
+  text-align: left;
+  margin-top: 0.9rem;
+}
+
+.input-group label {
+  color: #6A1452;
+  font-weight: bold;
+}
+
+.input-field {
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 0.7rem;
+  background-color: #F6C6D0;
+  border-radius: 35px;
+  border: none;
+  font-size: 0.95rem;
+  outline: none;
+  box-shadow: 3px 3px 1px #6A1452;
+}
+
+.input-icon-wrapper {
+  position: relative;
+}
+
+.icon-eye,
+.icon-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #6A1452;
+}
+
+.button-row {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.confirmar-btn,
+.btn-login {
+  background-color: #6A1452;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-confirmar:hover,
+.btn-login:hover {
+  background-color: #F6C6D0;
+  color: #6A1452;
+}
