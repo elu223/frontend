@@ -1,25 +1,20 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
 import './Header-Menu.css';
 import axios from 'axios';
+import { useAuth } from '../../auth/AuthProvider';
 
 function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const [terminoLocal, setTerminoLocal] = useState(searchTerm);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [sugerencias, setSugerencias] = useState([]);
-  const [user, setUser] = useState(null);
   const [productos, setProductos] = useState([]);
   const [, setLocation] = useLocation();
+  const { user, logout } = useAuth();
 
   // Cargar usuario desde localStorage
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    
-    // Cargar productos desde API para la búsqueda
+    // Ya no es necesario porque useAuth lo maneja
     cargarProductos();
   }, []);
 
@@ -33,19 +28,9 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
       });
   };
 
-  // Escuchar cambios en localStorage
+  // Escuchar cambios en localStorage - ya no es necesario porque useAuth se suscribe
   useEffect(() => {
-    const verificarCambiosStorage = () => {
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      } else {
-        setUser(null);
-      }
-    };
-
-    window.addEventListener('storage', verificarCambiosStorage);
-    return () => window.removeEventListener('storage', verificarCambiosStorage);
+    cargarProductos();
   }, []);
 
   // Verificar si es admin
@@ -123,8 +108,7 @@ function HeaderMenu({ onSearch, searchTerm = '', totalItems = 0 }) {
   const cerrarSesion = () => {
     const confirmar = window.confirm("¿Estás seguro que deseas cerrar sesión?");
     if (confirmar) {
-      localStorage.removeItem('user');
-      setUser(null);
+      logout();
       setLocation('/');
     }
   }

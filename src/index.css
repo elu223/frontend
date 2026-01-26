@@ -2,22 +2,35 @@
   --background-color: #7c0850; /* se cambia para el fondo*/
 }
 
-/* body {
-  margin: 0;
-  background-color: red;
-  background-color: var(--background-color);
-} */
- html, body {
-  height: 100%;
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
+
 footer {
   margin-top: auto;
 }

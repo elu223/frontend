@@ -33,27 +33,44 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const load = () => {
-      const storedAuth = localStorage.getItem('auth_user');
-      const storedUser = localStorage.getItem('user');
-      const raw = storedAuth ?? storedUser ?? null;
-      if (raw) {
-        try {
-          setUser(normalizeUser(JSON.parse(raw)));
-        } catch {
+    const verifySession = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/usuarios/me', {
+          method: 'GET',
+          credentials: 'include', // Enviar cookies
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const normalizedUser = normalizeUser(data.usuario);
+          setUser(normalizedUser);
+          // También guardar token en localStorage como backup
+          if (data.token) {
+            localStorage.setItem('auth_user', JSON.stringify(normalizedUser));
+            localStorage.setItem('token', data.token);
+          }
+        } else {
+          setUser(null);
           localStorage.removeItem('auth_user');
           localStorage.removeItem('user');
-          setUser(null);
+          localStorage.removeItem('token');
         }
+      } catch (error) {
+        console.error('Error verificando sesión:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    load();
+    verifySession();
 
     const onStorage = (e) => {
       if (e.key === 'auth_user' || e.key === 'user' || e.key === 'token') {
-        load();
+        verifySession();
       }
     };
 
@@ -77,7 +94,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch('http://localhost:5000/usuarios/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (error) {
+      console.error('Error en logout:', error);
+    }
+    
     setUser(null);
     localStorage.removeItem('auth_user');
     localStorage.removeItem('user');
