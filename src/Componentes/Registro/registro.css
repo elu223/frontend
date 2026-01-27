@@ -21,14 +21,7 @@
 .registro-title {
   font-size: 1.8rem;
   color: #6A1452;
-  margin-bottom: -1rem;
   font-weight: bold;
-}/* titulo DE AVATAR */
-
-.avatar-img {
-  width: 34%;
-  border-radius: 50%;
-  margin-bottom:-15px;
 }
 .input-group {
   text-align: left;

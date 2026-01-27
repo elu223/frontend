@@ -5,71 +5,93 @@ import { useAuth } from '../../auth/AuthProvider';
 import { useLocation } from 'wouter';
 import './VistaCarrito.css';
 import Footer from '../Footer/Footer.jsx';
+import axios from 'axios';
+import HeaderMenu from '../Header/Header-Menu.jsx';
+import { useCarrito } from '../../CarritoContext';
 
-function VistaCarrito({ carrito, setCarrito }) {
+function VistaCarrito() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const { user } = useAuth();
   const [, setLocation] = useLocation();
+  const { carrito, eliminarDelCarrito, actualizarCantidad, calcularTotalItems } = useCarrito();
 
-  const eliminarItem = (id) => {
-    setCarrito(carrito.filter(item => item.id !== id));
+  // función para verificar stock disponible
+  const verificarStockDisponible = (productoId, cantidadDeseada) => {
+    return new Promise((resolve) => {
+      axios.get(`http://localhost:5000/api/productos/${productoId}`)
+        .then((response) => {
+          const stockTotal = response.data.stock || 0;
+          
+          if (cantidadDeseada > stockTotal) {
+            alert(`solo hay ${stockTotal} unidades disponibles`);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        })
+        .catch(() => {
+          alert('error al verificar stock');
+          resolve(false);
+        });
+    });
   };
 
-  const actualizarCantidad = (id, cantidad) => {
-    setCarrito(carrito.map(item =>
-      item.id === id ? { ...item, cantidad } : item
-    ));
+  const handleActualizarCantidad = (id, nuevaCantidad) => {
+    if (nuevaCantidad < 1) {
+      nuevaCantidad = 1;
+    }
+    
+    verificarStockDisponible(id, nuevaCantidad)
+      .then((tieneStock) => {
+        if (tieneStock) {
+          actualizarCantidad(id, nuevaCantidad);
+        }
+      });
   };
 
   const incrementarCantidad = (id) => {
-    setCarrito(carrito.map(item =>
-      item.id === id
-        ? { ...item, cantidad: item.cantidad + 1 }
-        : item
-    ));
+    const item = carrito.find(item => item.id === id);
+    if (!item) return;
+    
+    const nuevaCantidad = item.cantidad + 1;
+    handleActualizarCantidad(id, nuevaCantidad);
   };
 
   const disminuirCantidad = (id) => {
-    setCarrito(carrito.map(item =>
-      item.id === id
-        ? { ...item, cantidad: Math.max(1, item.cantidad - 1) }
-        : item
-    ));
+    const item = carrito.find(item => item.id === id);
+    if (!item) return;
+    
+    const nuevaCantidad = Math.max(1, item.cantidad - 1);
+    handleActualizarCantidad(id, nuevaCantidad);
   };
 
   const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+  
+  // calcular total de items para el header
+  const totalItems = calcularTotalItems();
 
   return (
     <div className="Carrito-container">
-      <header className="header-ecommerce">
-        <div className="container">
-          <div className="logo-container">
-            <Link href="/" className="logo-link">
-              <img src="/img/logo.png" alt="Logo TejidosMiki" className="logo-imagen" />
-              <h1 className="logo-texto">TejidosMiki</h1>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <h2 className="tituloCarrito">Carrito de Compras</h2>
+      <HeaderMenu totalItems={totalItems} />
+      
+      <h2 className="tituloCarrito">carrito de compras</h2>
 
       <div className="carrito">
         <div className="itemsLista">
           {carrito.length === 0 ? (
-            <p className="carrito-vacio">Tu carrito está vacío 🛒</p>
+            <p className="carrito-vacio">tu carrito está vacío 🛒</p>
           ) : (
             carrito.map(item => (
               <div key={item.id} className="Carrito-item">
-                 <img src={item.img} alt={item.nombre} className="carrito-img" />
+                <img src={item.img} alt={item.nombre} className="carrito-img" />
                 <h3>{item.nombre}</h3>
                 <div className="Precio-producto">
-                  <p>Precio</p>
+                  <p>precio</p>
                   <h3>${item.precio}</h3>
                 </div>
 
                 <div className="Cantidad-producto">
-                  <p>Cantidad</p>
+                  <p>cantidad</p>
                   <button className="Aumentar-cantidad" onClick={() => incrementarCantidad(item.id)}>+</button>
 
                   <input
@@ -79,34 +101,35 @@ function VistaCarrito({ carrito, setCarrito }) {
                     min="1"
                     onChange={(e) => {
                       const value = parseInt(e.target.value) || 1;
-                      actualizarCantidad(item.id, Math.max(1, value));
+                      handleActualizarCantidad(item.id, value);
                     }}
                   />
 
                   <button className="Disminuir-cantidad" onClick={() => disminuirCantidad(item.id)}>-</button>
                 </div>
 
-                <button className="Boton-Eliminar Quitar" onClick={() => eliminarItem(item.id)}>Quitar</button>
+                <button className="Boton-Eliminar Quitar" onClick={() => eliminarDelCarrito(item.id)}>quitar</button>
               </div>
             ))
           )}
         </div>
 
         <div className="Carrito-total">
-          <h3>Total de compra <p>${total}</p></h3>
+          <h3>total de compra <p>${total}</p></h3>
 
           {carrito.length > 0 && (
             <button
               className="Boton-Comprar"
               onClick={() => {
                 if (!user) {
+                  alert('debes iniciar sesión para comprar');
                   setLocation('/iniciar-sesion');
                   return;
                 }
                 setMostrarFormulario(true);
               }}
             >
-              Comprar
+              comprar
             </button>
           )}
         </div>

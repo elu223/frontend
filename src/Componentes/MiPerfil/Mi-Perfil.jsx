@@ -20,10 +20,9 @@ function MiPerfil() {
 
   const [modoEdicion, setModoEdicion] = useState(false);
 
-  // Cargar datos del usuario desde el contexto de autenticación
+  // cargar datos del usuario desde el contexto
   useEffect(() => {
     if (user) {
-      console.log('User desde contexto:', user);
       setUsuario({
         id_usuario: user.id_usuario,
         nombre: user.nombre || "",
@@ -35,14 +34,6 @@ function MiPerfil() {
       });
     }
   }, [user]);
-
-  const comentariosPorUsuario = {
-    "": [],
-  };
-
-  const comprasPorUsuario = {
-    "": [],
-  };
 
   const manejarCambio = (e) => {
     const nuevoUsuario = {
@@ -60,10 +51,18 @@ function MiPerfil() {
     setUsuario(nuevoUsuario);
   };
 
-  const manejarSubmit = async (e) => {
+  const manejarSubmit = (e) => {
     e.preventDefault();
-    console.log("Información del usuario actualizada:", usuario);
-    alert("Perfil actualizado correctamente");
+    
+    // no permitir cambiar el email
+    if (usuario.email !== user.email) {
+      alert("no puedes cambiar tu correo electrónico");
+      setUsuario({...usuario, email: user.email});
+      return;
+    }
+    
+    console.log("información del usuario actualizada:", usuario);
+    alert("perfil actualizado correctamente");
     setModoEdicion(false);
   };
 
@@ -73,82 +72,83 @@ function MiPerfil() {
       <div className="mi-perfil">
       
       <div className="titulo-perfil">
-        <h2 className="h2">Mi Perfil</h2>
+        <h2 className="h2">mi perfil</h2>
       </div>
 
       <div className="container-perfil">
 
         <div className="perfil-usuario">
-          <img src={usuario.avatar} alt="Avatar del usuario" className="avatar-imagen" />
-          <h3>{usuario.nombre || "Sin nombre"} {usuario.apellido || ""}</h3>
-          <p>{usuario.email || "Sin email"}</p>
-          <p>{usuario.telefono || "Sin teléfono"}</p>
-          <p>{usuario.direccion || "Sin dirección"}</p>
+          <img src={usuario.avatar} alt="avatar del usuario" className="avatar-imagen" />
+          <h3>{usuario.nombre || "sin nombre"} {usuario.apellido || ""}</h3>
+          <p>{usuario.email || "sin email"}</p>
+          <p>{usuario.telefono || "sin teléfono"}</p>
+          <p>{usuario.direccion || "sin dirección"}</p>
 
           <button className="editar-perfil-btn" onClick={() => setModoEdicion(!modoEdicion)}>
-            {modoEdicion ? "Cancelar" : "Editar Perfil"}
+            {modoEdicion ? "cancelar" : "editar perfil"}
           </button>
         </div>
 
         {modoEdicion && (
           <form className="perfil-formulario" onSubmit={manejarSubmit}>
             <label>
-              Nombre:
+              nombre:
               <input 
                 type="text" 
                 name="nombre" 
                 value={usuario.nombre} 
                 onChange={manejarCambio} 
-                placeholder="Ingresa tu nombre"
+                placeholder="ingresa tu nombre"
               />
             </label>
 
             <label>
-              Apellido:
+              apellido:
               <input 
                 type="text" 
                 name="apellido" 
                 value={usuario.apellido} 
                 onChange={manejarCambio} 
-                placeholder="Ingresa tu apellido"
+                placeholder="ingresa tu apellido"
               />
             </label>
 
             <label>
-              Email:
+              email:
               <input 
                 type="email" 
                 name="email" 
                 value={usuario.email} 
                 onChange={manejarCambio} 
-                placeholder="Ingresa tu email"
+                placeholder="ingresa tu email"
+                readOnly
               />
             </label>
 
             <label>
-              Teléfono:
+              teléfono:
               <input 
                 type="text" 
                 name="telefono" 
                 value={usuario.telefono} 
                 onChange={manejarCambio} 
-                placeholder="Ingresa tu teléfono"
+                placeholder="ingresa tu teléfono"
               />
             </label>
 
             <label>
-              Dirección:
+              dirección:
               <input 
                 type="text" 
                 name="direccion" 
                 value={usuario.direccion} 
                 onChange={manejarCambio} 
-                placeholder="Ingresa tu dirección"
+                placeholder="ingresa tu dirección"
               />
             </label>
 
             <div className="seleccion-avatar">
-              <p>Seleccioná tu avatar:</p>
+              <p>seleccioná tu avatar:</p>
               <div className="opciones-avatar">
                 {[
                   "./img/1.png",
@@ -163,7 +163,7 @@ function MiPerfil() {
                   <img
                     key={ruta}
                     src={ruta}
-                    alt="Avatar"
+                    alt="avatar"
                     className={`avatar-opcion ${usuario.avatar === ruta ? "seleccionado" : ""}`}
                     onClick={() => manejarAvatar(ruta)}
                   />
@@ -171,37 +171,25 @@ function MiPerfil() {
               </div>
             </div>
 
-            <button type="submit" className="guardar-btn">Guardar Cambios</button>
+            <button type="submit" className="guardar-btn">guardar cambios</button>
           </form>
         )}
 
         <div className="mis-comentarios">
-          <h3>Mis Comentarios</h3>
+          <h3>mis comentarios</h3>
           <ul>
-            {comentariosPorUsuario[usuario.nombre] ? (
-              comentariosPorUsuario[usuario.nombre].map((comentario, i) => (
-                <li key={i}>{comentario}</li>
-              ))
-            ) : (
-              <li>No tienes comentarios aún.</li>
-            )}
+            <li>no tienes comentarios aún.</li>
           </ul>
         </div>
       </div>
 
       <div className="mis-compras">
         <div className="titulo-compras">
-          <h2 className="h2">Mis Compras</h2>
+          <h2 className="h2">mis compras</h2>
         </div>
 
         <ul>
-          {comprasPorUsuario[usuario.nombre] ? (
-            comprasPorUsuario[usuario.nombre].map((compra, i) => (
-              <li key={i}>{compra}</li>
-            ))
-          ) : (
-            <li>No has realizado compras aún.</li>
-          )}
+          <li>no has realizado compras aún.</li>
         </ul>
       </div>
       </div>

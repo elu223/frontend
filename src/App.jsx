@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Route, Switch } from 'wouter';
 import { AuthProvider } from './auth/AuthProvider';
-import ProtectedRoute from './components/ProtectedRoute';
+import { CarritoProvider } from './CarritoContext';
 import VistaProductos from './Componentes/Vista-Productos/VistaProductos';
 import VistaCarrito from './Componentes/Vista-Carrito/VistaCarrito';
 import VistaProductoDetalle from './Componentes/Vista-Producto-Detalle/VistaProductoDetalle';
@@ -15,134 +15,68 @@ import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import EnviosPendiente from './Componentes/Admin/Admin-Envios-Pendientes/EnvioPendiente';
 import './App.css';
 
-// componente interno que pueda usa useAuth
-function AppContent() {
-  const [carrito, setCarrito] = useState([]);
-  const [seccionAdminActiva, setSeccionAdminActiva] = useState('productos');
-  
-  // cargar carrito desde localStorage al iniciar
-  useEffect(() => {
-    const carritoGuardado = localStorage.getItem('carrito');
-    if (carritoGuardado) {
-      try {
-        setCarrito(JSON.parse(carritoGuardado));
-      } catch (error) {
-        console.error('Error al cargar carrito:', error);
-        localStorage.removeItem('carrito');
-      }
-    }
-  }, []);
-
-  // guardar carrito en localStorage cada vez que cambie
-  useEffect(() => {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-  }, [carrito]);
-
-  const agregarAlCarrito = (producto) => {
-    setCarrito(prevCarrito => {
-      const productoExistente = prevCarrito.find(item => item.id === producto.id);
-      if (productoExistente) {
-        return prevCarrito.map(item =>
-          item.id === producto.id ? { ...item, cantidad: item.cantidad + 1 } : item
-        );
-      } else {
-        return [...prevCarrito, { ...producto, cantidad: 1 }];
-      }
-    });
-  };
-
-  const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
-
-  // Función para renderizar contenido del admin
-  const renderContenidoAdmin = () => {
-    if (seccionAdminActiva === 'productos') {
-      return <ProductosAdmin />;
-    }
-    if (seccionAdminActiva === 'usuarios') {
-      return <AdminUsuarios/>
-    }
-    if (seccionAdminActiva === 'compras') {
-      return <ComprasAdmin />;
-    }
-    if (seccionAdminActiva === 'envios') {
-      return <EnviosPendiente />;
-    }
-    return <div>Contenido de productos...</div>;
-  };
-
+function App() {
   return (
     <AuthProvider>
-      <div className="App">
-        <Switch>
-        <Route path="/">
-          <VistaProductos 
-            agregarAlCarrito={agregarAlCarrito} 
-            totalItems={totalItems}
-          />
-        </Route>
-        <Route path="/carrito">
-          <VistaCarrito carrito={carrito} setCarrito={setCarrito} />
-        </Route>
-        <Route path="/producto/:id">
-          <VistaProductoDetalle 
-            agregarAlCarrito={agregarAlCarrito}
-            totalItems={totalItems}
-          />
-        </Route>
-        <Route path="/iniciar-sesion">
-          <Login />
-        </Route>
-        <Route path="/registrarse">
-          <Registro />
-       </Route>
-       
-       {/* Ruta de perfil protegida */}
-       <ProtectedRoute path="/miperfil">
-          <MiPerfil />
-       </ProtectedRoute>
-       
-       {/* Añadir esta ruta para búsqueda */}
-       <Route path="/buscar">
-         <VistaProductos 
-           agregarAlCarrito={agregarAlCarrito} 
-           totalItems={totalItems}
-         />
-       </Route>
+      <CarritoProvider>
+        <div className="App">
+          <Switch>
+            <Route path="/">
+              <VistaProductos />
+            </Route>
+            <Route path="/carrito">
+              <VistaCarrito />
+            </Route>
+            <Route path="/producto/:id">
+              <VistaProductoDetalle />
+            </Route>
+            <Route path="/iniciar-sesion">
+              <Login />
+            </Route>
+            <Route path="/registrarse">
+              <Registro />
+            </Route>
+            <Route path="/miperfil">
+              <MiPerfil />
+            </Route>
+            <Route path="/buscar">
+              <VistaProductos />
+            </Route>
 
-        {/* Rutas de admin protegidas */}
-        <ProtectedRoute path="/admin" allowedRoles={["admin"]}>
-          <div className="contenedor-admin">
-            <AdminPanel />
-            <ProductosAdmin />
-          </div>
-        </ProtectedRoute>
+            <Route path="/admin">
+              <div className="contenedor-admin">
+                <AdminPanel />
+                <ProductosAdmin />
+              </div>
+            </Route>
 
-        <ProtectedRoute path="/admin/usuarios" allowedRoles={["admin"]}>
-          <div className="contenedor-admin">
-            <AdminPanel />
-            <AdminUsuarios />
-          </div>
-        </ProtectedRoute>
+            <Route path="/admin/usuarios">
+              <div className="contenedor-admin">
+                <AdminPanel />
+                <AdminUsuarios />
+              </div>
+            </Route>
 
-        <ProtectedRoute path="/admin/compras" allowedRoles={["admin"]}>
-          <div className="contenedor-admin">
-            <AdminPanel />
-            <ComprasAdmin />
-          </div>
-        </ProtectedRoute>
+            <Route path="/admin/compras">
+              <div className="contenedor-admin">
+                <AdminPanel />
+                <ComprasAdmin />
+              </div>
+            </Route>
 
-        <ProtectedRoute path="/admin/envios" allowedRoles={["admin"]}>
-          <div className="contenedor-admin">
-            <AdminPanel />
-            <EnviosPendiente />
-          </div>
-        </ProtectedRoute>
+            <Route path="/admin/envios">
+              <div className="contenedor-admin">
+                <AdminPanel />
+                <EnviosPendiente />
+              </div>
+            </Route>
 
-        <Route path="/forbidden">
-          <div>Acceso no autorizado. No tienes permisos para ver esta página.</div>
-        </Route>
-      </Switch>
-      </div>
+            <Route path="/forbidden">
+              <div>acceso no autorizado</div>
+            </Route>
+          </Switch>
+        </div>
+      </CarritoProvider>
     </AuthProvider>
   );
 }

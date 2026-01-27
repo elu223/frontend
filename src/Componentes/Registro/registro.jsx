@@ -3,60 +3,68 @@ import { useLocation } from "wouter";
 import axios from 'axios';
 import "./registro.css";
 import Footer from "../Footer/Footer";
+import { useAuth } from '../../auth/AuthProvider';
 
 function Registro() {
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [form, setForm] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    telefono: "",
+    direccion: ""
+  });
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [, setLocation] = useLocation();
+  const { login } = useAuth();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const registrar = (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Validaciones
-    if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
+    if (form.password !== form.confirmPassword) {
+      alert("las contraseñas no coinciden");
       setLoading(false);
       return;
     }
 
-    if (password.length < 6) {
-      alert("La contraseña debe tener al menos 6 caracteres");
+    if (form.password.length < 6) {
+      alert("la contraseña debe tener al menos 6 caracteres");
       setLoading(false);
       return;
     }
 
-    axios.post('/usuarios/register', {
-      nombre: nombre,
-      apellido: apellido,
-      email: email,
-      password: password,
-      telefono: "",
-      direccion: ""
+    axios.post('http://localhost:5000/usuarios/register', {
+      nombre: form.nombre,
+      apellido: form.apellido,
+      email: form.email,
+      password: form.password,
+      telefono: form.telefono || "",
+      direccion: form.direccion || ""
     })
     .then((response) => {
       const data = response.data;
-      
-      console.log('Respuesta del backend:', data);
-      
       const userData = {
-        token: data.token,
-        name: data.usuario.nombre,
+        id_usuario: data.usuario.id_usuario,
+        nombre: data.usuario.nombre,
         apellido: data.usuario.apellido,
         email: data.usuario.email,
-        rol: data.usuario.id_rol
+        id_rol: data.usuario.id_rol,
+        token: data.token
       };
       
-      localStorage.setItem('user', JSON.stringify(userData));
-      window.dispatchEvent(new Event('storage'));
+      // guardar usuario
+      login(userData);
       
+      // redirigir según rol
       if (data.usuario.id_rol === 1) {
         setLocation('/admin');
       } else {
@@ -66,16 +74,12 @@ function Registro() {
       setLoading(false);
     })
     .catch((error) => {
-      console.error('Error en el registro:', error);
-      
-      if (error.response) {
-        alert(`Error: ${error.response.data}`);
-      } else if (error.request) {
-        alert('Error de conexión. Verifica que el backend esté corriendo.');
+      console.error('error en el registro:', error);
+      if (error.response?.status === 409) {
+        alert("este email ya está registrado");
       } else {
-        alert('Error inesperado: ' + error.message);
+        alert("error al registrar");
       }
-      
       setLoading(false);
     });
   }
@@ -83,22 +87,16 @@ function Registro() {
   return (
     <div className="registro-container">
       <div className="registro-box">
-        <h2 className="registro-title">Registrarse</h2>
+        <h2 className="registro-title">Crear tu cuenta</h2>
 
-        <div className="avatar-circle">
-          <img src="/img/icon-user.png" alt="icono usuario" className="avatar-img" />
-        </div>
-
-        <form 
-          className="registro-form"
-          onSubmit={(e) => registrar(e)}
-        >
+        <form onSubmit={registrar}>
           <div className="input-group">
             <label>Nombre</label>
             <input
               type="text"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              name="nombre"
+              value={form.nombre}
+              onChange={handleChange}
               className="input-field"
               required
             />
@@ -108,19 +106,21 @@ function Registro() {
             <label>Apellido</label>
             <input
               type="text"
-              value={apellido}
-              onChange={(e) => setApellido(e.target.value)}
+              name="apellido"
+              value={form.apellido}
+              onChange={handleChange}
               className="input-field"
               required
             />
           </div>
 
           <div className="input-group">
-            <label>Correo electrónico</label>
+            <label>correo electrónico</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={form.email}
+              onChange={handleChange}
               className="input-field"
               required
             />
@@ -131,16 +131,14 @@ function Registro() {
             <div className="input-icon-wrapper">
               <input
                 type={showPass ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
                 className="input-field"
                 required
                 minLength="6"
               />
-              <span
-                className="icon-eye"
-                onClick={() => setShowPass(!showPass)}
-              >
+              <span className="icon-eye" onClick={() => setShowPass(!showPass)}>
                 👁
               </span>
             </div>
@@ -151,32 +149,26 @@ function Registro() {
             <div className="input-icon-wrapper">
               <input
                 type={showConfirmPass ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
                 className="input-field"
                 required
                 minLength="6"
               />
-              <span
-                className="icon-arrow"
-                onClick={() => setShowConfirmPass(!showConfirmPass)}
-              >
-                ⌄
+              <span className="icon-eye" onClick={() => setShowConfirmPass(!showConfirmPass)}>
+                👁
               </span>
             </div>
           </div>
 
           <div className="button-row">
-            <button 
-              type="submit" 
-              className="confirmar-btn"
-              disabled={loading}
-            >
-              {loading ? "Registrando..." : "Confirmar"}
+            <button type="submit" className="confirmar-btn" disabled={loading}>
+              {loading ? "registrando..." : "confirmar"}
             </button>
 
             <a href="/iniciar-sesion" className="btn-login">
-              Iniciar sesión
+              iniciar sesión
             </a>
           </div>
         </form>
