@@ -16,14 +16,10 @@ export const AuthProvider = ({ children }) => {
           setUser(parsedUser);
         } catch {
           localStorage.removeItem('user');
-          localStorage.removeItem('token');
+          setUser(null);
         }
-      } catch (error) {
-        console.error('Error verificando sesión:', error);
-        setUser(null);
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     cargarUsuario();
@@ -35,19 +31,7 @@ export const AuthProvider = ({ children }) => {
     window.dispatchEvent(new Event('storage'));
   };
 
-  const logout = async () => {
-    try {
-      await fetch('http://localhost:5000/usuarios/logout', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-    } catch (error) {
-      console.error('Error en logout:', error);
-    }
-    
+  const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
     window.dispatchEvent(new Event('storage'));
