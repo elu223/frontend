@@ -1,39 +1,38 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, useLocation } from 'wouter';
 import { useAuth } from '../auth/AuthProvider';
 
-const ProtectedContent = ({ children, allowedRoles }) => {
-  const [, setLocation] = useLocation();
+const ProtectedRoute = ({ path, children, adminOnly = false }) => {
   const { user } = useAuth();
-  const [redirected, setRedirected] = React.useState(false);
+  const [, setLocation] = useLocation();
 
-  useEffect(() => {
-    if (!user && !redirected) {
-      // No autenticado -> ir a login
-      setRedirected(true);
-      setLocation('/iniciar-sesion');
-    }
-  }, [user, redirected, setLocation]);
-
-  if (!user) {
-    return null;
-  }
-
-  if (allowedRoles && allowedRoles.length > 0) {
-    const hasRole = user.roles?.some(r => allowedRoles.includes(r));
-    if (!hasRole) {
-      setLocation('/forbidden');
-      return null;
-    }
-  }
-
-  return children;
-};
-
-const ProtectedRoute = ({ path, children, allowedRoles = [] }) => {
   return (
     <Route path={path}>
-      {() => <ProtectedContent allowedRoles={allowedRoles}>{children}</ProtectedContent>}
+      {() => {
+        // efecto para redirigir si no tiene acceso
+        React.useEffect(() => {
+          if (!user) {
+            setLocation('/iniciar-sesion');
+            return;
+          }
+          
+          if (adminOnly && (!user || user.id_rol !== 1)) {
+            setLocation('/');
+            return;
+          }
+        }, [user, adminOnly, setLocation]);
+
+        // verificar acceso
+        if (!user) {
+          return <div>redirigiendo...</div>;
+        }
+        
+        if (adminOnly && user.id_rol !== 1) {
+          return <div>redirigiendo...</div>;
+        }
+
+        return children;
+      }}
     </Route>
   );
 };

@@ -108,7 +108,9 @@ function ProductosAdmin() {
         console.error('Error al actualizar producto:', error);
         alert('Error al actualizar el producto');
       });
-    } else {
+    } 
+    else {
+      //validar que se haya seleccionado una imagen para nuevo producto
       if (!imagen) {
         alert('Debe seleccionar una imagen para el producto');
         return;

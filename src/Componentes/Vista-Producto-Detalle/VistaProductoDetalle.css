@@ -133,7 +133,8 @@
   background: #d3117c;
   color: white;
   border: none;
-  border-radius: 4px;
+  margin: auto;
+  border-radius: 35px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: background 0.2s;
@@ -227,6 +228,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin: 1rem 0;
+  width: 70%;
+  
 }
 
 .btn-anadir-carrito {
@@ -234,7 +237,7 @@
   background: #d3117c;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -246,7 +249,7 @@
   background: #d3117c;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -363,9 +366,9 @@
   background: #d3117c;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600px;
 }
 
 .btn-enviar-comentario:hover {

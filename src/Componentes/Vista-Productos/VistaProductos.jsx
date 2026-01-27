@@ -2,49 +2,143 @@ import { useState, useEffect } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import './VistaProductos.css';
+import Footer from "../Footer/Footer.jsx";
+import axios from 'axios';
+import { useLocation } from 'wouter';
+import { useAuth } from '../../auth/AuthProvider';
+import { useCarrito } from '../../CarritoContext';
 
-function VistaProductos({ agregarAlCarrito, totalItems = 0 }) { 
+function VistaProductos() { 
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
-  const productos = [
-    {
-      id: '1',
-      nombre: 'Smartphone Samsung',
-      precio: 30000,
-      imagen: 'https://via.placeholder.com/300x300/007bff/ffffff?text=Samsung',
-      descripcion: 'Smartphone de última generación'
-    },
-    {
-      id: '2',
-      nombre: 'Laptop HP',
-      precio: 100000,
-      imagen: 'https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop+HP',
-      descripcion: 'Laptop ideal para trabajo y estudio'
-    },
-    {
-      id: '3',
-      nombre: 'Audífonos Sony',
-      precio: 30000,
-      imagen: 'https://via.placeholder.com/300x300/dc3545/ffffff?text=Audífonos',
-      descripcion: 'Audífonos con cancelación de ruido'
-    },
-    {
-      id: '4',
-      nombre: 'Tablet iPad',
-      precio: 30000,
-      imagen: 'https://via.placeholder.com/300x300/6f42c1/ffffff?text=iPad',
-      descripcion: 'Tablet perfecta para creativos'
-    },
-    {
-      id: '5',
-      nombre: 'Smart Watch',
-      precio: 500000,
-      imagen: 'https://via.placeholder.com/300x300/fd7e14/ffffff?text=Smart+Watch',
-      descripcion: 'Reloj inteligente con monitor de salud'
+  const [productosMostrados, setProductosMostrados] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [, setLocation] = useLocation();
+  const { user } = useAuth();
+  const { carrito, agregarAlCarrito, calcularTotalItems } = useCarrito();
+  
+  useEffect(() => {
+    cargarProductos();
+  }, []);
+
+  const cargarProductos = () => {
+    setCargando(true);
+    axios.get('http://localhost:5000/api/productos')
+      .then((response) => {
+        setProductosMostrados(response.data);
+        setCargando(false);
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchParam = urlParams.get('search');
+        if (searchParam) {
+          setTerminoBusqueda(searchParam);
+          const filtrados = response.data.filter(p =>
+            p.nombre.toLowerCase().includes(searchParam.toLowerCase())
+          );
+          setProductosMostrados(filtrados);
+        }
+      })
+      .catch(() => {
+        setCargando(false);
+      });
+  };
+
+  const cantidadEnCarrito = (productoId) => {
+    const item = carrito.find(item => item.id === productoId);
+    return item ? item.cantidad : 0;
+  };
+
+  const verificarAutenticacion = () => {
+    if (!user) {
+      alert('debes iniciar sesión para agregar productos al carrito');
+      setLocation('/iniciar-sesion');
+      return false;
     }
-  ];
-  const productosFiltrados = productos.filter(producto =>
-    producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) || producto.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase())
-  );
+    return true;
+  };
+
+  const handleAgregarAlCarrito = (producto) => {
+    if (!verificarAutenticacion()) return;
+    
+    const yaEnCarrito = cantidadEnCarrito(producto.id_producto);
+    const stockTotal = producto.stock || 0;
+    
+    if (stockTotal <= 0) {
+      alert('no hay stock disponible');
+      return;
+    }
+    
+    const totalDespues = yaEnCarrito + 1;
+    
+    if (totalDespues > stockTotal) {
+      const maxPermitido = stockTotal - yaEnCarrito;
+      
+      if (maxPermitido <= 0) {
+        alert('ya no puedes agregar más de este producto. límite de stock alcanzado.');
+      } else {
+        alert(`solo puedes agregar ${maxPermitido} unidad(es) más. ya tienes ${yaEnCarrito} en el carrito.`);
+      }
+      return;
+    }
+    
+    axios.get(`http://localhost:5000/api/productos/${producto.id_producto}`)
+      .then((response) => {
+        const stockVerificado = response.data.stock;
+        
+        if (totalDespues > stockVerificado) {
+          const maxPermitido = stockVerificado - yaEnCarrito;
+          
+          if (maxPermitido <= 0) {
+            alert('stock actualizado: ya no hay unidades disponibles');
+          } else {
+            alert(`stock actualizado: solo puedes agregar ${maxPermitido} unidad(es) más`);
+          }
+          return;
+        }
+        
+        agregarAlCarrito({
+          ...producto,
+          id: producto.id_producto,
+          cantidad: 1,
+          img: `http://localhost:5000${producto.imagen_url}`
+        });
+        
+        alert(`1 unidad de "${producto.nombre}" añadida al carrito`);
+      })
+      .catch(() => {
+        alert('error al verificar stock disponible');
+      });
+  };
+
+  const ejecutarBusqueda = (termino) => {
+    setTerminoBusqueda(termino);
+    if (termino.trim() === '') {
+      cargarProductos();
+    } else {
+      const filtrados = productosMostrados.filter(p =>
+        p.nombre.toLowerCase().includes(termino.toLowerCase())
+      );
+      setProductosMostrados(filtrados);
+    }
+  };
+
+  const totalItems = calcularTotalItems();
+
+  if (cargando) {
+    return (
+      <div className="vista-productos">
+        <HeaderMenu 
+          onSearch={ejecutarBusqueda} 
+          searchTerm={terminoBusqueda} 
+          totalItems={totalItems} 
+        />
+        <main className="main-content">
+          <div className="container">
+            <div className="cargando-productos">cargando productos...</div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="vista-productos">
@@ -53,15 +147,14 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
         searchTerm={terminoBusqueda} 
         totalItems={totalItems} 
       />
-
       <main className="main-content">
         <div className="container">
           {terminoBusqueda && (
             <div className="resultados-busqueda">
               <p>
                 {productosMostrados.length > 0
-                  ? `Se encontraron ${productosMostrados.length} productos para "${terminoBusqueda}"`
-                  : `No se encontraron productos para "${terminoBusqueda}".`
+                  ? `se encontraron ${productosMostrados.length} productos para "${terminoBusqueda}"`
+                  : `no se encontraron productos para "${terminoBusqueda}".`
                 }
               </p>
               {productosMostrados.length === 0 && (
@@ -72,12 +165,11 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
                     cargarProductos();
                   }}
                 >
-                  Ver todos los productos
+                  ver todos los productos
                 </button>
               )}
             </div>
           )}
-
           <div className="contenedor-productos">
             <div className="lista-productos-horizontal">
               {productosMostrados.map((producto) => (
@@ -88,23 +180,16 @@ function VistaProductos({ agregarAlCarrito, totalItems = 0 }) {
                   precio={producto.precio}
                   imagen={`http://localhost:5000${producto.imagen_url}`}
                   descripcion={producto.descripcion}
-                  agregarAlCarrito={agregarAlCarrito}
+                  agregarAlCarrito={() => handleAgregarAlCarrito(producto)}
                 />
               ))}
             </div>
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="footer">
-        <div className="container">
-          <p>&copy; 2024 TejidosMiki. Todos los derechos reservados.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
 
 export default VistaProductos;
-
