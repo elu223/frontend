@@ -15,7 +15,8 @@ import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import EnviosPendiente from './Componentes/Admin/Admin-Envios-Pendientes/EnvioPendiente';
 import './App.css';
 
-function App() {
+// componente interno que pueda usa useAuth
+function AppContent() {
   const [carrito, setCarrito] = useState([]);
   const [seccionAdminActiva, setSeccionAdminActiva] = useState('productos');
   
