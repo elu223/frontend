@@ -5,19 +5,11 @@
   background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
 }
 
 /* Main Content */
 .main-content {
   padding: 2rem 0;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
 }
 
 .cargando-productos {
@@ -33,14 +25,9 @@
   font-size: 1.1rem;
   color: #666;
 }
-
 .container {
   margin: 0 auto;
   padding: 0 20px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 /* Resultados de búsqueda */
@@ -59,9 +46,6 @@
   box-shadow: 0 5px 20px rgba(0,0,0,0.1);
   margin-bottom: 3rem;
   border: 1px solid #e9ecef;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 .lista-productos-horizontal {
