@@ -8,57 +8,115 @@
 }
 
 .footer-contenedor {
-  width: 100vw;
-  margin: auto;
-  max-width: 1200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  position: relative;
+    width: 100vw;
+    margin: auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    gap: 40px;
+    padding: 0 20px;
 }
 
 .footer-info h3 {
-  font-size: 22px;
-  margin-bottom: 5px;
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #9c1095;
+}
+
+.footer-info p {
+    font-size: 15px;
+    margin: 5px 0;
 }
 
 .footer-links {
-  display: flex;
-  gap: 20px;
+    display: flex;
+    gap: 20px;
 }
 
 .footer-links a {
-  color: #000000;
-  text-decoration: none;
-  font-size: 16px;
+    color: #000000;
+    text-decoration: none; /* Esto quita las rayas/subrayado */
+    font-size: 16px;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
-  color: #9c1095;
+    color: #9c1095;
 }
 
-.footer-social a {
-  color: rgb(0, 0, 0);
-  font-size: 24px;
-  margin: 0 8px;
+.footer-redes {
+    display: flex;
+    gap: 20px;
 }
 
-.footer-social a:hover {
-  color: #7a095e;
+.footer-redes a {
+    color: #000000;
+    text-decoration: none; /* Esto quita las rayas/subrayado */
+    font-size: 16px;
+    font-weight: 500;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.footer-redes a:hover {
+    color: #9c1095;
 }
 
 .footer-copy {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  opacity: 0.7;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    opacity: 0.8;
+    padding: 0 20px;
+}
+
+.footer-legal {
+    margin-top: 10px;
+}
+
+.footer-legal a {
+    color: #666;
+    text-decoration: none; /* Esto quita las rayas/subrayado */
+    font-size: 13px;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.footer-legal a:hover {
+    color: #9c1095;
+    text-decoration: underline; /* Opcional: puedes dejar subrayado solo al hover */
 }
 
 @media (max-width: 700px) {
-  .footer-contenedor {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
+    .footer-contenedor {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .footer-redes {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .footer-copy {
+        font-size: 13px;
+        padding: 0 15px;
+    }
+    
+    .footer-legal a {
+        margin: 0 5px;
+        font-size: 12px;
+    }
 }

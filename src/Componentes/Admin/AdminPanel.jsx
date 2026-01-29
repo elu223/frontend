@@ -34,7 +34,7 @@ function AdminPanel() {
     <div className="barra-lateral-admin">
       <Link href="/" className="logo-admin-link">
         <div className="logo-container-admin">
-          <img className="logo-panel" src="img/logo.png" alt="TejidosMiki" />
+          <img className="logo-panel" src="./img/logo.png" alt="TejidosMiki" />
         </div>
       </Link>
       <nav className="navegacion-panel">
