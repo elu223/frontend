@@ -1,21 +1,26 @@
-
 .Carrito-container {
   width: 100vw;
-  height: auto;
+  min-height: 70vh; 
   background-color: #f0ebeb;
+  display: flex;
+  flex-direction: column;
+  flex: 1; 
 }
+
 .carrito {
     display: flex;
     flex-direction: column;
     align-content: center;
     align-items: center;
+    flex: 1; 
+    padding-bottom: 20px;
 }
 
 .tituloCarrito {
   height: 49px;
   width: 100vw;
-  text-align:start;
-  color:#ffffff;
+  text-align: start;
+  color: #ffffff;
   background-color: #AB0C70;
   text-align: center;
   margin: 0;
@@ -25,24 +30,36 @@
 h2.tituloCarrito {
    font-size: 34px;
    height: 55px;
-    display: flex;
-    text-align: center;
-    font-family: "Playfair Display", serif;
-    font-optical-sizing: auto;
-    font-weight: bold;
-    font-style: normal;
-    align-items: center;
-    justify-content: center;
-  
+   display: flex;
+   text-align: center;
+   font-family: "Playfair Display", serif;
+   font-optical-sizing: auto;
+   font-weight: bold;
+   font-style: normal;
+   align-items: center;
+   justify-content: center;
 }
 
-
-
 .itemsLista {
-
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  width: 100%;
+  max-width: 800px;
+  flex: 1;
+}
+
+
+.carrito-vacio {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #666;
+  margin: 50px 0;
+  padding: 40px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 :hover.Carrito-item {
@@ -63,7 +80,7 @@ h2.tituloCarrito {
   margin-top: 12px;
   background-color: #fff8dc;
   display: flex;
- justify-content: space-between;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -75,7 +92,7 @@ h2.tituloCarrito {
 }
 
 :hover.Boton-Eliminar {
-    top: 53px;
+    top: 36px;
     left: -4px;
     position: relative;
     background-color: white;
@@ -87,7 +104,7 @@ h2.tituloCarrito {
 }
 
 .Boton-Eliminar {
-      top: 53px;
+    top: 34px;
     left: -4px;
     position: relative;
     background-color: #AB0C70;
@@ -106,6 +123,7 @@ h2.tituloCarrito {
     margin-top: 20px;
     width: 58%;
     text-align: center;
+    margin-bottom: 20px; /* Espacio antes del footer */
 }
 
 :hover.Boton-Comprar {
@@ -119,6 +137,7 @@ h2.tituloCarrito {
     box-shadow: 1px 0px 1px 1px #7a7a7a;
     cursor: pointer;
 }
+
 .Boton-Comprar {
     font-size: 20px;
     width: -webkit-fill-available;
@@ -138,18 +157,19 @@ h2.tituloCarrito {
   cursor: pointer;
   font-size: 20px;
 }
+
 .cantidad-input {
   -webkit-appearance: none;
   -moz-appearance: textfield;
   appearance: none;
   background: #6A1452;
   width: 50px;
-    height: 30px;
+  height: 30px;
   border-radius: 30px;
   text-align: center;
   font: inherit;
   box-sizing: border-box;
-  color:white;
+  color: white;
 }
 
 .cantidad-input::-webkit-outer-spin-button,
@@ -163,8 +183,53 @@ h2.tituloCarrito {
     width: 143px;
     height: 124px;
     object-fit: cover;
-    /* border-radius: 10px; */
-    background: #f3f3f3;
-    /* display: block; */
     margin-left: 9px;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .Carrito-item {
+    width: 95%;
+    max-width: 750px;
+  }
+  
+  .itemsLista {
+    align-items: center;
+  }
+}
+
+@media (max-width: 650px) {
+  .Carrito-item {
+    flex-direction: column;
+    padding: 15px;
+    width: 90%;
+  }
+  
+  .carrito-img {
+    width: 120px;
+    height: 100px;
+  }
+  
+  .Carrito-total {
+    width: 90%;
+  }
+  
+  h2.tituloCarrito {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Carrito-container {
+    min-height: 60vh;
+  }
+  
+  .carrito-vacio {
+    font-size: 1.2rem;
+    padding: 20px;
+  }
+  
+  .Carrito-item {
+    width: 95%;
+  }
 }

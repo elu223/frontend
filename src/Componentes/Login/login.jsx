@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useLocation } from 'wouter';
 import axios from 'axios';
 import './Login.css'; 
-import Footer from '../Footer/Footer.jsx';
 import { useAuth } from '../../auth/AuthProvider';
 
 function Login() {
@@ -94,7 +93,6 @@ function Login() {
           <a href="/registrarse" className="link">Registrarse</a>
         </div>
       </div>
-      <Footer />  
     </div>
   );
 }

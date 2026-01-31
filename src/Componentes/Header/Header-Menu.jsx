@@ -2,25 +2,31 @@ import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import './Header-Menu.css';
-import axios from 'axios';
 import { useAuth } from '../../auth/AuthProvider';
 import { useCarrito } from '../../CarritoContext';
 
-function HeaderMenu({ onSearch, searchTerm = '' }) {
-  const [terminoLocal, setTerminoLocal] = useState(searchTerm);
+function HeaderMenu() {
+  const [terminoLocal, setTerminoLocal] = useState('');
   const [, setLocation] = useLocation();
   const { user, logout } = useAuth();
   const { calcularTotalItems } = useCarrito();
 
-  const esAdmin = () => user && user.id_rol === 1;
+  // Leer parámetro de búsqueda de la URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    if (searchParam) {
+      setTerminoLocal(searchParam);
+    }
+  }, [window.location.search]);
 
-  const manejarBusqueda = (valor) => {
-    setTerminoLocal(valor);
-  };
+  const esAdmin = () => user && user.id_rol === 1;
 
   const enviarBusqueda = () => {
     if (terminoLocal.trim()) {
       setLocation(`/buscar?search=${terminoLocal}`);
+    } else {
+      setLocation('/');
     }
   };
 
@@ -52,7 +58,7 @@ function HeaderMenu({ onSearch, searchTerm = '' }) {
             type="text"
             placeholder="buscar productos..."
             value={terminoLocal}
-            onChange={(e) => manejarBusqueda(e.target.value)}
+            onChange={(e) => setTerminoLocal(e.target.value)}
             onKeyDown={manejarTecla}
             className="buscador-input"
           />

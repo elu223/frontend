@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useRoute, Link } from "wouter";
 import { FaStar } from 'react-icons/fa'; 
-import HeaderMenu from "../Header/Header-Menu.jsx";
 import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import './VistaProductoDetalle.css';
-import Footer from "../Footer/Footer.jsx";
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthProvider';
 import { useLocation } from 'wouter';
@@ -23,7 +21,7 @@ function VistaProductoDetalle() {
   const [cargando, setCargando] = useState(true);
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  const { carrito, agregarAlCarrito, calcularTotalItems } = useCarrito();
+  const { carrito, agregarAlCarrito } = useCarrito(); 
 
   useEffect(() => {
     if (params?.id) cargarProducto();
@@ -91,14 +89,13 @@ function VistaProductoDetalle() {
 
   if (cargando) return (
     <div className="vista-producto-detalle">
-      <HeaderMenu totalItems={calcularTotalItems()} />
+      {/*Si no se encuentra el producto*/}
       <main className="main-content"><div className="cargando-detalle">cargando...</div></main>
     </div>
   );
 
   if (!producto) return (
     <div className="vista-producto-detalle">
-      <HeaderMenu totalItems={calcularTotalItems()} />
       <main className="main-content">
         <div className="producto-no-encontrado">
           <h2>producto no encontrado</h2>
@@ -113,7 +110,7 @@ function VistaProductoDetalle() {
 
   return (
     <div className="vista-producto-detalle">
-      <HeaderMenu totalItems={calcularTotalItems()} />
+      {/*Vista de imagen pricipal con sus datos*/}
       <main className="main-content">
         <div className="contenedor-principal">
           
@@ -222,14 +219,13 @@ function VistaProductoDetalle() {
       {mostrarFormularioCompra && (
         <FormularioCompra
           carrito={carritoCompraRapida}
-          total={carritoCompraRapida.reduce(t, item => t + (item.precio * item.cantidad), 0 )}
-          onClose={ () =>{
+          total={carritoCompraRapida.reduce((t, item) => t + (item.precio * item.cantidad), 0)} // CORREGIDO
+          onClose={() => {
             setMostrarFormularioCompra(false);
-            setCarritoCompraRapida([])
+            setCarritoCompraRapida([]);
           }}
         />
       )}
-      <Footer />
     </div>
   );
 }

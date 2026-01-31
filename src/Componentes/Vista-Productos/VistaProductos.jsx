@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import TarjetaProducto from './TarjetaProductos.jsx';
-import HeaderMenu from "../Header/Header-Menu.jsx";
 import './VistaProductos.css';
-import Footer from "../Footer/Footer.jsx";
 import axios from 'axios';
 import { useLocation } from 'wouter';
 import { useAuth } from '../../auth/AuthProvider';
@@ -14,7 +12,7 @@ function VistaProductos() {
   const [cargando, setCargando] = useState(true);
   const [, setLocation] = useLocation();
   const { user } = useAuth();
-  const { carrito, agregarAlCarrito, calcularTotalItems } = useCarrito();
+  const { carrito, agregarAlCarrito } = useCarrito(); // Eliminamos calcularTotalItems aquí
   
   useEffect(() => {
     cargarProductos();
@@ -120,33 +118,20 @@ function VistaProductos() {
     }
   };
 
-  const totalItems = calcularTotalItems();
-
   if (cargando) {
     return (
       <div className="vista-productos">
-        <HeaderMenu 
-          onSearch={ejecutarBusqueda} 
-          searchTerm={terminoBusqueda} 
-          totalItems={totalItems} 
-        />
         <main className="main-content">
           <div className="container">
             <div className="cargando-productos">cargando productos...</div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="vista-productos">
-      <HeaderMenu 
-        onSearch={ejecutarBusqueda} 
-        searchTerm={terminoBusqueda} 
-        totalItems={totalItems} 
-      />
       <main className="main-content">
         <div className="container">
           {terminoBusqueda && (
@@ -187,7 +172,6 @@ function VistaProductos() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

@@ -1,0 +1,172 @@
+/* Estilos para la página de Soporte */
+.soporte-pagina {
+    width: 100%;
+    min-height: calc(100vh - 160px); /* Ajusta según tu Header+Footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+}
+
+.soporte-container {
+    max-width: 800px;
+    width: 100%;
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.soporte-titulo {
+    color: #9c1095;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.soporte-descripcion {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* Estilos del formulario */
+.soporte-formulario {
+    margin-bottom: 40px;
+}
+
+.form-box {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.campo {
+    width: 100%;
+}
+
+.input-email,
+.textarea-mensaje {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Arial', sans-serif;
+    transition: border-color 0.3s ease;
+    background-color: #f8f8f8;
+}
+
+.input-email:focus,
+.textarea-mensaje:focus {
+    outline: none;
+    border-color: #9c1095;
+    background-color: white;
+}
+
+.input-email::placeholder,
+.textarea-mensaje::placeholder {
+    color: #999;
+}
+
+.textarea-mensaje {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* Botón de enviar */
+.btn-enviar {
+    background-color: #9c1095;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+}
+
+.btn-enviar:hover {
+    background-color: #7a095e;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(156, 16, 149, 0.2);
+}
+
+.btn-enviar:active {
+    transform: translateY(0);
+}
+
+/* Información de contacto */
+.soporte-info {
+    border-top: 2px solid #FCEFB0;
+    padding-top: 30px;
+    margin-top: 30px;
+}
+
+.soporte-info h3 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.soporte-info p {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    border-left: 3px solid #FCEFB0;
+}
+
+.soporte-info strong {
+    color: #9c1095;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .soporte-pagina {
+        padding: 20px 15px;
+        min-height: calc(100vh - 140px);
+    }
+    
+    .soporte-container {
+        padding: 25px;
+    }
+    
+    .soporte-titulo {
+        font-size: 2rem;
+    }
+    
+    .soporte-descripcion {
+        font-size: 1rem;
+    }
+    
+    .btn-enviar {
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .soporte-container {
+        padding: 20px;
+    }
+    
+    .soporte-titulo {
+        font-size: 1.8rem;
+    }
+    
+    .soporte-info h3 {
+        font-size: 1.2rem;
+    }
+    
+    .soporte-info p {
+        font-size: 0.95rem;
+    }
+}

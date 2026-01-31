@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import axios from 'axios';
 import "./registro.css";
-import Footer from "../Footer/Footer";
 import { useAuth } from '../../auth/AuthProvider';
 
 function Registro() {
@@ -173,7 +172,6 @@ function Registro() {
           </div>
         </form>
       </div>
-      <Footer />
     </div>
   );
 }

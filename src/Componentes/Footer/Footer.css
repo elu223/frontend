@@ -1,21 +1,20 @@
 .footer {
-    margin: 0;
-    margin-top: 40px;
-    background: #FCEFB0;
+    background-color: #FCEFB0;
     color: black;
     padding: 20px 0;
     box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    flex-shrink: 0;
 }
 
 .footer-contenedor {
-    width: 100vw;
-    margin: auto;
+    width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    position: relative;
     gap: 40px;
     padding: 0 20px;
 }
@@ -38,11 +37,10 @@
 
 .footer-links a {
     color: #000000;
-    text-decoration: none; /* Esto quita las rayas/subrayado */
+    text-decoration: none;
     font-size: 16px;
     font-weight: 500;
     padding: 5px 0;
-    position: relative;
     transition: color 0.3s ease;
 }
 
@@ -57,7 +55,7 @@
 
 .footer-redes a {
     color: #000000;
-    text-decoration: none; /* Esto quita las rayas/subrayado */
+    text-decoration: none;
     font-size: 16px;
     font-weight: 500;
     padding: 5px 0;
@@ -74,6 +72,7 @@
     font-size: 14px;
     opacity: 0.8;
     padding: 0 20px;
+    width: 100%;
 }
 
 .footer-legal {
@@ -82,7 +81,7 @@
 
 .footer-legal a {
     color: #666;
-    text-decoration: none; /* Esto quita las rayas/subrayado */
+    text-decoration: none;
     font-size: 13px;
     margin: 0 10px;
     transition: color 0.3s ease;
@@ -90,7 +89,7 @@
 
 .footer-legal a:hover {
     color: #9c1095;
-    text-decoration: underline; /* Opcional: puedes dejar subrayado solo al hover */
+    text-decoration: underline;
 }
 
 @media (max-width: 700px) {

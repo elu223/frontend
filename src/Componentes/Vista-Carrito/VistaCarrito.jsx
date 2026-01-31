@@ -4,16 +4,14 @@ import FormularioCompra from '../FormularioComprar/Formulario-Compra.jsx';
 import { useAuth } from '../../auth/AuthProvider';
 import { useLocation } from 'wouter';
 import './VistaCarrito.css';
-import Footer from '../Footer/Footer.jsx';
 import axios from 'axios';
-import HeaderMenu from '../Header/Header-Menu.jsx';
 import { useCarrito } from '../../CarritoContext';
 
 function VistaCarrito() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  const { carrito, eliminarDelCarrito, actualizarCantidad, calcularTotalItems } = useCarrito();
+  const { carrito, eliminarDelCarrito, actualizarCantidad } = useCarrito();
 
   // función para verificar stock disponible
   const verificarStockDisponible = (productoId, cantidadDeseada) => {
@@ -66,13 +64,10 @@ function VistaCarrito() {
   };
 
   const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-  
-  // calcular total de items para el header
-  const totalItems = calcularTotalItems();
 
   return (
     <div className="Carrito-container">
-      <HeaderMenu totalItems={totalItems} />
+      {/* ELIMINADO: HeaderMenu */}
       
       <h2 className="tituloCarrito">carrito de compras</h2>
 
@@ -142,7 +137,6 @@ function VistaCarrito() {
           />
         )}
       </div>
-      <Footer />
     </div>
   );
 }

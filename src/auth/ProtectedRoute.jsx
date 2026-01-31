@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, useLocation } from 'wouter';
-import { useAuth } from '../auth/AuthProvider';
+import { useAuth } from './AuthProvider';
 
 const ProtectedRoute = ({ path, children, adminOnly = false }) => {
   const { user } = useAuth();
