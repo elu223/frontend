@@ -255,18 +255,20 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 42px;
+  height: 42px;
 }
 
 /* Unifica las imágenes dentro del bloque de acciones para evitar duplicados */
 .acciones img {
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
 }
 

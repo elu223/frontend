@@ -1,4 +1,3 @@
-// AuthProvider.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
@@ -8,33 +7,23 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const cargarUsuario = () => {
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        try {
-          const parsedUser = JSON.parse(savedUser);
-          setUser(parsedUser);
-        } catch {
-          localStorage.removeItem('user');
-          setUser(null);
-        }
-      }
-      setLoading(false);
-    };
-
-    cargarUsuario();
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      setUser(parsedUser);
+    }
+    setLoading(false);
   }, []);
 
   const login = (userData) => {
-    setUser(userData);
+    // Guardar el usuario COMPLETO con token en localStorage
     localStorage.setItem('user', JSON.stringify(userData));
-    window.dispatchEvent(new Event('storage'));
+    setUser(userData);
   };
 
   const logout = () => {
-    setUser(null);
     localStorage.removeItem('user');
-    window.dispatchEvent(new Event('storage'));
+    setUser(null);
   };
 
   if (loading) {

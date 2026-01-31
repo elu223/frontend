@@ -13,6 +13,7 @@ import AdminUsuarios from './Componentes/Admin/Admin-Usuarios/AdminUsuarios';
 import ComprasAdmin from './Componentes/Admin/Compras-Admin/ComprasAdmin'; 
 import ProductosAdmin from './Componentes/Admin/Productos-Admin/ProductosAdmin';
 import EnviosPendiente from './Componentes/Admin/Admin-Envios-Pendientes/EnvioPendiente';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
@@ -36,40 +37,40 @@ function App() {
             <Route path="/registrarse">
               <Registro />
             </Route>
-            <Route path="/miperfil">
+            <ProtectedRoute path="/miperfil">
               <MiPerfil />
-            </Route>
+            </ProtectedRoute>
             <Route path="/buscar">
               <VistaProductos />
             </Route>
 
-            <Route path="/admin">
+            <ProtectedRoute path="/admin" adminOnly={true}>
               <div className="contenedor-admin">
                 <AdminPanel />
                 <ProductosAdmin />
               </div>
-            </Route>
+            </ProtectedRoute>
 
-            <Route path="/admin/usuarios">
+            <ProtectedRoute path="/admin/usuarios" adminOnly={true}>
               <div className="contenedor-admin">
                 <AdminPanel />
                 <AdminUsuarios />
               </div>
-            </Route>
+            </ProtectedRoute>
 
-            <Route path="/admin/compras">
+            <ProtectedRoute path="/admin/compras" adminOnly={true}>
               <div className="contenedor-admin">
                 <AdminPanel />
                 <ComprasAdmin />
               </div>
-            </Route>
+            </ProtectedRoute>
 
-            <Route path="/admin/envios">
+            <ProtectedRoute path="/admin/envios" adminOnly={true}>
               <div className="contenedor-admin">
                 <AdminPanel />
                 <EnviosPendiente />
               </div>
-            </Route>
+            </ProtectedRoute>
 
             <Route path="/forbidden">
               <div>acceso no autorizado</div>
