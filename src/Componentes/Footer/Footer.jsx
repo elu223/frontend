@@ -47,8 +47,7 @@ function Footer() {
           Diseñado por Luciana Orosco y Milagros Nenen
         </p>
         <p className="footer-legal">
-          <Link href="/soporte">Soporte</Link> • 
-          <Link href="/terminos">Términos y Condiciones</Link>
+          <Link href="/soporte">Soporte</Link> 
         </p>
       </div>
     </footer>

@@ -17,18 +17,38 @@ function AdminUsuarios() {
     id_rol: "1"
   });
 
-  // Cargar usuarios
+  // Función para obtener el token del localStorage
+  const getAuthConfig = () => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      if (user && user.token) {
+        return {
+          headers: {
+            'Authorization': `Bearer ${user.token}`
+          }
+        };
+      }
+    }
+    return {};
+  };
+
   useEffect(() => {
     cargarUsuarios();
   }, []);
 
   const cargarUsuarios = () => {
-    axios.get("http://localhost:5000/usuarios")
+    axios.get("http://localhost:5000/usuarios", getAuthConfig())
       .then(res => setUsuarios(res.data))
-      .catch(err => console.log("Error:", err));
+      .catch(err => {
+        console.log("Error:", err);
+        if (err.response && err.response.status === 401) {
+          alert("Sesión expirada. Por favor, inicia sesión nuevamente.");
+          window.location.href = '/iniciar-sesion';
+        }
+      });
   };
 
-  // Funciones modal
   const abrirNuevo = () => {
     setUsuarioEditando(null);
     setFormData({ 
@@ -62,13 +82,11 @@ function AdminUsuarios() {
     setUsuarioEditando(null);
   };
 
-  // Guardar usuario
   const guardarUsuario = (e) => {
     e.preventDefault();
     
     if (usuarioEditando) {
-      // Editar
-      axios.put(`http://localhost:5000/usuarios/${usuarioEditando}`, formData)
+      axios.put(`http://localhost:5000/usuarios/${usuarioEditando}`, formData, getAuthConfig())
         .then(() => {
           cargarUsuarios();
           cerrarModal();
@@ -79,8 +97,7 @@ function AdminUsuarios() {
           alert("Error: " + (error.response?.data?.error || "No se pudo actualizar"));
         });
     } else {
-      // Nuevo usuario
-      axios.post("http://localhost:5000/usuarios", formData)
+      axios.post("http://localhost:5000/usuarios", formData, getAuthConfig())
         .then(() => {
           cargarUsuarios();
           cerrarModal();
@@ -88,27 +105,25 @@ function AdminUsuarios() {
         })
         .catch(error => {
           console.log("Error:", error);
-          alert("Error: " + error.response?.data);
+          alert("Error: " + (error.response?.data?.error || error.response?.data || "Error desconocido"));
         });
     }
   };
 
-  // Eliminar
   const eliminarUsuario = (id) => {
     if (!confirm("¿Eliminar usuario?")) return;
     
-    axios.delete(`http://localhost:5000/usuarios/${id}`)
+    axios.delete(`http://localhost:5000/usuarios/${id}`, getAuthConfig())
       .then(() => {
         cargarUsuarios();
         alert("Usuario eliminado");
       })
       .catch(error => {
         console.log("Error:", error);
-        alert("Error: " + error.response?.data?.error);
+        alert("Error: " + (error.response?.data?.error || "No se pudo eliminar"));
       });
   };
 
-  // Filtrar
   const filtrados = usuarios.filter(u =>
     `${u.nombre} ${u.apellido}`.toLowerCase().includes(busqueda.toLowerCase())
   );

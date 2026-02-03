@@ -10,29 +10,39 @@ function VistaProductos() {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [productosMostrados, setProductosMostrados] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation(); //obtener la ubicación actual
   const { user } = useAuth();
-  const { carrito, agregarAlCarrito } = useCarrito(); // Eliminamos calcularTotalItems aquí
+  const { carrito, agregarAlCarrito } = useCarrito();
   
+  // Escucha cambios en la ruta para re-filtrar productos sin necesidad de recargar la página completa
   useEffect(() => {
     cargarProductos();
-  }, []);
+  }, [location]); // dependencia en location para recargar al cambiar URL
 
   const cargarProductos = () => {
     setCargando(true);
     axios.get('http://localhost:5000/api/productos')
       .then((response) => {
-        setProductosMostrados(response.data);
-        setCargando(false);
+        const todosProductos = response.data;
+        
+        // Siempre leer el parámetro de búsqueda de la URL ACTUAL
         const urlParams = new URLSearchParams(window.location.search);
         const searchParam = urlParams.get('search');
+        
+        setTerminoBusqueda(searchParam || '');
+        
         if (searchParam) {
-          setTerminoBusqueda(searchParam);
-          const filtrados = response.data.filter(p =>
+          // Filtrar productos
+          const filtrados = todosProductos.filter(p =>
             p.nombre.toLowerCase().includes(searchParam.toLowerCase())
           );
           setProductosMostrados(filtrados);
+        } else {
+          // Mostrar todos si no hay búsqueda
+          setProductosMostrados(todosProductos);
         }
+        
+        setCargando(false);
       })
       .catch(() => {
         setCargando(false);
@@ -47,7 +57,7 @@ function VistaProductos() {
   const verificarAutenticacion = () => {
     if (!user) {
       alert('debes iniciar sesión para agregar productos al carrito');
-      setLocation('/iniciar-sesion');
+      window.location.href = '/iniciar-sesion';
       return false;
     }
     return true;
@@ -106,18 +116,6 @@ function VistaProductos() {
       });
   };
 
-  const ejecutarBusqueda = (termino) => {
-    setTerminoBusqueda(termino);
-    if (termino.trim() === '') {
-      cargarProductos();
-    } else {
-      const filtrados = productosMostrados.filter(p =>
-        p.nombre.toLowerCase().includes(termino.toLowerCase())
-      );
-      setProductosMostrados(filtrados);
-    }
-  };
-
   if (cargando) {
     return (
       <div className="vista-productos">
@@ -145,10 +143,9 @@ function VistaProductos() {
               {productosMostrados.length === 0 && (
                 <button 
                   className="btn-ver-todos"
-                  onClick={() => {
-                    setTerminoBusqueda('');
-                    cargarProductos();
-                  }}
+                  onClick={() => 
+                    setLocation ('/')
+                  }
                 >
                   ver todos los productos
                 </button>
@@ -156,19 +153,25 @@ function VistaProductos() {
             </div>
           )}
           <div className="contenedor-productos">
-            <div className="lista-productos-horizontal">
-              {productosMostrados.map((producto) => (
-                <TarjetaProducto
-                  key={producto.id_producto}
-                  id={producto.id_producto}
-                  nombre={producto.nombre}
-                  precio={producto.precio}
-                  imagen={`http://localhost:5000${producto.imagen_url}`}
-                  descripcion={producto.descripcion}
-                  agregarAlCarrito={() => handleAgregarAlCarrito(producto)}
-                />
-              ))}
-            </div>
+            {productosMostrados.length === 0 && !terminoBusqueda ? (
+              <div className="sin-productos">
+                <p>no hay productos disponibles</p>
+              </div>
+            ) : (
+              <div className="lista-productos-horizontal">
+                {productosMostrados.map((producto) => (
+                  <TarjetaProducto
+                    key={producto.id_producto}
+                    id={producto.id_producto}
+                    nombre={producto.nombre}
+                    precio={producto.precio}
+                    imagen={`http://localhost:5000${producto.imagen_url}`}
+                    descripcion={producto.descripcion}
+                    agregarAlCarrito={() => handleAgregarAlCarrito(producto)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </main>

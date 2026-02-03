@@ -2,7 +2,7 @@ import React from 'react';
 import './soporte.css';
 
 const Soporte = () => {
-    const FORMSPREE_ENDPOINT = "https://formspree.io/f/mjklgvaa";
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzqvezd";
 
     return (
         <div className="soporte-pagina">
@@ -43,7 +43,6 @@ const Soporte = () => {
                 <div className="soporte-info">
                     <h3>Otras formas de contacto:</h3>
                     <p><strong>Email:</strong> tejidosmiki@gmail.com</p>
-                    <p><strong>WhatsApp:</strong> +54 2901 533-532</p>
                     <p><strong>Horario de atención:</strong> Lunes a Viernes 9:00 - 18:00 hs</p>
                 </div>
             </div>

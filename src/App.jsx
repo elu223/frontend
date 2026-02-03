@@ -24,95 +24,64 @@ function App() {
     <AuthProvider>
       <CarritoProvider>
         <div className="App">
-          {/* Header en todas las rutas excepto admin y auth */}
           <Switch>
-            <Route path="/admin/:rest*">
-              {/* No mostrar Header en admin */}
-            </Route>
-            <Route path="/iniciar-sesion">
-              {/* No mostrar Header en login */}
-            </Route>
-            <Route path="/registrarse">
-              {/* No mostrar Header en registro */}
-            </Route>
-            <Route>
-              <HeaderMenu />
-            </Route>
-          </Switch>
-          
-          <main className="main-content">
-            <Switch>
-              <Route path="/" component={VistaProductos} />
-              <Route path="/soporte" component={Soporte} />
-              <Route path="/carrito" component={VistaCarrito} />
-              <Route path="/producto/:id" component={VistaProductoDetalle} />
-              <Route path="/iniciar-sesion" component={Login} />
-              <Route path="/registrarse" component={Registro} />
-              <Route path="/buscar" component={VistaProductos} />
-              
-              {/* Rutas protegidas */}
-              <ProtectedRoute path="/miperfil" adminOnly={false}>
-                <MiPerfil />
-              </ProtectedRoute>
-              
-              {/* Rutas de admin */}
-              <ProtectedRoute path="/admin" adminOnly={true}>
+            {/* Rutas de Admin  */}
+            <Route path="/admin">
+              <ProtectedRoute path="/admin">
                 <div className="contenedor-admin">
                   <AdminPanel />
                   <ProductosAdmin />
                 </div>
               </ProtectedRoute>
-              
-              <ProtectedRoute path="/admin/usuarios" adminOnly={true}>
+            </Route>
+            
+            <Route path="/admin/usuarios">
+              <ProtectedRoute path="/admin/usuarios">
                 <div className="contenedor-admin">
                   <AdminPanel />
                   <AdminUsuarios />
                 </div>
               </ProtectedRoute>
-              
-              <ProtectedRoute path="/admin/compras" adminOnly={true}>
+            </Route>
+            
+            <Route path="/admin/compras">
+              <ProtectedRoute path="/admin/compras">
                 <div className="contenedor-admin">
                   <AdminPanel />
                   <ComprasAdmin />
                 </div>
               </ProtectedRoute>
-              
-              <ProtectedRoute path="/admin/envios" adminOnly={true}>
+            </Route>
+            
+            <Route path="/admin/envios">
+              <ProtectedRoute path="/admin/envios">
                 <div className="contenedor-admin">
                   <AdminPanel />
                   <EnviosPendiente />
                 </div>
               </ProtectedRoute>
-              
-              <Route path="/forbidden">
-                <div className="error-container">
-                  <h1>403 - Acceso no autorizado</h1>
-                  <p>No tienes permiso para acceder a esta página.</p>
-                </div>
-              </Route>
-              
-              {/* 404 */}
-              <Route>
-                <div className="error-container">
-                  <h1>404 - Página no encontrada</h1>
-                  <p>La página que buscas no existe.</p>
-                </div>
-              </Route>
-            </Switch>
-          </main>
-          
-          {/* Footer en todas las rutas excepto admin y auth */}
-          <Switch>
-            <Route path="/admin/:rest*">
-              {/* No mostrar Footer en admin */}
             </Route>
-            <Route path="/iniciar-sesion">
-              {/* No mostrar Footer en login */}
-            </Route>
-            <Route path="/registrarse">
-              {/* No mostrar Footer en registro */}
-            </Route>
+            
+            {/* todas las demás rutas con Header y Footer */}
             <Route>
+              <HeaderMenu />
+              
+              <main className="main-content">
+                <Switch>
+                  <Route path="/" component={VistaProductos} />
+                  <Route path="/soporte" component={Soporte} />
+                  <Route path="/carrito" component={VistaCarrito} />
+                  <Route path="/producto/:id" component={VistaProductoDetalle} />
+                  <Route path="/iniciar-sesion" component={Login} />
+                  <Route path="/registrarse" component={Registro} />
+                  <Route path="/buscar" component={VistaProductos} />
+                  
+                  <ProtectedRoute path="/miperfil">
+                    <MiPerfil />
+                  </ProtectedRoute>
+                </Switch>
+              </main>
+              
               <Footer />
             </Route>
           </Switch>
