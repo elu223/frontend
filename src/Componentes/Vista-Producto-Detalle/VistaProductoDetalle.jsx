@@ -15,6 +15,7 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
   const [comentario, setComentario] = useState('');
   const [cantidad, setCantidad] = useState(1);
   const [comentariosLocales, setComentariosLocales] = useState([]);
+  const [comentarios, setComentarios] = useState([]);
   const [mostrarFormularioCompra, setMostrarFormularioCompra] = useState(false);
   const [carritoCompraRapida, setCarritoCompraRapida] = useState([]);
   const [producto, setProducto] = useState(null);
@@ -46,7 +47,17 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
               .filter(p => p.id_producto !== response.data.id_producto)
               .slice(0, 6);
             setProductosRelacionados(relacionados);
-            setCargando(false);
+            
+            // obtener comentarios del producto
+            axios.get(`http://localhost:5000/api/productos/${params.id}/comentarios`)
+              .then((responseComentarios) => {
+                setComentarios(responseComentarios.data);
+                setCargando(false);
+              })
+              .catch((error) => {
+                console.error('Error al cargar comentarios:', error);
+                setCargando(false);
+              });
           })
           .catch((error) => {
             console.error('Error al cargar productos relacionados:', error);
@@ -168,24 +179,6 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
         alert('Error al verificar stock disponible');
       });
   };
-
-  const comentarios = [
-    {
-      usuario: "AnaMaria87",
-      texto: "Me gustó el diseño y la calidad. Aparte de que es muy lindo.", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "Juanito124", 
-      texto: "No fue lo que esperaba. creí que era mas grande", 
-      puntuacion: 5,
-    },
-    { 
-      usuario: "User0001", 
-      texto: "Me en cantaron los colores :3", 
-      puntuacion: 5,
-    }
-  ];
 
   // si está cargando
   if (cargando) {
@@ -386,14 +379,32 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                       }
 
                       if (comentario.trim() && rating > 0) {
-                        const nuevoComentario = {
-                          usuario: user.nombre || "Usuario Actual",
-                          texto: comentario,
+                        // Enviar comentario al backend
+                        axios.post(`http://localhost:5000/api/productos/${params.id}/comentarios`, {
+                          comentario: comentario.trim(),
                           puntuacion: rating
-                        };
-                        setComentariosLocales([...comentariosLocales, nuevoComentario]);
-                        setComentario('');
-                        setRating(0);
+                        }, {
+                          headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                          }
+                        })
+                        .then((response) => {
+                          // Recargar comentarios después de enviar
+                          axios.get(`http://localhost:5000/api/productos/${params.id}/comentarios`)
+                            .then((responseComentarios) => {
+                              setComentarios(responseComentarios.data);
+                              setComentario('');
+                              setRating(0);
+                              alert('Comentario enviado correctamente');
+                            })
+                            .catch((error) => {
+                              console.error('Error al recargar comentarios:', error);
+                            });
+                        })
+                        .catch((error) => {
+                          console.error('Error al enviar comentario:', error);
+                          alert('Error al enviar comentario');
+                        });
                       }
                     }}
                   >
@@ -402,12 +413,15 @@ function VistaProductoDetalle({ agregarAlCarrito, totalItems = 0 }) {
                 </div>
 
                 <div className="lista-comentarios">
-                  {[...comentarios, ...comentariosLocales].map((com, index) => (
+                  {comentarios.map((com, index) => (
                     <div key={index} className="comentario-item">
                       <div className="usuario-comentario">{com.usuario}</div>
-                      <div className="texto-comentario">{com.texto}</div>
+                      <div className="texto-comentario">{com.comentario}</div>
                       <div className="estrellas-comentario">
                         {"★".repeat(com.puntuacion)}{"☆".repeat(5 - com.puntuacion)}
+                      </div>
+                      <div className="fecha-comentario">
+                        {new Date(com.fecha).toLocaleDateString()}
                       </div>
                     </div>
                   ))}

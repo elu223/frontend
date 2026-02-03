@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { useAuth } from "../../auth/AuthProvider";
 import HeaderMenu from "../Header/Header-Menu.jsx";
 import Footer from "../Footer/Footer.jsx";
+import axios from 'axios';
 import "./Mi-Perfil.css";
 
 function MiPerfil() {
@@ -33,12 +34,23 @@ function MiPerfil() {
         direccion: user.direccion || "",
         avatar: user.avatar || "./img/1.png"
       });
+      
+      // Cargar comentarios del usuario
+      axios.get(`http://localhost:5000/usuarios/${user.id_usuario}/comentarios`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then((response) => {
+        setComentariosPorUsuario(response.data);
+      })
+      .catch((error) => {
+        console.error('Error al cargar comentarios:', error);
+      });
     }
   }, [user]);
 
-  const comentariosPorUsuario = {
-    "": [],
-  };
+  const [comentariosPorUsuario, setComentariosPorUsuario] = useState([]);
 
   const comprasPorUsuario = {
     "": [],
@@ -178,9 +190,15 @@ function MiPerfil() {
         <div className="mis-comentarios">
           <h3>Mis Comentarios</h3>
           <ul>
-            {comentariosPorUsuario[usuario.nombre] ? (
-              comentariosPorUsuario[usuario.nombre].map((comentario, i) => (
-                <li key={i}>{comentario}</li>
+            {comentariosPorUsuario.length > 0 ? (
+              comentariosPorUsuario.map((comentario, i) => (
+                <li key={i}>
+                  <strong>{comentario.producto}:</strong> {comentario.comentario} 
+                  <span style={{ color: '#ffc107' }}>
+                    {"★".repeat(comentario.puntuacion)}
+                  </span>
+                  <small> ({new Date(comentario.fecha).toLocaleDateString()})</small>
+                </li>
               ))
             ) : (
               <li>No tienes comentarios aún.</li>

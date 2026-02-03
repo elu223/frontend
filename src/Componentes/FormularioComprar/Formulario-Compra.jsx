@@ -14,6 +14,10 @@ function FormularioCompra({ carrito, total, onClose }) {
   const [metodoPago, setMetodoPago] = useState('');
   const [procesando, setProcesando] = useState(false);
   const [usuarioId, setUsuarioId] = useState(null);
+  const [direccion, setDireccion] = useState('');
+  const [ciudad, setCiudad] = useState('');
+  const [estado, setEstado] = useState('');
+  const [codigoPostal, setCodigoPostal] = useState('');
   const { user } = useAuth();
   const [, setLocation] = useLocation();
 
@@ -26,7 +30,24 @@ function FormularioCompra({ carrito, total, onClose }) {
 
     const userId = user.id ?? user.id_usuario ?? localStorage.getItem('userId');
     setUsuarioId(userId);
-  }, []);
+
+    // Cargar dirección del usuario
+    axios.get(`http://localhost:5000/usuarios/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then((response) => {
+      const userData = response.data;
+      setDireccion(userData.direccion || '');
+      setCiudad(userData.ciudad || '');
+      setEstado(userData.estado || '');
+      setCodigoPostal(userData.codigo_postal || '');
+    })
+    .catch((error) => {
+      console.error('Error al cargar dirección:', error);
+    });
+  }, [user]);
 
   const mediosPago = [
     { id: 'VISA', nombre: 'VISA' },
@@ -58,7 +79,11 @@ function FormularioCompra({ carrito, total, onClose }) {
     let carritoIdUsado;
 
     // 1. Crear carrito
-    axios.post('http://localhost:5000/api/carritos', { id_usuario: usuarioId })
+    axios.post('http://localhost:5000/api/carritos', {}, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
       .then((responseCarrito) => {
         carritoIdUsado = responseCarrito.data.id_carrito;
         console.log('Carrito creado ID:', carritoIdUsado);
@@ -107,7 +132,43 @@ function FormularioCompra({ carrito, total, onClose }) {
       .then((responseVenta) => {
         console.log('Venta registrada:', responseVenta.data);
         
-        alert('Pago exitoso\nLa compra ha sido registrada.');
+        // 5. Actualizar dirección del usuario si cambió
+        const datosUsuarioActualizado = {
+          nombre: user.nombre,
+          apellido: user.apellido,
+          email: user.email,
+          telefono: user.telefono,
+          direccion: direccion,
+          ciudad: ciudad,
+          estado: estado,
+          codigo_postal: codigoPostal
+        };
+        
+        return axios.put(`http://localhost:5000/usuarios/${usuarioId}`, datosUsuarioActualizado, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+      })
+      .then((responseUsuario) => {
+        console.log('Usuario actualizado:', responseUsuario.data);
+        
+        // 6. Crear envío
+        const datosEnvio = {
+          id_usuario: usuarioId,
+          id_carrito: carritoIdUsado,
+          direccion: direccion,
+          ciudad: ciudad,
+          estado: estado,
+          codigo_postal: codigoPostal
+        };
+        
+        return axios.post('http://localhost:5000/api/envios', datosEnvio);
+      })
+      .then((responseEnvio) => {
+        console.log('Envío creado:', responseEnvio.data);
+        
+        alert('Pago exitoso\nLa compra ha sido registrada y el envío creado.');
         
         // Cerrar formulario
         onClose();
@@ -156,14 +217,47 @@ function FormularioCompra({ carrito, total, onClose }) {
           </div>
 
           <div className="campo-envio">
+            <h3>Dirección de Envío</h3>
             <input
               className="input"
               type="text"
-              placeholder="Lugar del envío"
-              value={lugarEnvio}
-              onChange={(e) => setLugarEnvio(e.target.value)}
+              placeholder="Dirección"
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
               required
               disabled={procesando}
+            />
+            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <input
+                className="input"
+                type="text"
+                placeholder="Ciudad"
+                value={ciudad}
+                onChange={(e) => setCiudad(e.target.value)}
+                required
+                disabled={procesando}
+                style={{ flex: 1 }}
+              />
+              <input
+                className="input"
+                type="text"
+                placeholder="Estado"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                required
+                disabled={procesando}
+                style={{ flex: 1 }}
+              />
+            </div>
+            <input
+              className="input"
+              type="text"
+              placeholder="Código Postal"
+              value={codigoPostal}
+              onChange={(e) => setCodigoPostal(e.target.value)}
+              required
+              disabled={procesando}
+              style={{ marginTop: '10px' }}
             />
           </div>
 
