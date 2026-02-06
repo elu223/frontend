@@ -4,35 +4,29 @@ import './Formulario-Compra.css';
 import { useAuth } from '../../auth/AuthProvider';
 import { useLocation } from 'wouter';
 
+// Cambiar nombre de variable para claridad
 function FormularioCompra({ carrito, total, onClose }) {
-  const { user } = useAuth();
-  const [, setLocation] = useLocation();
-  
-  // Estados combinados
-  const [form, setForm] = useState({
-    voucher: '',
-    direccion: '',
-    estado: '',
-    ciudad: '',
-    codigoPostal: '',
-    cardNombre: '',
-    cardNumero: '',
-    cardFecha: '',
-    cardCVV: '',
-    metodoPago: ''
-  });
-  
+  const [voucher, setVoucher] = useState('');
+  const [direccionEnvio, setDireccionEnvio] = useState(''); // Cambiado de lugarEnvio a direccionEnvio
+  const [cardNombre, setCardNombre] = useState('');
+  const [cardNumero, setCardNumero] = useState('');
+  const [cardFecha, setCardFecha] = useState('');
+  const [cardCVV, setCardCVV] = useState('');
+  const [metodoPago, setMetodoPago] = useState('');
   const [procesando, setProcesando] = useState(false);
   const [usuarioId, setUsuarioId] = useState(null);
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     if (!user) {
       setLocation('/iniciar-sesion');
       return;
     }
-    setUsuarioId(user.id || user.id_usuario || localStorage.getItem('userId'));
-    if (user.direccion) setForm(prev => ({ ...prev, direccion: user.direccion }));
-  }, []);
+
+    const userId = user.id ?? user.id_usuario ?? localStorage.getItem('userId');
+    setUsuarioId(userId);
+  }, [user, setLocation]);
 
   const mediosPago = [
     { id: 'VISA', nombre: 'VISA' },
@@ -42,106 +36,153 @@ function FormularioCompra({ carrito, total, onClose }) {
   ];
 
   const aplicarVoucher = () => {
-    console.log('Voucher aplicado:', form.voucher);
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    console.log('Voucher aplicado:', voucher);
   };
 
   const manejarPago = (e) => {
     e.preventDefault();
     
-    if (!form.metodoPago || carrito.length === 0 || !form.direccion || !form.estado) {
-      alert(!form.metodoPago ? 'Seleccione método de pago' : 
-            carrito.length === 0 ? 'Carrito vacío' : 'Complete dirección y estado');
+    if (!metodoPago) {
+      alert('Por favor seleccione un método de pago');
+      return;
+    }
+
+    if (carrito.length === 0) {
+      alert('El carrito está vacío');
+      return;
+    }
+
+    if (!direccionEnvio.trim()) {
+      alert('Por favor ingrese la dirección de envío');
       return;
     }
 
     setProcesando(true);
 
+    // Variable para guardar el ID del carrito
     let carritoIdUsado;
 
+    // 1. Crear carrito
     axios.post('http://localhost:5000/api/carritos', { id_usuario: usuarioId })
       .then((responseCarrito) => {
         carritoIdUsado = responseCarrito.data.id_carrito;
-        return axios.post('http://localhost:5000/api/pagos', {
+        console.log('Carrito creado ID:', carritoIdUsado);
+        
+        // 2. Crear pago
+        const datosPago = {
           id_carrito: carritoIdUsado,
           monto: parseFloat(total).toFixed(2),
-          metodo: form.metodoPago
-        });
+          metodo: metodoPago
+        };
+
+        return axios.post('http://localhost:5000/api/pagos', datosPago);
       })
       .then((responsePago) => {
-        const promesasProductos = carrito.map((producto) =>
-          axios.post('http://localhost:5000/api/compras', {
+        console.log('Pago creado ID:', responsePago.data.id_pago);
+        
+        // 3. Registrar productos
+        const promesasProductos = carrito.map((producto) => {
+          const datosProducto = {
             id_carrito: carritoIdUsado,
             id_producto: producto.id,
             cantidad: producto.cantidad || 1,
             precio_unitario: parseFloat(producto.precio).toFixed(2)
-          })
-        );
+          };
+          
+          return axios.post('http://localhost:5000/api/compras', datosProducto);
+        });
+
         return Promise.all(promesasProductos);
       })
       .then((resultados) => {
-        return axios.post('http://localhost:5000/api/ventas', {
-          id_compra_productos: resultados[0].data.id_compra_productos,
+        console.log('Compra completada. Productos:', resultados.length);
+        
+        // 4. Registrar la venta para actualizar stock
+        const primeraCompraId = resultados[0].data.id_compra_productos;
+        
+        const datosVenta = {
+          id_compra_productos: primeraCompraId,
           id_usuario: usuarioId
-        });
+        };
+        
+        return axios.post('http://localhost:5000/api/ventas', datosVenta);
       })
-      .then(() => {
-        return axios.post('http://localhost:5000/api/envios', {
+      .then((responseVenta) => {
+        console.log('Venta registrada:', responseVenta.data);
+        
+        // 5. CREAR ENVÍO AUTOMÁTICO (ESTE ES EL NUEVO PASO)
+        const datosEnvio = {
           id_usuario: usuarioId,
-          direccion: form.direccion,
-          estado: form.estado,
-          ciudad: form.ciudad,
-          codigo_postal: form.codigoPostal
-        });
+          direccion: direccionEnvio,
+          estado: "Pendiente",
+          ciudad: "",
+          codigo_postal: ""
+        };
+        
+        return axios.post('http://localhost:5000/api/envios', datosEnvio);
       })
-      .then(() => {
-        alert('Pago exitoso\nCompra y envío registrados.');
+      .then((responseEnvio) => {
+        console.log('Envío creado automáticamente:', responseEnvio.data);
+        
+        alert('Pago exitoso\nLa compra ha sido registrada.\nEl envío ha sido creado y está "Pendiente".');
+        
+        // Cerrar formulario
         onClose();
-        setTimeout(() => window.location.reload(), 1000);
+        
+        // Recargar la página después de 1 segundo para ver cambios
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        
+        setProcesando(false);
       })
       .catch((error) => {
-        alert(error.response?.data?.error || 'Error en el pago');
-        console.error('Error:', error);
-      })
-      .finally(() => {
+        console.error('Error en compra:', error);
+        
+        let mensajeError = 'Error en el proceso de compra';
+        if (error.response && error.response.data && error.response.data.error) {
+          mensajeError = error.response.data.error;
+        }
+        
+        alert(mensajeError);
         setProcesando(false);
       });
   };
-
-  // Renderizar campo de entrada reutilizable
-  const renderInput = (name, placeholder, required = false, type = 'text') => (
-    <input
-      className="input"
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      value={form[name]}
-      onChange={handleChange}
-      required={required}
-      disabled={procesando}
-    />
-  );
 
   return (
     <div className="formulario-overlay">
       <div className="formulario-container pago-form">
         <form onSubmit={manejarPago}>
           <div className="fila-voucher">
-            {renderInput('voucher', 'Código del vale')}
-            <button type="button" className="btn-aplicar" onClick={aplicarVoucher} disabled={procesando}>
+            <input
+              className="input"
+              type="text"
+              placeholder="Código del vale"
+              value={voucher}
+              onChange={(e) => setVoucher(e.target.value)}
+              disabled={procesando}
+            />
+            <button
+              type="button"
+              className="btn-aplicar"
+              onClick={aplicarVoucher}
+              disabled={procesando}
+            >
               Aplicar
             </button>
           </div>
 
-          {renderInput('direccion', 'Dirección completa', true)}
-          {renderInput('estado', 'Estado o provincia', true)}
-
-          <div className="fila-pequena">
-            <div className="col-pequena">{renderInput('ciudad', 'Ciudad')}</div>
-            <div className="col-pequena">{renderInput('codigoPostal', 'Código Postal')}</div>
+          {/* Campo de dirección de envío actualizado */}
+          <div className="campo-envio">
+            <input
+              className="input"
+              type="text"
+              placeholder="Dirección de envío (calle, número, ciudad)"
+              value={direccionEnvio}
+              onChange={(e) => setDireccionEnvio(e.target.value)}
+              required
+              disabled={procesando}
+            />
           </div>
 
           <div className="medios-pago">
@@ -151,8 +192,8 @@ function FormularioCompra({ carrito, total, onClose }) {
                   type="radio"
                   name="metodoPago"
                   value={medio.id}
-                  checked={form.metodoPago === medio.id}
-                  onChange={handleChange}
+                  checked={metodoPago === medio.id}
+                  onChange={(e) => setMetodoPago(e.target.value)}
                   disabled={procesando}
                 />
                 <span className="pago-icon">{medio.nombre}</span>
@@ -161,25 +202,64 @@ function FormularioCompra({ carrito, total, onClose }) {
           </div>
 
           <label className="label">Nombre de la tarjeta</label>
-          {renderInput('cardNombre', 'Titular de la tarjeta', true)}
+          <input
+            className="input"
+            type="text"
+            placeholder="Titular de la tarjeta"
+            value={cardNombre}
+            onChange={(e) => setCardNombre(e.target.value)}
+            required
+            disabled={procesando}
+          />
 
           <label className="label">Número de tarjeta</label>
-          {renderInput('cardNumero', '0000 0000 0000 0000', true)}
+          <input
+            className="input"
+            type="text"
+            placeholder="0000 0000 0000 0000"
+            value={cardNumero}
+            onChange={(e) => setCardNumero(e.target.value)}
+            required
+            disabled={procesando}
+          />
 
           <div className="fila-pequena">
             <div className="col-pequena">
               <label>Fecha</label>
-              {renderInput('cardFecha', 'MM/AA', true)}
+              <input
+                className="input"
+                type="text"
+                placeholder="MM/AA"
+                value={cardFecha}
+                onChange={(e) => setCardFecha(e.target.value)}
+                required
+                disabled={procesando}
+              />
             </div>
+
             <div className="col-pequena">
               <label>CVV</label>
-              {renderInput('cardCVV', 'CVV', true)}
+              <input
+                className="input"
+                type="text"
+                placeholder="CVV"
+                value={cardCVV}
+                onChange={(e) => setCardCVV(e.target.value)}
+                required
+                disabled={procesando}
+              />
             </div>
           </div>
 
           <div className="resumen-pago">
-            <button type="submit" className="btn-confirmar-pago" disabled={procesando}>
-              {procesando ? 'Procesando...' : (
+            <button 
+              type="submit" 
+              className="btn-confirmar-pago"
+              disabled={procesando}
+            >
+              {procesando ? (
+                <span>Procesando...</span>
+              ) : (
                 <>
                   <span>${total}</span>
                   <span>Pagar</span>
@@ -188,7 +268,12 @@ function FormularioCompra({ carrito, total, onClose }) {
             </button>
           </div>
 
-          <button type="button" className="btn-cancelar" onClick={onClose} disabled={procesando}>
+          <button
+            type="button"
+            className="btn-cancelar"
+            onClick={onClose}
+            disabled={procesando}
+          >
             Cancelar
           </button>
         </form>
