@@ -9,8 +9,7 @@ import axios from 'axios';
 
 function HeaderMenu() {
   const [terminoLocal, setTerminoLocal] = useState('');
-  const [location] = useLocation();
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const [sugerencias, setSugerencias] = useState([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const { user, logout } = useAuth();
