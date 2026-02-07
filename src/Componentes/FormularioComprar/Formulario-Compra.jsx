@@ -1,165 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import './Formulario-Compra.css';
-import { useAuth } from '../../auth/AuthProvider';
-import { useLocation } from 'wouter';
+import { useFormularioCompra } from '../../hooks/useFormularioCompra';
 
-// Cambiar nombre de variable para claridad
 function FormularioCompra({ carrito, total, onClose }) {
-  const [voucher, setVoucher] = useState('');
-  const [direccionEnvio, setDireccionEnvio] = useState(''); // Cambiado de lugarEnvio a direccionEnvio
-  const [cardNombre, setCardNombre] = useState('');
-  const [cardNumero, setCardNumero] = useState('');
-  const [cardFecha, setCardFecha] = useState('');
-  const [cardCVV, setCardCVV] = useState('');
-  const [metodoPago, setMetodoPago] = useState('');
-  const [procesando, setProcesando] = useState(false);
-  const [usuarioId, setUsuarioId] = useState(null);
-  const { user } = useAuth();
-  const [, setLocation] = useLocation();
-
-  useEffect(() => {
-    if (!user) {
-      setLocation('/iniciar-sesion');
-      return;
-    }
-
-    const userId = user.id ?? user.id_usuario ?? localStorage.getItem('userId');
-    setUsuarioId(userId);
-  }, [user, setLocation]);
-
-  const mediosPago = [
-    { id: 'VISA', nombre: 'VISA' },
-    { id: 'MCD', nombre: 'MasterCard' },
-    { id: 'BBVA', nombre: 'BBVA' },
-    { id: 'NX', nombre: 'NX' },
-  ];
-
-  const aplicarVoucher = () => {
-    console.log('Voucher aplicado:', voucher);
-  };
-
-  const manejarPago = (e) => {
-    e.preventDefault();
-    
-    if (!metodoPago) {
-      alert('Por favor seleccione un método de pago');
-      return;
-    }
-
-    if (carrito.length === 0) {
-      alert('El carrito está vacío');
-      return;
-    }
-
-    if (!direccionEnvio.trim()) {
-      alert('Por favor ingrese la dirección de envío');
-      return;
-    }
-
-    setProcesando(true);
-
-    // Variable para guardar el ID del carrito
-    let carritoIdUsado;
-
-    // 1. Crear carrito
-    axios.post('http://localhost:5000/api/carritos', { id_usuario: usuarioId })
-      .then((responseCarrito) => {
-        carritoIdUsado = responseCarrito.data.id_carrito;
-        console.log('Carrito creado ID:', carritoIdUsado);
-        
-        // 2. Crear pago
-        const datosPago = {
-          id_carrito: carritoIdUsado,
-          monto: parseFloat(total).toFixed(2),
-          metodo: metodoPago
-        };
-
-        return axios.post('http://localhost:5000/api/pagos', datosPago);
-      })
-      .then((responsePago) => {
-        console.log('Pago creado ID:', responsePago.data.id_pago);
-        
-        // 3. Registrar productos
-        const promesasProductos = carrito.map((producto) => {
-          const datosProducto = {
-            id_carrito: carritoIdUsado,
-            id_producto: producto.id,
-            cantidad: producto.cantidad || 1,
-            precio_unitario: parseFloat(producto.precio).toFixed(2)
-          };
-          
-          return axios.post('http://localhost:5000/api/compras', datosProducto);
-        });
-
-        return Promise.all(promesasProductos);
-      })
-      .then((resultados) => {
-        console.log('Compra completada. Productos:', resultados.length);
-        
-        // 4. Registrar la venta para actualizar stock
-        const primeraCompraId = resultados[0].data.id_compra_productos;
-        
-        const datosVenta = {
-          id_compra_productos: primeraCompraId,
-          id_usuario: usuarioId
-        };
-        
-        return axios.post('http://localhost:5000/api/ventas', datosVenta);
-      })
-      .then((responseVenta) => {
-        console.log('Venta registrada:', responseVenta.data);
-        
-        // 5. CREAR ENVÍO AUTOMÁTICO (ESTE ES EL NUEVO PASO)
-        const datosEnvio = {
-          id_usuario: usuarioId,
-          direccion: direccionEnvio,
-          estado: "Pendiente",
-          ciudad: "",
-          codigo_postal: ""
-        };
-        
-        return axios.post('http://localhost:5000/api/envios', datosEnvio);
-      })
-      .then((responseEnvio) => {
-        console.log('Envío creado automáticamente:', responseEnvio.data);
-        
-        alert('Pago exitoso\nLa compra ha sido registrada.\nEl envío ha sido creado y está "Pendiente".');
-        
-        // Cerrar formulario
-        onClose();
-        
-        // Recargar la página después de 1 segundo para ver cambios
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-        
-        setProcesando(false);
-      })
-      .catch((error) => {
-        console.error('Error en compra:', error);
-        
-        let mensajeError = 'Error en el proceso de compra';
-        if (error.response && error.response.data && error.response.data.error) {
-          mensajeError = error.response.data.error;
-        }
-        
-        alert(mensajeError);
-        setProcesando(false);
-      });
-  };
+  const {
+    formData,
+    procesando,
+    mediosPago,
+    manejarCambio,
+    manejarSubmit,
+    aplicarVoucher
+  } = useFormularioCompra(carrito, total, onClose);
 
   return (
     <div className="formulario-overlay">
       <div className="formulario-container pago-form">
-        <form onSubmit={manejarPago}>
+        <form onSubmit={manejarSubmit}>
+          {/* Campo voucher */}
           <div className="fila-voucher">
             <input
               className="input"
               type="text"
               placeholder="Código del vale"
-              value={voucher}
-              onChange={(e) => setVoucher(e.target.value)}
+              value={formData.voucher}
+              onChange={(e) => manejarCambio('voucher', e.target.value)}
               disabled={procesando}
             />
             <button
@@ -172,19 +36,20 @@ function FormularioCompra({ carrito, total, onClose }) {
             </button>
           </div>
 
-          {/* Campo de dirección de envío actualizado */}
+          {/* Campo dirección (simple) */}
           <div className="campo-envio">
             <input
               className="input"
               type="text"
-              placeholder="Dirección de envío (calle, número, ciudad)"
-              value={direccionEnvio}
-              onChange={(e) => setDireccionEnvio(e.target.value)}
+              placeholder="Dirección de envío"
+              value={formData.direccion}
+              onChange={(e) => manejarCambio('direccion', e.target.value)}
               required
               disabled={procesando}
             />
           </div>
 
+          {/* Métodos de pago */}
           <div className="medios-pago">
             {mediosPago.map((medio) => (
               <label key={medio.id} className="pago-option">
@@ -192,8 +57,8 @@ function FormularioCompra({ carrito, total, onClose }) {
                   type="radio"
                   name="metodoPago"
                   value={medio.id}
-                  checked={metodoPago === medio.id}
-                  onChange={(e) => setMetodoPago(e.target.value)}
+                  checked={formData.metodoPago === medio.id}
+                  onChange={(e) => manejarCambio('metodoPago', e.target.value)}
                   disabled={procesando}
                 />
                 <span className="pago-icon">{medio.nombre}</span>
@@ -201,13 +66,14 @@ function FormularioCompra({ carrito, total, onClose }) {
             ))}
           </div>
 
+          {/* Datos de tarjeta */}
           <label className="label">Nombre de la tarjeta</label>
           <input
             className="input"
             type="text"
             placeholder="Titular de la tarjeta"
-            value={cardNombre}
-            onChange={(e) => setCardNombre(e.target.value)}
+            value={formData.cardNombre}
+            onChange={(e) => manejarCambio('cardNombre', e.target.value)}
             required
             disabled={procesando}
           />
@@ -217,8 +83,8 @@ function FormularioCompra({ carrito, total, onClose }) {
             className="input"
             type="text"
             placeholder="0000 0000 0000 0000"
-            value={cardNumero}
-            onChange={(e) => setCardNumero(e.target.value)}
+            value={formData.cardNumero}
+            onChange={(e) => manejarCambio('cardNumero', e.target.value)}
             required
             disabled={procesando}
           />
@@ -230,50 +96,34 @@ function FormularioCompra({ carrito, total, onClose }) {
                 className="input"
                 type="text"
                 placeholder="MM/AA"
-                value={cardFecha}
-                onChange={(e) => setCardFecha(e.target.value)}
+                value={formData.cardFecha}
+                onChange={(e) => manejarCambio('cardFecha', e.target.value)}
                 required
                 disabled={procesando}
               />
             </div>
-
             <div className="col-pequena">
               <label>CVV</label>
               <input
                 className="input"
                 type="text"
                 placeholder="CVV"
-                value={cardCVV}
-                onChange={(e) => setCardCVV(e.target.value)}
+                value={formData.cardCVV}
+                onChange={(e) => manejarCambio('cardCVV', e.target.value)}
                 required
                 disabled={procesando}
               />
             </div>
           </div>
 
+          {/* Botones */}
           <div className="resumen-pago">
-            <button 
-              type="submit" 
-              className="btn-confirmar-pago"
-              disabled={procesando}
-            >
-              {procesando ? (
-                <span>Procesando...</span>
-              ) : (
-                <>
-                  <span>${total}</span>
-                  <span>Pagar</span>
-                </>
-              )}
+            <button type="submit" className="btn-confirmar-pago" disabled={procesando}>
+              {procesando ? 'Procesando...' : `$${total} Pagar`}
             </button>
           </div>
 
-          <button
-            type="button"
-            className="btn-cancelar"
-            onClick={onClose}
-            disabled={procesando}
-          >
+          <button type="button" className="btn-cancelar" onClick={onClose} disabled={procesando}>
             Cancelar
           </button>
         </form>
