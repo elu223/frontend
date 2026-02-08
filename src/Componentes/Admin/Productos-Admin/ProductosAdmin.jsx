@@ -142,17 +142,36 @@ function ProductosAdmin() {
         <h1 className="titulo-principal">Productos</h1>
       </div>
 
-      <div className="acciones-superiores">
-        <input
-          type="text"
-          placeholder="Buscar producto..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="input-busqueda"
-        />
-        <button className="btn-agregar" onClick={() => abrirModal()}>
-          + Agregar Producto
-        </button>
+      {/* Sección de búsqueda y resumen juntos */}
+      <div className="seccion-busqueda-resumen">
+        <div className="busqueda-container">
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="input-busqueda"
+          />
+          <button className="btn-agregar" onClick={() => abrirModal()}>
+            + Agregar Producto
+          </button>
+        </div>
+
+        {/* Resumen de productos - ahora debajo del buscador */}
+        <div className="resumen-productos">
+          <div className="resumen-item">
+            <span className="resumen-numero">{productos.length}</span>
+            <span className="resumen-texto">Total Productos</span>
+          </div>
+          <div className="resumen-item">
+            <span className="resumen-numero">{productos.filter(p => Number(p.stock) > 0).length}</span>
+            <span className="resumen-texto">Productos Activos</span>
+          </div>
+          <div className="resumen-item">
+            <span className="resumen-numero">{productos.filter(p => Number(p.stock) === 0).length}</span>
+            <span className="resumen-texto">Productos Agotados</span>
+          </div>
+        </div>
       </div>
 
       <div className="tabla-container">
@@ -204,22 +223,6 @@ function ProductosAdmin() {
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Resumen de productos */}
-      <div className="resumen-productos">
-        <div className="resumen-item">
-          <span className="resumen-numero">{productos.length}</span>
-          <span className="resumen-texto">Total Productos</span>
-        </div>
-        <div className="resumen-item">
-          <span className="resumen-numero">{productos.filter(p => Number(p.stock) > 0).length}</span>
-          <span className="resumen-texto">Productos Activos</span>
-        </div>
-        <div className="resumen-item">
-          <span className="resumen-numero">{productos.filter(p => Number(p.stock) === 0).length}</span>
-          <span className="resumen-texto">Productos Agotados</span>
-        </div>
       </div>
 
       {/* Modal para agregar/editar productos (integrado) */}

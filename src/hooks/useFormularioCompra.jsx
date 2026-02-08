@@ -9,7 +9,7 @@ export function useFormularioCompra(carrito, total, onClose) {
   
   const [formData, setFormData] = useState({
     voucher: '',
-    direccion: '', // Cambiado a "direccion" (sin "Envio")
+    direccion: '',
     cardNombre: '',
     cardNumero: '',
     cardFecha: '',
@@ -20,7 +20,6 @@ export function useFormularioCompra(carrito, total, onClose) {
   const [procesando, setProcesando] = useState(false);
   const [usuarioId, setUsuarioId] = useState(null);
   
-  // Medios de pago fijos
   const mediosPago = [
     { id: 'VISA', nombre: 'VISA' },
     { id: 'MCD', nombre: 'MasterCard' },
@@ -28,7 +27,6 @@ export function useFormularioCompra(carrito, total, onClose) {
     { id: 'NX', nombre: 'NX' },
   ];
 
-  // Obtener ID del usuario
   useEffect(() => {
     if (user?.id_usuario) {
       setUsuarioId(user.id_usuario);
@@ -41,17 +39,14 @@ export function useFormularioCompra(carrito, total, onClose) {
     }
   }, [user]);
 
-  // Manejar cambio en inputs
   const manejarCambio = (campo, valor) => {
     setFormData(prev => ({ ...prev, [campo]: valor }));
   };
 
-  // Aplicar voucher (función simple)
   const aplicarVoucher = () => {
     if (formData.voucher) console.log('Voucher aplicado:', formData.voucher);
   };
 
-  // Función principal de compra con then/catch (como pediste)
   const procesarCompra = () => {
     if (!formData.metodoPago) return alert('Seleccione método de pago');
     if (carrito.length === 0) return alert('Carrito vacío');
@@ -61,24 +56,26 @@ export function useFormularioCompra(carrito, total, onClose) {
     setProcesando(true);
     let carritoIdUsado;
 
-    // 1. Crear carrito
+    // solo crear carrito, pago y productos. no crear venta ni envío todavía
     axios.post('/api/carritos', { id_usuario: usuarioId })
       .then((responseCarrito) => {
         carritoIdUsado = responseCarrito.data.id_carrito;
         console.log('Carrito ID:', carritoIdUsado);
         
-        // 2. Crear pago
+        // Guardar dirección con el pago
         const datosPago = {
           id_carrito: carritoIdUsado,
           monto: parseFloat(total).toFixed(2),
-          metodo: formData.metodoPago
+          metodo: formData.metodoPago,
+          direccion: formData.direccion
         };
+        
         return axios.post('/api/pagos', datosPago);
       })
       .then((responsePago) => {
-        console.log('Pago ID:', responsePago.data.id_pago);
+        console.log('Pago creado ID:', responsePago.data.id_pago);
         
-        // 3. Registrar productos
+        // Registrar productos en compra_productos
         const promesasProductos = carrito.map(producto => 
           axios.post('/api/compras', {
             id_carrito: carritoIdUsado,
@@ -87,41 +84,26 @@ export function useFormularioCompra(carrito, total, onClose) {
             precio_unitario: parseFloat(producto.precio).toFixed(2)
           })
         );
+        
         return Promise.all(promesasProductos);
       })
       .then((resultados) => {
-        console.log('Productos registrados:', resultados.length);
+        console.log('Compra registrada. Productos:', resultados.length);
         
-        // 4. Registrar venta (actualiza stock)
-        const primeraCompraId = resultados[0].data.id_compra_productos;
-        return axios.post('/api/ventas', {
-          id_compra_productos: primeraCompraId,
-          id_usuario: usuarioId
-        });
-      })
-      .then(() => {
-        // 5. Crear envío automático
-        return axios.post('/api/envios', {
-          id_usuario: usuarioId,
-          direccion: formData.direccion,
-          estado: "Pendiente"
-        });
-      })
-      .then(() => {
-        alert('Pago exitoso\nCompra registrada\nEnvío creado (Pendiente)');
+        // mostrar mensaje de éxito
+        alert('Compra registrada. El pago está pendiente de aprobación.');
+        
         onClose();
         setTimeout(() => window.location.reload(), 1000);
+        setProcesando(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error('Error en compra:', error);
         alert(error.response?.data?.error || 'Error en la compra');
-      })
-      .finally(() => {
         setProcesando(false);
       });
   };
 
-  // Manejar submit
   const manejarSubmit = (e) => {
     e.preventDefault();
     procesarCompra();

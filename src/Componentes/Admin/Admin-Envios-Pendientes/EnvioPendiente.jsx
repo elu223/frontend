@@ -8,8 +8,6 @@ function EnviosRecientes() {
   const [envioEditando, setEnvioEditando] = useState(null);
   const [formData, setFormData] = useState({
     direccion: "",
-    estado: "",
-    ciudad: "",
     codigo_postal: "",
   });
 
@@ -83,7 +81,7 @@ function EnviosRecientes() {
     <div className="envios-recientes-container">
       <h2>Envíos recientes</h2>
 
-      <button className="btn-agregar" onClick={abrirModalAgregar}>
+      <button className="btn-agregar-envios" onClick={abrirModalAgregar}>
         + Agregar Envío
       </button>
 
@@ -100,8 +98,6 @@ function EnviosRecientes() {
               <th>ID Envío</th>
               <th>ID Usuario</th>
               <th>Dirección</th>
-              <th>Estado</th>
-              <th>Ciudad</th>
               <th>Código Postal</th>
               <th>Fecha</th>
               <th>Acciones</th>
@@ -114,8 +110,6 @@ function EnviosRecientes() {
                 <td>{e.id_envio}</td>
                 <td>{e.id_usuario}</td>
                 <td>{e.direccion}</td>
-                <td>{e.estado}</td>
-                <td>{e.ciudad}</td>
                 <td>{e.codigo_postal}</td>
                 <td>{e.fecha}</td>
                 <td>
@@ -144,28 +138,6 @@ function EnviosRecientes() {
                   required
                 />
               </div>
-
-              <div className="input-group">
-                <label>Estado:</label>
-                <input
-                  type="text"
-                  name="estado"
-                  value={formData.estado}
-                  onChange={manejarCambio}
-                  required
-                />
-              </div>
-
-              <div className="input-group">
-                <label>Ciudad:</label>
-                <input
-                  type="text"
-                  name="ciudad"
-                  value={formData.ciudad}
-                  onChange={manejarCambio}
-                />
-              </div>
-
               <div className="input-group">
                 <label>Código Postal:</label>
                 <input

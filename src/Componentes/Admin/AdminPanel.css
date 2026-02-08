@@ -28,6 +28,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  text-align: center;
 }
 
 .logo-panel {
@@ -84,7 +85,7 @@
   }
   
   .barra-lateral-admin {
-    width: 218%;
+    width: 100%;
     padding: 15px 0;
     position: sticky;
     top: 0;
