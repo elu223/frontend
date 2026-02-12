@@ -12,7 +12,19 @@
   font-size: 18px;
   margin-top: 20px;
 }
-
+/* BOTÓN AGREGAR */
+.btn-agregar-envios {
+  background: #6A1452;
+  color: white;
+  border: none;
+  padding: 14px 15px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 50px;
+  font-weight: 700;
+}
 /* TABLA */
 .tabla-envios {
   width: 100%;

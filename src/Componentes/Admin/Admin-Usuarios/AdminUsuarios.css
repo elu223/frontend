@@ -45,7 +45,7 @@
   background: #6A1452;
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 8px 15px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
@@ -67,6 +67,7 @@
   width: 95%;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 15px;
 }
 
 .tabla-usuarios {
@@ -309,24 +310,58 @@
   background: #5a6268;
 }
 
-/* Responsive */
+/* ================================================
+   RESPONSIVE PARA MÓVILES - CORREGIDO
+================================================ */
+
+/* Para tablets (768px o menos) */
 @media (max-width: 768px) {
   .contenido-admin {
-    padding: 15px;
+    padding: 10px;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
   }
   
   .header-productos {
     flex-direction: column;
     gap: 15px;
-    align-items: flex-start;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+  
+  .acciones-superiores {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .input-busqueda {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  
+  .btn-agregar {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    order: 3; /* Lo coloca después del input */
   }
   
   .tabla-container {
+    width: 100%;
+    margin: 15px 0;
+    border-radius: 10px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
   }
   
   .tabla-usuarios {
-    min-width: 800px;
+    min-width: 100%; /* Ancho mínimo para scroll horizontal */
+    font-size: 0.9em;
+    width: auto;
+    table-layout: auto;
   }
   
   .tabla-usuarios th,
@@ -339,17 +374,120 @@
     height: 60px;
   }
   
+  /* Ajustes específicos para columnas en móvil */
+  .tabla-usuarios td:nth-child(2),
+  .tabla-usuarios td:nth-child(3),
+  .tabla-usuarios td:nth-child(5) {
+    max-width: 150px;
+  }
+  
   .acciones-td {
-    flex-direction: row;
-    gap: 10px;
+    gap: 8px;
+    min-width: 120px;
   }
   
-  .btn-agregar {
-    width: 100%;
-    margin: 10px 0;
+  .btn-editar,
+  .btn-eliminar {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
   }
   
-  .input-busqueda {
+  .acciones-td img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Ajustes para los badges de rol */
+  .rol-admin,
+  .rol-cliente {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Para teléfonos móviles (480px o menos) */
+@media (max-width: 480px) {
+  .contenido-admin {
+    padding: 10px;
+  }
+  
+  .titulo-principal {
+    font-size: 1.5rem;
+  }
+  
+  .tabla-usuarios {
+    min-width: 700px; /* Ligeramente más pequeño */
+  }
+  
+  .tabla-usuarios th,
+  .tabla-usuarios td {
+    padding: 8px 6px;
+    font-size: 0.75em;
+  }
+  
+  /* Reducir aún más las columnas de texto */
+  .tabla-usuarios td:nth-child(2),
+  .tabla-usuarios td:nth-child(3),
+  .tabla-usuarios td:nth-child(5) {
+    max-width: 120px;
+  }
+  
+  .acciones-td {
+    gap: 5px;
+    min-width: 110px;
+  }
+  
+  .btn-editar,
+  .btn-eliminar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .acciones-td img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Mejorar la visualización de los modales en móvil */
+  .modal-formulario {
+    padding: 20px 15px;
+    width: 95%;
+  }
+  
+  .input-group input,
+  .input-group textarea,
+  .input-group select {
+    padding: 8px;
+  }
+  
+  .botones-formulario {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn-confirmar,
+  .btn-cancelar {
     width: 100%;
+    padding: 10px;
+  }
+}
+
+/* Para teléfonos muy pequeños (360px o menos) */
+@media (max-width: 360px) {
+  .tabla-usuarios {
+    min-width: 900px;
+  }
+  
+  .tabla-usuarios th,
+  .tabla-usuarios td {
+    padding: 6px 4px;
+    font-size: 0.7em;
+  }
+  
+  .tabla-usuarios td:nth-child(2),
+  .tabla-usuarios td:nth-child(3),
+  .tabla-usuarios td:nth-child(5) {
+    max-width: 100px;
   }
 }

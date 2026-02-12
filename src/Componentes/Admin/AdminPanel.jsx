@@ -34,25 +34,25 @@ function AdminPanel() {
     <div className="barra-lateral-admin">
       <Link href="/" className="logo-admin-link">
         <div className="logo-container-admin">
-          <img className="logo-panel" src="./img/logo.png" alt="TejidosMiki" />
+          <img className="logo-panel" src="img/logo.png" alt="TejidosMiki" />
         </div>
       </Link>
       <nav className="navegacion-panel">
         <Link href="/admin" className="item-navegacion">
-          productos
+          Productos
         </Link>
         <Link href="/admin/usuarios" className="item-navegacion">
-          usuarios
+          Usuarios
         </Link>
         <Link href="/admin/compras" className="item-navegacion">
-          compras recientes
+          Compras recientes
         </Link>
         <Link href="/admin/envios" className="item-navegacion">
-          envíos pendientes
+          Envíos pendientes
         </Link>
         
         <button onClick={handleLogout} className="item-navegacion logout-admin">
-          cerrar sesión
+          Cerrar sesión
         </button>
       </nav>
     </div>
