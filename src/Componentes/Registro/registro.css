@@ -15,20 +15,12 @@
   padding: 0rem 2rem 2rem 2rem;
   border-radius: 30px;
   text-align: center;
-  margin-top: 12px;
 }
 
 .registro-title {
   font-size: 1.8rem;
   color: #6A1452;
-  margin-bottom: -1rem;
   font-weight: bold;
-}/* titulo DE AVATAR */
-
-.avatar-img {
-  width: 34%;
-  border-radius: 50%;
-  margin-bottom:-15px;
 }
 .input-group {
   text-align: left;

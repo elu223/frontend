@@ -4,9 +4,10 @@ import './Formulario-Compra.css';
 import { useAuth } from '../../auth/AuthProvider';
 import { useLocation } from 'wouter';
 
+// Cambiar nombre de variable para claridad
 function FormularioCompra({ carrito, total, onClose }) {
   const [voucher, setVoucher] = useState('');
-  const [lugarEnvio, setLugarEnvio] = useState('');
+  const [direccionEnvio, setDireccionEnvio] = useState(''); // Cambiado de lugarEnvio a direccionEnvio
   const [cardNombre, setCardNombre] = useState('');
   const [cardNumero, setCardNumero] = useState('');
   const [cardFecha, setCardFecha] = useState('');
@@ -23,31 +24,13 @@ function FormularioCompra({ carrito, total, onClose }) {
 
   useEffect(() => {
     if (!user) {
-      // si no está autenticado redirigir al login
       setLocation('/iniciar-sesion');
       return;
     }
 
     const userId = user.id ?? user.id_usuario ?? localStorage.getItem('userId');
     setUsuarioId(userId);
-
-    // Cargar dirección del usuario
-    axios.get(`http://localhost:5000/usuarios/${userId}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then((response) => {
-      const userData = response.data;
-      setDireccion(userData.direccion || '');
-      setCiudad(userData.ciudad || '');
-      setEstado(userData.estado || '');
-      setCodigoPostal(userData.codigo_postal || '');
-    })
-    .catch((error) => {
-      console.error('Error al cargar dirección:', error);
-    });
-  }, [user]);
+  }, [user, setLocation]);
 
   const mediosPago = [
     { id: 'VISA', nombre: 'VISA' },
@@ -70,6 +53,11 @@ function FormularioCompra({ carrito, total, onClose }) {
 
     if (carrito.length === 0) {
       alert('El carrito está vacío');
+      return;
+    }
+
+    if (!direccionEnvio.trim()) {
+      alert('Por favor ingrese la dirección de envío');
       return;
     }
 
@@ -117,8 +105,7 @@ function FormularioCompra({ carrito, total, onClose }) {
       .then((resultados) => {
         console.log('Compra completada. Productos:', resultados.length);
         
-        // IMPORTANTE: Ahora registrar la venta para actualizar stock
-        // Tomar el primer ID de compra_productos para la venta
+        // 4. Registrar la venta para actualizar stock
         const primeraCompraId = resultados[0].data.id_compra_productos;
         
         const datosVenta = {
@@ -126,49 +113,26 @@ function FormularioCompra({ carrito, total, onClose }) {
           id_usuario: usuarioId
         };
         
-        // Llamar a /api/ventas que actualiza el stock
         return axios.post('http://localhost:5000/api/ventas', datosVenta);
       })
       .then((responseVenta) => {
         console.log('Venta registrada:', responseVenta.data);
         
-        // 5. Actualizar dirección del usuario si cambió
-        const datosUsuarioActualizado = {
-          nombre: user.nombre,
-          apellido: user.apellido,
-          email: user.email,
-          telefono: user.telefono,
-          direccion: direccion,
-          ciudad: ciudad,
-          estado: estado,
-          codigo_postal: codigoPostal
-        };
-        
-        return axios.put(`http://localhost:5000/usuarios/${usuarioId}`, datosUsuarioActualizado, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-      })
-      .then((responseUsuario) => {
-        console.log('Usuario actualizado:', responseUsuario.data);
-        
-        // 6. Crear envío
+        // 5. CREAR ENVÍO AUTOMÁTICO (ESTE ES EL NUEVO PASO)
         const datosEnvio = {
           id_usuario: usuarioId,
-          id_carrito: carritoIdUsado,
-          direccion: direccion,
-          ciudad: ciudad,
-          estado: estado,
-          codigo_postal: codigoPostal
+          direccion: direccionEnvio,
+          estado: "Pendiente",
+          ciudad: "",
+          codigo_postal: ""
         };
         
         return axios.post('http://localhost:5000/api/envios', datosEnvio);
       })
       .then((responseEnvio) => {
-        console.log('Envío creado:', responseEnvio.data);
+        console.log('Envío creado automáticamente:', responseEnvio.data);
         
-        alert('Pago exitoso\nLa compra ha sido registrada y el envío creado.');
+        alert('Pago exitoso\nLa compra ha sido registrada.\nEl envío ha sido creado y está "Pendiente".');
         
         // Cerrar formulario
         onClose();
@@ -183,7 +147,7 @@ function FormularioCompra({ carrito, total, onClose }) {
       .catch((error) => {
         console.error('Error en compra:', error);
         
-        let mensajeError = 'Error en el pago';
+        let mensajeError = 'Error en el proceso de compra';
         if (error.response && error.response.data && error.response.data.error) {
           mensajeError = error.response.data.error;
         }
@@ -216,14 +180,15 @@ function FormularioCompra({ carrito, total, onClose }) {
             </button>
           </div>
 
+          {/* Campo de dirección de envío actualizado */}
           <div className="campo-envio">
             <h3>Dirección de Envío</h3>
             <input
               className="input"
               type="text"
-              placeholder="Dirección"
-              value={direccion}
-              onChange={(e) => setDireccion(e.target.value)}
+              placeholder="Dirección de envío (calle, número, ciudad)"
+              value={direccionEnvio}
+              onChange={(e) => setDireccionEnvio(e.target.value)}
               required
               disabled={procesando}
             />

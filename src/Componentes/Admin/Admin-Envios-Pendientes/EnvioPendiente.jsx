@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  obtenerEnvios,
-  crearEnvio,
-  actualizarEnvio,
-  eliminarEnvioPorId
-} from "../../../services/enviosService";
-
+import { useEnvios } from "../../../hooks/useEnvios";
 import "./EnvioPendiente.css";
 
 function EnviosRecientes() {
-  const [envios, setEnvios] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  const { envios, loading, error, cargarEnvios, crearEnvio, actualizarEnvio, eliminarEnvio } = useEnvios();
   const [mostrarModal, setMostrarModal] = useState(false);
   const [envioEditando, setEnvioEditando] = useState(null);
-
   const [formData, setFormData] = useState({
     direccion: "",
     estado: "",
@@ -21,29 +13,24 @@ function EnviosRecientes() {
     codigo_postal: "",
   });
 
-  // Cargar envíos
-  const cargarEnvios = async () => {
-    try {
-      const data = await obtenerEnvios();
-      setEnvios(data);
-    } catch (error) {
-      console.log("Error cargando envíos:", error);
-    } finally {
-      setCargando(false);
-    }
-  };
-
-  useEffect(() => {
-    cargarEnvios();
-  }, []);
-
   const manejarCambio = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const abrirModalEditar = (envio) => {
     setEnvioEditando(envio.id_envio);
-    setFormData(envio);
+    setFormData({
+      direccion: envio.direccion,
+      estado: envio.estado,
+      ciudad: envio.ciudad,
+      codigo_postal: envio.codigo_postal,
+    });
+    setMostrarModal(true);
+  };
+
+  const abrirModalAgregar = () => {
+    setEnvioEditando(null);
+    setFormData({ direccion: "", estado: "", ciudad: "", codigo_postal: "" });
     setMostrarModal(true);
   };
 
@@ -52,40 +39,58 @@ function EnviosRecientes() {
     setEnvioEditando(null);
   };
 
-  const enviarFormulario = async (e) => {
+  const enviarFormulario = (e) => {
     e.preventDefault();
 
-    try {
-      if (envioEditando) {
-        await actualizarEnvio(envioEditando, formData);
-      } else {
-        await crearEnvio(formData);
-      }
-
-      cargarEnvios();
-      cerrarModal();
-    } catch (error) {
-      console.log("Error guardando envío:", error);
+    if (envioEditando) {
+      actualizarEnvio(envioEditando, formData)
+        .then((resultado) => {
+          alert(resultado.message);
+          if (resultado.success) {
+            cerrarModal();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } else {
+      crearEnvio(formData)
+        .then((resultado) => {
+          alert(resultado.message);
+          if (resultado.success) {
+            cerrarModal();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }
   };
 
-  const eliminarEnvio = async (id) => {
+  const handleEliminarEnvio = (id) => {
     if (!window.confirm("¿Seguro quieres eliminar este envío?")) return;
 
-    try {
-      await eliminarEnvioPorId(id);
-      cargarEnvios();
-    } catch (error) {
-      console.log("Error eliminando envío:", error);
-    }
+    eliminarEnvio(id)
+      .then((resultado) => {
+        alert(resultado.message);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   return (
     <div className="envios-recientes-container">
       <h2>Envíos recientes</h2>
 
-      {cargando ? (
+      <button className="btn-agregar" onClick={abrirModalAgregar}>
+        + Agregar Envío
+      </button>
+
+      {loading ? (
         <p className="cargando">Cargando envíos...</p>
+      ) : error ? (
+        <p className="error">{error}</p>
       ) : envios.length === 0 ? (
         <p className="no-envios">No hay envíos registrados.</p>
       ) : (
@@ -113,10 +118,9 @@ function EnviosRecientes() {
                 <td>{e.ciudad}</td>
                 <td>{e.codigo_postal}</td>
                 <td>{e.fecha}</td>
-
                 <td>
                   <button onClick={() => abrirModalEditar(e)}>Editar</button>
-                  <button onClick={() => eliminarEnvio(e.id_envio)}>Eliminar</button>
+                  <button onClick={() => handleEliminarEnvio(e.id_envio)}>Eliminar</button>
                 </td>
               </tr>
             ))}

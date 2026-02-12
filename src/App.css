@@ -1,5 +1,86 @@
+/* Reset y estilos globales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
+/* ELIMINA ESTO: 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+} */
+
+/* En su lugar, usa esto: */
+#root, .App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Asegura que App ocupe toda la altura */
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Header - SIN márgenes ni padding extra */
+.header-ecommerce {
+  flex-shrink: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main content - debe ocupar el espacio disponible */
+.main-content {
+  flex: 1 0 auto; /* Esto hace que crezca y empuje el footer hacia abajo */
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Asegura que las vistas principales también ocupen espacio */
+.vista-productos,
+.vista-producto-detalle,
+.Carrito-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer - DEBE estar pegado abajo */
+.footer {
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: auto; /* Esto lo empuja hacia abajo */
+}
+
+/* Para login y registro (sin header/footer) */
+.login-container,
+.registro-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6A1452;
+}
+
+/* Animaciones (opcional) */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -14,37 +95,18 @@
   color: #888;
 }
 
-* {
-  box-sizing: border-box;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-html {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-body {
-  font-family: "Arial", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-footer {
-  margin-top: auto;
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 10px;
+  }
 }
