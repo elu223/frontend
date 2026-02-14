@@ -1,3 +1,4 @@
+// hooks/useFormularioCompra.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../auth/AuthProvider';
@@ -43,10 +44,6 @@ export function useFormularioCompra(carrito, total, onClose) {
     setFormData(prev => ({ ...prev, [campo]: valor }));
   };
 
-  const aplicarVoucher = () => {
-    if (formData.voucher) console.log('Voucher aplicado:', formData.voucher);
-  };
-
   const procesarCompra = () => {
     if (!formData.metodoPago) return alert('Seleccione método de pago');
     if (carrito.length === 0) return alert('Carrito vacío');
@@ -56,26 +53,26 @@ export function useFormularioCompra(carrito, total, onClose) {
     setProcesando(true);
     let carritoIdUsado;
 
-    // solo crear carrito, pago y productos. no crear venta ni envío todavía
+    // Crear carrito
     axios.post('/api/carritos', { id_usuario: usuarioId })
       .then((responseCarrito) => {
         carritoIdUsado = responseCarrito.data.id_carrito;
         console.log('Carrito ID:', carritoIdUsado);
         
-        // Guardar dirección con el pago
+        // Enviar dirección con el pago
         const datosPago = {
           id_carrito: carritoIdUsado,
           monto: parseFloat(total).toFixed(2),
           metodo: formData.metodoPago,
-          direccion: formData.direccion
+          direccion: formData.direccion 
         };
         
         return axios.post('/api/pagos', datosPago);
       })
       .then((responsePago) => {
-        console.log('Pago creado ID:', responsePago.data.id_pago);
+        console.log('Pago creado con dirección:', formData.direccion);
         
-        // Registrar productos en compra_productos
+        // Registrar productos
         const promesasProductos = carrito.map(producto => 
           axios.post('/api/compras', {
             id_carrito: carritoIdUsado,
@@ -88,11 +85,9 @@ export function useFormularioCompra(carrito, total, onClose) {
         return Promise.all(promesasProductos);
       })
       .then((resultados) => {
-        console.log('Compra registrada. Productos:', resultados.length);
+        console.log('Compra registrada. Dirección guardada:', formData.direccion);
         
-        // mostrar mensaje de éxito
         alert('Compra registrada. El pago está pendiente de aprobación.');
-        
         onClose();
         setTimeout(() => window.location.reload(), 1000);
         setProcesando(false);
@@ -115,6 +110,6 @@ export function useFormularioCompra(carrito, total, onClose) {
     mediosPago,
     manejarCambio,
     manejarSubmit,
-    aplicarVoucher
+    aplicarVoucher: () => console.log('Voucher:', formData.voucher)
   };
 }
