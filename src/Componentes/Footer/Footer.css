@@ -100,12 +100,12 @@
     }
     
     .footer-links {
-        flex-direction: row;
+        flex-direction: column;
         gap: 15px;
     }
     
     .footer-redes {
-        flex-direction: row;
+        flex-direction: column;
         gap: 15px;
     }
     

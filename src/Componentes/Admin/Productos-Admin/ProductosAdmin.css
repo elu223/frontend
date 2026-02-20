@@ -152,6 +152,7 @@
 /* celdas */
 .tabla-productos td {
   padding: 14px 10px;
+  border-bottom: 1px solid #e6e6e6;
   font-weight: 500;
   color: #333;
   text-align: center;

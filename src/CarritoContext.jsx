@@ -71,17 +71,13 @@ export const CarritoProvider = (props) => {
   const calcularTotalItems = () => {
     return carrito.reduce((total, item) => total + item.cantidad, 0);
   };
-  //limpiar carrito despues de la compra
-  const limpiarCarrito = () => {
-    setCarrito([]);
-  }
+
   const value = {
     carrito,
     agregarAlCarrito,
     eliminarDelCarrito,
     actualizarCantidad,
-    calcularTotalItems,
-    limpiarCarrito
+    calcularTotalItems
   };
 
   return (
@@ -99,8 +95,7 @@ export const useCarrito = () => {
       agregarAlCarrito: () => {},
       eliminarDelCarrito: () => {},
       actualizarCantidad: () => {},
-      calcularTotalItems: () => 0,
-      limpiarCarrito: () => {}
+      calcularTotalItems: () => 0
     };
   }
   return context;
