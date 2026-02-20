@@ -2,11 +2,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../auth/AuthProvider';
+import { useCarrito } from '../CarritoContext'; 
 
 axios.defaults.baseURL = 'http://localhost:5000';
 
 export function useFormularioCompra(carrito, total, onClose) {
   const { user } = useAuth();
+  const { limpiarCarrito } = useCarrito();
   
   const [formData, setFormData] = useState({
     voucher: '',
@@ -44,6 +46,10 @@ export function useFormularioCompra(carrito, total, onClose) {
     setFormData(prev => ({ ...prev, [campo]: valor }));
   };
 
+  const aplicarVoucher = () => {
+    if (formData.voucher) console.log('Voucher aplicado:', formData.voucher);
+  };
+
   const procesarCompra = () => {
     if (!formData.metodoPago) return alert('Seleccione método de pago');
     if (carrito.length === 0) return alert('Carrito vacío');
@@ -53,26 +59,28 @@ export function useFormularioCompra(carrito, total, onClose) {
     setProcesando(true);
     let carritoIdUsado;
 
-    // Crear carrito
+    // solo crear carrito, pago y productos. no crear venta ni envío todavía
     axios.post('/api/carritos', { id_usuario: usuarioId })
       .then((responseCarrito) => {
         carritoIdUsado = responseCarrito.data.id_carrito;
         console.log('Carrito ID:', carritoIdUsado);
         
-        // Enviar dirección con el pago
+        // Guardar dirección con el pago
         const datosPago = {
           id_carrito: carritoIdUsado,
           monto: parseFloat(total).toFixed(2),
           metodo: formData.metodoPago,
-          direccion: formData.direccion 
+          direccion: formData.direccion
         };
+        
+        console.log('Pago creado con dirección:', formData.direccion); 
         
         return axios.post('/api/pagos', datosPago);
       })
       .then((responsePago) => {
-        console.log('Pago creado con dirección:', formData.direccion);
+        console.log('Pago creado ID:', responsePago.data.id_pago);
         
-        // Registrar productos
+        // Registrar productos en compra_productos
         const promesasProductos = carrito.map(producto => 
           axios.post('/api/compras', {
             id_carrito: carritoIdUsado,
@@ -85,11 +93,15 @@ export function useFormularioCompra(carrito, total, onClose) {
         return Promise.all(promesasProductos);
       })
       .then((resultados) => {
-        console.log('Compra registrada. Dirección guardada:', formData.direccion);
+        console.log('Compra registrada. Productos:', resultados.length);
         
+        // limpiar carrito después de la compra
+        limpiarCarrito(); 
+        
+        // mostrar mensaje de éxito
         alert('Compra registrada. El pago está pendiente de aprobación.');
+        
         onClose();
-        setTimeout(() => window.location.reload(), 1000);
         setProcesando(false);
       })
       .catch((error) => {
@@ -110,6 +122,6 @@ export function useFormularioCompra(carrito, total, onClose) {
     mediosPago,
     manejarCambio,
     manejarSubmit,
-    aplicarVoucher: () => console.log('Voucher:', formData.voucher)
+    aplicarVoucher
   };
 }
