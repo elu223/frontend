@@ -1,11 +1,14 @@
+// hooks/useFormularioCompra.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../auth/AuthProvider';
+import { useCarrito } from '../CarritoContext'; 
 
 axios.defaults.baseURL = 'http://localhost:5000';
 
 export function useFormularioCompra(carrito, total, onClose) {
   const { user } = useAuth();
+  const { limpiarCarrito } = useCarrito();
   
   const [formData, setFormData] = useState({
     voucher: '',
@@ -70,6 +73,8 @@ export function useFormularioCompra(carrito, total, onClose) {
           direccion: formData.direccion
         };
         
+        console.log('Pago creado con dirección:', formData.direccion); 
+        
         return axios.post('/api/pagos', datosPago);
       })
       .then((responsePago) => {
@@ -90,11 +95,13 @@ export function useFormularioCompra(carrito, total, onClose) {
       .then((resultados) => {
         console.log('Compra registrada. Productos:', resultados.length);
         
+        // limpiar carrito después de la compra
+        limpiarCarrito(); 
+        
         // mostrar mensaje de éxito
         alert('Compra registrada. El pago está pendiente de aprobación.');
         
         onClose();
-        setTimeout(() => window.location.reload(), 1000);
         setProcesando(false);
       })
       .catch((error) => {

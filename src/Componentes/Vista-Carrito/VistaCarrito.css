@@ -189,7 +189,11 @@ h2.tituloCarrito {
 /* Responsive */
 @media (max-width: 850px) {
   .Carrito-item {
-    width: 95%;
+    width: 100%;
+    max-width: 750px;
+  }
+  :hover.Carrito-item {
+    width: 100%;
     max-width: 750px;
   }
   
@@ -200,18 +204,21 @@ h2.tituloCarrito {
 
 @media (max-width: 650px) {
   .Carrito-item {
-    flex-direction: column;
+    flex-direction: row;
     padding: 15px;
-    width: 90%;
+    width: 100%;
   }
-  
+  :hover.Carrito-item {
+    width: 100%;
+    max-width: 750px;
+  }
   .carrito-img {
     width: 120px;
     height: 100px;
   }
   
   .Carrito-total {
-    width: 90%;
+    width: 100%;
   }
   
   h2.tituloCarrito {
@@ -230,6 +237,10 @@ h2.tituloCarrito {
   }
   
   .Carrito-item {
-    width: 95%;
+    width: 100%;
+  }
+    :hover.Carrito-item {
+    width: 100%;
+    max-width: 750px;
   }
 }

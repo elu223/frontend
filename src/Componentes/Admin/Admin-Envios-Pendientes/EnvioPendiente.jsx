@@ -9,6 +9,8 @@ function EnviosRecientes() {
   const [formData, setFormData] = useState({
     direccion: "",
     codigo_postal: "",
+    estado: "Pendiente",
+    nombre_usuario: "",
   });
 
   const manejarCambio = (e) => {
@@ -19,8 +21,8 @@ function EnviosRecientes() {
     setEnvioEditando(envio.id_envio);
     setFormData({
       direccion: envio.direccion,
-      estado: envio.estado,
-      ciudad: envio.ciudad,
+      estado: envio.estado || "Pendiente",
+      nombre_usuario: envio.nombre_usuario,
       codigo_postal: envio.codigo_postal,
     });
     setMostrarModal(true);
@@ -28,7 +30,7 @@ function EnviosRecientes() {
 
   const abrirModalAgregar = () => {
     setEnvioEditando(null);
-    setFormData({ direccion: "", estado: "", ciudad: "", codigo_postal: "" });
+    setFormData({ direccion: "", estado: "Pendiente", nombre_usuario: "", codigo_postal: "" });
     setMostrarModal(true);
   };
 
@@ -97,8 +99,10 @@ function EnviosRecientes() {
             <tr>
               <th>ID Envío</th>
               <th>ID Usuario</th>
+              <th>Nombre Usuario</th>
               <th>Dirección</th>
               <th>Código Postal</th>
+              <th>Estado</th>
               <th>Fecha</th>
               <th>Acciones</th>
             </tr>
@@ -109,8 +113,10 @@ function EnviosRecientes() {
               <tr key={e.id_envio}>
                 <td>{e.id_envio}</td>
                 <td>{e.id_usuario}</td>
+                <td>{e.nombre_usuario}</td>
                 <td>{e.direccion}</td>
                 <td>{e.codigo_postal}</td>
+                <td>{e.estado}</td>
                 <td>{e.fecha}</td>
                 <td>
                   <button onClick={() => abrirModalEditar(e)}>Editar</button>
@@ -139,12 +145,29 @@ function EnviosRecientes() {
                 />
               </div>
               <div className="input-group">
+                <label>Estado:</label>
+                <select name="estado" value={formData.estado} onChange={manejarCambio}> 
+                  <option value="pendiente">Pendiente</option>
+                  <option value="entregado">Entregado</option>
+                </select>
+              </div>
+              <div className="input-group">
                 <label>Código Postal:</label>
                 <input
                   type="text"
                   name="codigo_postal"
                   value={formData.codigo_postal}
                   onChange={manejarCambio}
+                />
+              </div>
+              <div className="input-group">
+                <label>Nombre Usuario:</label>
+                <input
+                  type="text"
+                  name="nombre_usuario"
+                  value={formData.nombre_usuario}
+                  onChange={manejarCambio}
+                  required
                 />
               </div>
 
