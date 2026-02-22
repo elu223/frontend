@@ -86,7 +86,10 @@ function ProductosAdmin() {
       });
   };
 
-  const formatearPrecio = (precio) => `$${parseInt(precio).toLocaleString('es-AR')}`;
+  const formatearPrecio = (precio) => {
+    const numeroEntero = Math.round(Number(precio));
+    return `$${numeroEntero.toLocaleString('es-AR')}`;
+  }
 
   if (loading) return (
     <div className="contenido-admin"><div className="cargando">Cargando productos...</div></div>

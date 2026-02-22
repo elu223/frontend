@@ -81,24 +81,38 @@ function FormularioCompra({ carrito, total, onClose }) {
           <label className="label">Número de tarjeta</label>
           <input
             className="input"
-            type="text"
+            type="tel"
             placeholder="0000 0000 0000 0000"
             value={formData.cardNumero}
-            onChange={(e) => manejarCambio('cardNumero', e.target.value)}
+            onChange={(e) => {
+              // variable temporal para limpiar el texto antes de guardarlo
+              let v = e.target.value.replace(/\D/g, '');
+              v = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+              //finalmente le pasamos el valor limpio a la función de manejo de cambios
+              manejarCambio('cardNumero', v);
+            }}
             required
+            maxLength="19"
             disabled={procesando}
           />
 
           <div className="fila-pequena">
             <div className="col-pequena">
-              <label>Fecha</label>
+              <label>Fecha de vencimiento</label>
               <input
                 className="input"
                 type="text"
                 placeholder="MM/AA"
                 value={formData.cardFecha}
-                onChange={(e) => manejarCambio('cardFecha', e.target.value)}
+                onChange={(e) => {
+                  let v = e.target.value.replace(/\D/g, '');
+                  if (v.length > 2){
+                    v = v.slice(0, 2) + '/' + v.slice(2, 4);
+                  }
+                  manejarCambio('cardFecha', v);
+                }}
                 required
+                maxLength={5}
                 disabled={procesando}
               />
             </div>
@@ -112,6 +126,7 @@ function FormularioCompra({ carrito, total, onClose }) {
                 onChange={(e) => manejarCambio('cardCVV', e.target.value)}
                 required
                 disabled={procesando}
+                maxLength="3"
               />
             </div>
           </div>
