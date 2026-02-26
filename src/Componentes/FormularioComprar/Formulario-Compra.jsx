@@ -105,7 +105,9 @@ function FormularioCompra({ carrito, total, onClose }) {
                 placeholder="MM/AA"
                 value={formData.cardFecha}
                 onChange={(e) => {
+                  // variable temporal para limpiar el texto antes de guardarlo
                   let v = e.target.value.replace(/\D/g, '');
+                  //guardamos el valor limpio en la variable temporal y luego le agregamos la barra después de los primeros dos dígitos
                   if (v.length > 2){
                     v = v.slice(0, 2) + '/' + v.slice(2, 4);
                   }
